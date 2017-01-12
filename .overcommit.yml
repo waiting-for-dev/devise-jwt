@@ -1,0 +1,53 @@
+#
+# Select version of overcommit and the other tools from Gemfile
+#
+gemfile: .overcommit_gems.rb
+
+#
+# Hooks that are run against every commit message after a user has written it.
+#
+CommitMsg:
+  ALL:
+    required: true
+    exclude: &default_excludes
+      - Gemfile
+      - devise-jwt.gemspec
+      - spec/fixtures/rails_app
+
+  HardTabs:
+    enabled: true
+
+  SingleLineSubject:
+    enabled: true
+
+#
+# Hooks that are run after `git commit` is executed, before the commit message
+# editor is displayed.
+#
+PreCommit:
+  ALL:
+    required: true
+    exclude: *default_excludes
+
+  BundleAudit:
+    enabled: true
+
+  BundleCheck:
+    enabled: true
+
+  LocalPathsInGemfile:
+    enabled: true
+
+  ExecutePermissions:
+    enabled: true
+    exclude:
+      - bin/*
+
+  Reek:
+    enabled: true
+
+  RuboCop:
+    enabled: true
+
+  TrailingWhitespace:
+    enabled: true
