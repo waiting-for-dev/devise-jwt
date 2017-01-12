@@ -1,7 +1,11 @@
-require "devise/jwt/version"
+# frozen_string_literal: true
+
+require 'warden/jwt_auth'
+require 'devise/jwt/version'
+require 'devise/jwt/railtie'
 
 module Devise
-  module Jwt
-    # Your code goes here...
+  # JWT extension for devise
+  module JWT
   end
 end

@@ -5,12 +5,12 @@ require 'devise/jwt/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "devise-jwt"
-  spec.version       = Devise::Jwt::VERSION
+  spec.version       = Devise::JWT::VERSION
   spec.authors       = ["Marc Busqué"]
   spec.email         = ["marc@lamarciana.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Devise & JWT.}
+  spec.description   = %q{Devise & JWT}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 
@@ -30,7 +30,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.13"
+  spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency 'rails', '~> 5.0.0'
+  spec.add_development_dependency "pry-byebug", "~> 3.4"
 end
