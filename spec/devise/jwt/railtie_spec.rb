@@ -11,7 +11,7 @@ describe Devise::JWT::Railtie do
   let(:rails) { Rails }
   let(:rails_config) { Rails.configuration }
 
-  it 'adds middleware Warden::JWTAuth::Middleware' do
+  it 'adds JWTAuth middleware' do
     expect(rails_config.middleware).to include(Warden::JWTAuth::Middleware)
   end
 end
