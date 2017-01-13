@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'devise'
 require 'active_support/core_ext/module/attribute_accessors'
 require 'warden/jwt_auth'
 require 'devise/jwt/version'
 require 'devise/jwt/railtie'
+require 'devise/jwt/models/jwt_authenticatable'
 
 # Authentication library
 module Devise

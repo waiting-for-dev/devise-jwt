@@ -34,4 +34,5 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'warden-jwt_auth', github: 'waiting-for-dev/warden-jwt_auth'
+# We want to test the behavior of this gem in a rails app
+gem 'devise-jwt', path: '../../../'

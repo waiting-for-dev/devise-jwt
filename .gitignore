@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 .overcommit_gems.rb.lock
+*.log
