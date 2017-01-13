@@ -22,6 +22,8 @@ module Devise
     end
   end
 
+  add_module(:jwt_authenticatable)
+
   # JWT extension for devise
   module JWT
   end

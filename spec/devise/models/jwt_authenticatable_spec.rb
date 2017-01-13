@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Devise::JWT::Models::JWTAuthenticatable do
+describe Devise::Models::JwtAuthenticatable do
   subject(:user_class) { JwtUser }
 
   describe '#find_for_jwt_authentication(sub)' do
