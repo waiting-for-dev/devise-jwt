@@ -22,7 +22,7 @@ module Devise
     end
   end
 
-  add_module(:jwt_authenticatable)
+  add_module(:jwt_authenticatable, strategy: :jwt)
 
   # JWT extension for devise
   module JWT

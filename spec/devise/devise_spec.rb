@@ -13,6 +13,10 @@ describe Devise do
     expect(described_class::ALL).to include(:jwt_authenticatable)
   end
 
+  it 'associates jwt_authenticatable module with jwt strategy' do
+    expect(described_class::STRATEGIES[:jwt_authenticatable]).to eq(:jwt)
+  end
+
   it 'forwards to JWTAuth config settings set through Devise' do
     expiration_time = rand(100)
 
