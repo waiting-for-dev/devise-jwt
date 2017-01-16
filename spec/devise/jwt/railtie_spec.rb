@@ -15,4 +15,10 @@ describe Devise::JWT::Railtie do
       jwt_user: JwtUser
     )
   end
+
+  it 'configures as dispatch_paths sign_in for modules configured with jwt' do
+    expect(Warden::JWTAuth.config.dispatch_paths).to eq(
+      Regexp.union('/jwt_users/sign_in')
+    )
+  end
 end
