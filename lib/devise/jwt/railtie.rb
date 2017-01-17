@@ -36,6 +36,20 @@ module Devise
                 array << [method, /^#{routes.url_helpers.send(named_path)}$/]
               end
             end
+
+          config.revocation_requests =
+            begin
+              routes = Rails.application.routes
+              scopes = config.mappings.keys
+              scopes.each_with_object([]) do |scope, array|
+                named_route = "destroy_#{scope}_session"
+                named_path = "#{named_route}_path"
+                route = routes.named_routes[named_route]
+                next unless route
+                method = route.verb
+                array << [method, /^#{routes.url_helpers.send(named_path)}$/]
+              end
+            end
         end
       end
     end

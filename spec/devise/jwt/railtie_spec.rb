@@ -21,4 +21,10 @@ describe Devise::JWT::Railtie do
       [['POST', %r{^/jwt_users/sign_in$}]]
     )
   end
+
+  it 'configures as revocation_requests sign_out for models with jwt' do
+    expect(Warden::JWTAuth.config.revocation_requests).to eq(
+      [['DELETE', %r{^/jwt_users/sign_out$}]]
+    )
+  end
 end
