@@ -1,0 +1,55 @@
+# frozen_string_literal: true
+
+module Devise
+  module JWT
+    # Generate defaults to be used in the configuration for the Devise
+    # installation in a Rails app
+    #
+    # @see Warden::JWTAuth
+    class DefaultsGenerator
+      attr_reader :routes, :devise
+
+      def initialize
+        @routes = Rails.application.routes
+        @devise = Devise
+      end
+
+      def mappings
+        @mappings ||= devise.mappings.each_with_object({}) do |tuple, hash|
+          scope, mapping = tuple
+          modules = mapping.modules
+          next unless modules.include?(:jwt_authenticatable)
+          hash[scope] = mapping.to
+        end
+      end
+
+      def dispatch_requests
+        scopes.each_with_object([]) do |scope, array|
+          named_route = "#{scope}_session"
+          array << request_for(named_route)
+        end
+      end
+
+      def revocation_requests
+        scopes.each_with_object([]) do |scope, array|
+          named_route = "destroy_#{scope}_session"
+          array << request_for(named_route)
+        end
+      end
+
+      private
+
+      def scopes
+        mappings.keys
+      end
+
+      def request_for(named_route)
+        named_path = "#{named_route}_path"
+        route = routes.named_routes[named_route]
+        method = route.verb
+        path = /^#{routes.url_helpers.send(named_path)}$/
+        [method, path]
+      end
+    end
+  end
+end
