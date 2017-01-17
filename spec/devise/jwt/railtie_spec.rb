@@ -10,15 +10,15 @@ describe Devise::JWT::Railtie do
     expect(rails_config.middleware).to include(Warden::JWTAuth::Middleware)
   end
 
-  it 'configures as JWTAuth mappings devise modules configured to jwt' do
+  it 'configures as JWTAuth mappings devise models configured with jwt' do
     expect(Warden::JWTAuth.config.mappings).to eq(
       jwt_user: JwtUser
     )
   end
 
-  it 'configures as dispatch_paths sign_in for modules configured with jwt' do
-    expect(Warden::JWTAuth.config.dispatch_paths).to eq(
-      Regexp.union('/jwt_users/sign_in')
+  it 'configures as dispatch_requests sign_in for models with jwt' do
+    expect(Warden::JWTAuth.config.dispatch_requests).to eq(
+      [['POST', %r{^/jwt_users/sign_in$}]]
     )
   end
 end
