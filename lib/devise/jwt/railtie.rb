@@ -19,6 +19,7 @@ module Devise
           config.mappings = defaults.mappings
           config.dispatch_requests = defaults.dispatch_requests
           config.revocation_requests = defaults.revocation_requests
+          config.revocation_strategies = defaults.revocation_strategies
         end
       end
     end

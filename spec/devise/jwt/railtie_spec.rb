@@ -27,4 +27,10 @@ describe Devise::JWT::Railtie do
       [['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}]]
     )
   end
+
+  it 'configures revocation_strategies using defaults' do
+    expect(Warden::JWTAuth.config.revocation_strategies).to eq(
+      jwt_with_jti_matcher_user: JwtWithJtiMatcherUser
+    )
+  end
 end
