@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119143719) do
+ActiveRecord::Schema.define(version: 20170119145401) do
+
+  create_table "blacklist", force: :cascade do |t|
+    t.string "jti", null: false
+  end
 
   create_table "jwt_with_jti_matcher_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

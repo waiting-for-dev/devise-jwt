@@ -1,0 +1,30 @@
+# frozen_string_literal: true
+
+require 'active_support/concern'
+
+module Devise
+  module JWT
+    module RevocationStrategies
+      # This strategy must be included in an ActiveRecord model, and requires
+      # that it has a `jti` column.
+      #
+      # In order to tell whether a token is revoked, it just checks whether
+      # `jti` is in the table. On revocation, creates a new record with it.
+      module Blacklist
+        extend ActiveSupport::Concern
+
+        included do
+          # @see Warden::JWTAuth::Interfaces::RevocationStrategy#jwt_revoked?
+          def self.jwt_revoked?(payload, _user)
+            exists?(jti: payload['jti'])
+          end
+
+          # @see Warden::JWTAuth::Interfaces::RevocationStrategy#jwt_revoke
+          def self.jwt_revoke(payload, _user)
+            create(jti: payload['jti'])
+          end
+        end
+      end
+    end
+  end
+end

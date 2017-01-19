@@ -8,6 +8,7 @@ require 'devise/jwt/defaults_generator'
 require 'devise/jwt/railtie'
 require 'devise/jwt/models/jwt_authenticatable'
 require 'devise/jwt/revocation_strategies/jti_matcher'
+require 'devise/jwt/revocation_strategies/blacklist'
 
 # Authentication library
 module Devise
