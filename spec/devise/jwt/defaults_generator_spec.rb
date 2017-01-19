@@ -28,4 +28,12 @@ describe Devise::JWT::DefaultsGenerator do
       )
     end
   end
+
+  describe '#revocation_strategies' do
+    it 'adds strategies configured for each devise model with jwt' do
+      expect(defaults.revocation_strategies).to eq(
+        jwt_user: JwtUser
+      )
+    end
+  end
 end

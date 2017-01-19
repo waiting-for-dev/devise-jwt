@@ -7,15 +7,15 @@ module Devise
     #
     # @see Warden::JWTAuth
     class DefaultsGenerator
-      attr_reader :routes, :devise
+      attr_reader :routes, :devise_mappings
 
       def initialize
         @routes = Rails.application.routes
-        @devise = Devise
+        @devise_mappings = Devise.mappings
       end
 
       def mappings
-        @mappings ||= devise.mappings.each_with_object({}) do |tuple, hash|
+        @mappings ||= devise_mappings.each_with_object({}) do |tuple, hash|
           scope, mapping = tuple
           modules = mapping.modules
           next unless modules.include?(:jwt_authenticatable)
@@ -34,6 +34,13 @@ module Devise
         scopes.each_with_object([]) do |scope, array|
           named_route = "destroy_#{scope}_session"
           array << request_for(named_route)
+        end
+      end
+
+      def revocation_strategies
+        mappings.each_with_object({}) do |tuple, hash|
+          scope, model = tuple
+          hash[scope] = model.jwt_revocation_strategy
         end
       end
 

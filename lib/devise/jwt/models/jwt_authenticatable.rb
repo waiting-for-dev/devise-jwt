@@ -11,6 +11,10 @@ module Devise
     module JwtAuthenticatable
       extend ActiveSupport::Concern
 
+      class_methods do
+        Devise::Models.config(self, :jwt_revocation_strategy)
+      end
+
       included do
         def self.find_for_jwt_authentication(sub)
           find(sub)
