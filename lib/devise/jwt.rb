@@ -7,6 +7,7 @@ require 'devise/jwt/version'
 require 'devise/jwt/defaults_generator'
 require 'devise/jwt/railtie'
 require 'devise/jwt/models/jwt_authenticatable'
+require 'devise/jwt/revocation_strategies/jti_matcher'
 
 # Authentication library
 module Devise
