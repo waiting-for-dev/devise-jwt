@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 describe Devise::JWT::RevocationStrategies::JtiMatcher do
-  subject(:model) { JwtUser }
-  subject(:strategy) { JwtUser }
+  subject(:model) { JwtWithJtiMatcherUser }
+  subject(:strategy) { JwtWithJtiMatcherUser }
   let(:user) { model.create(email: 'dummy@email.com', password: 'password') }
 
   context 'Callbacks' do

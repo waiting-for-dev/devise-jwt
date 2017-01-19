@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Devise::Models::JwtAuthenticatable do
-  subject(:user_class) { JwtUser }
+  subject(:user_class) { JwtWithJtiMatcherUser }
 
   describe '#find_for_jwt_authentication(sub)' do
     it 'finds record which has given `sub` as `id`' do

@@ -1,4 +1,4 @@
-class JwtUser < ApplicationRecord
+class JwtWithJtiMatcherUser < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JtiMatcher
 
   # Include default devise modules. Others available are:

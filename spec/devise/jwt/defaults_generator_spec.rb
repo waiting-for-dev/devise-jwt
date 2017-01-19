@@ -8,7 +8,7 @@ describe Devise::JWT::DefaultsGenerator do
   describe '#mappings' do
     it 'adds devise models with jwt' do
       expect(defaults.mappings).to eq(
-        jwt_user: JwtUser
+        jwt_with_jti_matcher_user: JwtWithJtiMatcherUser
       )
     end
   end
@@ -16,7 +16,7 @@ describe Devise::JWT::DefaultsGenerator do
   describe '#dispatch_requests' do
     it 'adds create session requests for devise models with jwt' do
       expect(defaults.dispatch_requests).to eq(
-        [['POST', %r{^/jwt_users/sign_in$}]]
+        [['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}]]
       )
     end
   end
@@ -24,7 +24,7 @@ describe Devise::JWT::DefaultsGenerator do
   describe '#revocation_requests' do
     it 'adds destroy session requests for devise models with jwt' do
       expect(defaults.revocation_requests).to eq(
-        [['DELETE', %r{^/jwt_users/sign_out$}]]
+        [['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}]]
       )
     end
   end
@@ -32,7 +32,7 @@ describe Devise::JWT::DefaultsGenerator do
   describe '#revocation_strategies' do
     it 'adds strategies configured for each devise model with jwt' do
       expect(defaults.revocation_strategies).to eq(
-        jwt_user: JwtUser
+        jwt_with_jti_matcher_user: JwtWithJtiMatcherUser
       )
     end
   end

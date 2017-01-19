@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class JwtUserTest < ActiveSupport::TestCase
+class JwtWithJtiMatcherUserTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

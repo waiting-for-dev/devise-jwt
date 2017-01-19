@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119120658) do
+ActiveRecord::Schema.define(version: 20170119143719) do
 
-  create_table "jwt_users", force: :cascade do |t|
+  create_table "jwt_with_jti_matcher_users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(version: 20170119120658) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "jti",                                 null: false
-    t.index ["email"], name: "index_jwt_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_jwt_users_on_reset_password_token", unique: true
+    t.index ["email"], name: "index_jwt_with_jti_matcher_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_jwt_with_jti_matcher_users_on_reset_password_token", unique: true
   end
 
   create_table "no_jwt_users", force: :cascade do |t|
