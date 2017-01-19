@@ -13,7 +13,7 @@ module Devise
       # In order to tell whether a token is revoked, it just compares both `jti`
       # values. On revocation, it changes column value so that the token is no
       # longer valid.
-      module JtiMatcher
+      module JTIMatcher
         extend ActiveSupport::Concern
 
         included do

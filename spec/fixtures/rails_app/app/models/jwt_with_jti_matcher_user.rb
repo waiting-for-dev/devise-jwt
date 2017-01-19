@@ -1,5 +1,5 @@
 class JwtWithJtiMatcherUser < ApplicationRecord
-  include Devise::JWT::RevocationStrategies::JtiMatcher
+  include Devise::JWT::RevocationStrategies::JTIMatcher
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

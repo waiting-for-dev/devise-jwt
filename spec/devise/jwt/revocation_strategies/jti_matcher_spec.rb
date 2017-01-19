@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Devise::JWT::RevocationStrategies::JtiMatcher do
+describe Devise::JWT::RevocationStrategies::JTIMatcher do
   subject(:model) { JwtWithJtiMatcherUser }
   subject(:strategy) { JwtWithJtiMatcherUser }
   let(:user) { model.create(email: 'dummy@email.com', password: 'password') }
