@@ -101,7 +101,7 @@ describe 'Authorization', type: :request do
       }
     end
 
-    it 'does not authorize a scope with another scope token' do
+    it 'unauthorizes' do
       auth = sign_in(jwt_with_jti_matcher_user_session_path, user_params)
       jwt_with_blacklist_user.update(id: user.id)
 
