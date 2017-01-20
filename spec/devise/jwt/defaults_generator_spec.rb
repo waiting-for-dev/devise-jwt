@@ -9,7 +9,8 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds devise models with jwt' do
       expect(defaults.mappings).to eq(
         jwt_with_jti_matcher_user: JwtWithJtiMatcherUser,
-        jwt_with_blacklist_user: JwtWithBlacklistUser
+        jwt_with_blacklist_user: JwtWithBlacklistUser,
+        jwt_with_null_user: JwtWithNullUser
       )
     end
   end
@@ -20,7 +21,8 @@ describe Devise::JWT::DefaultsGenerator do
       expect(defaults.dispatch_requests).to eq(
         [
           ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}],
-          ['POST', %r{^/jwt_with_blacklist_users/sign_in$}]
+          ['POST', %r{^/jwt_with_blacklist_users/sign_in$}],
+          ['POST', %r{^/jwt_with_null_users/sign_in$}]
         ]
       )
     end
@@ -31,7 +33,8 @@ describe Devise::JWT::DefaultsGenerator do
       expect(defaults.revocation_requests).to eq(
         [
           ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
-          ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}]
+          ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}],
+          ['DELETE', %r{^/jwt_with_null_users/sign_out$}]
         ]
       )
     end
@@ -42,7 +45,8 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds strategies configured for each devise model with jwt' do
       expect(defaults.revocation_strategies).to eq(
         jwt_with_jti_matcher_user: JwtWithJtiMatcherUser,
-        jwt_with_blacklist_user: Blacklist
+        jwt_with_blacklist_user: Blacklist,
+        jwt_with_null_user: Devise::JWT::RevocationStrategies::Null
       )
     end
   end
