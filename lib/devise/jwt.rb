@@ -11,17 +11,11 @@ require 'devise/jwt/revocation_strategies'
 
 # Authentication library
 module Devise
-  # Just defines JWTAuth settings as devise settings for convenience, prepending
-  # names with 'jwt'
+  # Yields to Warden::JWTAuth.config
   #
-  # @see [Warden::JWTAuth]
-  Warden::JWTAuth.config.to_h.keys.each do |setting|
-    mattr_accessor("jwt_#{setting}")
-
-    define_singleton_method("jwt_#{setting}=") do |value|
-      class_variable_set("@@jwt_#{setting}", value)
-      Warden::JWTAuth.config.send("#{setting}=", value)
-    end
+  # @see Warden::JWTAuth
+  def self.jwt
+    yield(Warden::JWTAuth.config)
   end
 
   add_module(:jwt_authenticatable, strategy: :jwt)
