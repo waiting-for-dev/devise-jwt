@@ -58,4 +58,22 @@ describe 'Token dispatch', type: :request do
       expect(response.headers['Authorization']).not_to be_nil
     end
   end
+
+  context 'no JWT user' do
+    let(:user) { no_jwt_user }
+    let(:user_params) do
+      {
+        no_jwt_user: {
+          email: user.email,
+          password: user.password
+        }
+      }
+    end
+
+    it 'does not dispatch JWT in sign_in requests' do
+      post no_jwt_user_session_path, params: user_params
+
+      expect(response.headers['Authorization']).to be_nil
+    end
+  end
 end

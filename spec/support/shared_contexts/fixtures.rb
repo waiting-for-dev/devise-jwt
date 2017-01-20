@@ -24,4 +24,12 @@ shared_context 'fixtures' do
       password: 'password'
     )
   end
+
+  let(:no_jwt_model) { NoJwtUser }
+  let(:no_jwt_user) do
+    no_jwt_model.create(
+      email: 'an@user.com',
+      password: 'password'
+    )
+  end
 end
