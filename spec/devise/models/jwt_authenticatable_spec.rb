@@ -3,23 +3,20 @@
 require 'spec_helper'
 
 describe Devise::Models::JwtAuthenticatable do
-  subject(:user_class) { JwtWithJtiMatcherUser }
+  include_context 'fixtures'
+
+  let(:model) { jwt_with_jti_matcher_model }
+  let(:user) { jwt_with_jti_matcher_user }
 
   describe '#find_for_jwt_authentication(sub)' do
     it 'finds record which has given `sub` as `id`' do
-      record = user_class.create(email: 'dummy@email.com', password: 'password')
-
-      id = record.id
-
-      expect(user_class.find_for_jwt_authentication(id)).to eq(record)
+      expect(model.find_for_jwt_authentication(user.id)).to eq(user)
     end
   end
 
   describe '#jwt_subject' do
     it 'returns id' do
-      record = user_class.create(email: 'dummy@email.com', password: 'password')
-
-      expect(record.jwt_subject).to eq(record.id)
+      expect(user.jwt_subject).to eq(user.id)
     end
   end
 end

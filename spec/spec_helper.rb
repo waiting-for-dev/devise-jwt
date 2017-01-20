@@ -11,6 +11,11 @@ require File.expand_path(
   '../fixtures/rails_app/config/environment', __FILE__
 )
 
+SPEC_ROOT = Pathname(__FILE__).dirname
+Dir[SPEC_ROOT.join('support/**/*.rb')].each do |file|
+  require file
+end
+
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
