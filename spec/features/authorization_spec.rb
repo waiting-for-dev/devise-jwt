@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'Token revocation', type: :request do
+describe 'Authorization', type: :request do
   include_context 'feature'
   include_context 'fixtures'
 
@@ -17,9 +17,16 @@ describe 'Token revocation', type: :request do
       }
     end
 
-    it 'revokes JWT in sign_out' do
+    it 'authorizes requests with a valid token' do
       auth = sign_in(jwt_with_jti_matcher_user_session_path, user_params)
-      sign_out(destroy_jwt_with_jti_matcher_user_session_path, auth)
+
+      get_with_auth('/jwt_with_jti_matcher_user_auth_action', auth)
+
+      expect(response.status).to eq(200)
+    end
+
+    it 'unauthorizes requests with an invalid token' do
+      auth = 'Bearer 123'
 
       get_with_auth('/jwt_with_jti_matcher_user_auth_action', auth)
 
@@ -38,9 +45,16 @@ describe 'Token revocation', type: :request do
       }
     end
 
-    it 'revokes JWT in sign_out' do
+    it 'authorizes requests with a valid token' do
       auth = sign_in(jwt_with_blacklist_user_session_path, user_params)
-      sign_out(destroy_jwt_with_blacklist_user_session_path, auth)
+
+      get_with_auth('/jwt_with_blacklist_user_auth_action', auth)
+
+      expect(response.status).to eq(200)
+    end
+
+    it 'unauthorizes requests with an invalid token' do
+      auth = 'Bearer 123'
 
       get_with_auth('/jwt_with_blacklist_user_auth_action', auth)
 
@@ -59,13 +73,41 @@ describe 'Token revocation', type: :request do
       }
     end
 
-    it 'does not revoke JWT' do
+    it 'authorizes requests with a valid token' do
       auth = sign_in(jwt_with_null_user_session_path, user_params)
-      sign_out(destroy_jwt_with_null_user_session_path, auth)
 
       get_with_auth('/jwt_with_null_user_auth_action', auth)
 
       expect(response.status).to eq(200)
+    end
+
+    it 'unauthorizes requests with an invalid token' do
+      auth = 'Bearer 123'
+
+      get_with_auth('/jwt_with_null_user_auth_action', auth)
+
+      expect(response.status).to eq(401)
+    end
+  end
+
+  context 'when a token from another scope and same id is given' do
+    let(:user) { jwt_with_jti_matcher_user }
+    let(:user_params) do
+      {
+        jwt_with_jti_matcher_user: {
+          email: user.email,
+          password: user.password
+        }
+      }
+    end
+
+    it 'does not authorize a scope with another scope token' do
+      auth = sign_in(jwt_with_jti_matcher_user_session_path, user_params)
+      jwt_with_blacklist_user.update(id: user.id)
+
+      get_with_auth('/jwt_with_blacklist_user_auth_action', auth)
+
+      expect(response.status).to eq(401)
     end
   end
 end

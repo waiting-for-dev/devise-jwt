@@ -3,11 +3,8 @@
 require 'spec_helper'
 
 describe 'Token dispatch', type: :request do
+  include_context 'feature'
   include_context 'fixtures'
-
-  def sign_in(session_path, params)
-    post(session_path, params: params)
-  end
 
   context 'JWT user with JTI matcher revocation' do
     let(:user) { jwt_with_jti_matcher_user }
