@@ -5,6 +5,10 @@ require 'spec_helper'
 describe 'Token dispatch', type: :request do
   include_context 'fixtures'
 
+  def sign_in(session_path, params)
+    post(session_path, params: params)
+  end
+
   context 'JWT user with JTI matcher revocation' do
     let(:user) { jwt_with_jti_matcher_user }
     let(:user_params) do
@@ -17,7 +21,7 @@ describe 'Token dispatch', type: :request do
     end
 
     it 'dispatches JWT in sign_in requests' do
-      post jwt_with_jti_matcher_user_session_path, params: user_params
+      sign_in(jwt_with_jti_matcher_user_session_path, user_params)
 
       expect(response.headers['Authorization']).not_to be_nil
     end
@@ -35,7 +39,7 @@ describe 'Token dispatch', type: :request do
     end
 
     it 'dispatches JWT in sign_in requests' do
-      post jwt_with_blacklist_user_session_path, params: user_params
+      sign_in(jwt_with_blacklist_user_session_path, user_params)
 
       expect(response.headers['Authorization']).not_to be_nil
     end
@@ -53,7 +57,7 @@ describe 'Token dispatch', type: :request do
     end
 
     it 'dispatches JWT in sign_in requests' do
-      post jwt_with_null_user_session_path, params: user_params
+      sign_in(jwt_with_null_user_session_path, user_params)
 
       expect(response.headers['Authorization']).not_to be_nil
     end
@@ -71,7 +75,7 @@ describe 'Token dispatch', type: :request do
     end
 
     it 'does not dispatch JWT in sign_in requests' do
-      post no_jwt_user_session_path, params: user_params
+      sign_in(no_jwt_user_session_path, user_params)
 
       expect(response.headers['Authorization']).to be_nil
     end
