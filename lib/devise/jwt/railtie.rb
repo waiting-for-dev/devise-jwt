@@ -8,18 +8,18 @@ module Devise
     class Railtie < Rails::Railtie
       initializer 'devise-jwt-middleware' do |app|
         app.middleware.use Warden::JWTAuth::Middleware
-      end
 
-      config.after_initialize do
-        Rails.application.reload_routes!
+        config.after_initialize do
+          Rails.application.reload_routes!
 
-        Warden::JWTAuth.configure do |config|
-          defaults = DefaultsGenerator.new
+          Warden::JWTAuth.configure do |config|
+            defaults = DefaultsGenerator.new
 
-          config.mappings = defaults.mappings
-          config.dispatch_requests = defaults.dispatch_requests
-          config.revocation_requests = defaults.revocation_requests
-          config.revocation_strategies = defaults.revocation_strategies
+            config.mappings = defaults.mappings
+            config.dispatch_requests.push(*defaults.dispatch_requests)
+            config.revocation_requests.push(*defaults.revocation_requests)
+            config.revocation_strategies = defaults.revocation_strategies
+          end
         end
       end
     end

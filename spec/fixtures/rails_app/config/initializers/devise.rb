@@ -275,5 +275,7 @@ Devise.setup do |config|
   # JWT configuration
   config.jwt do |jwt|
     jwt.secret = 'dwdwdwdwdwdwedwedwedwddw'
+    jwt.dispatch_requests = [['GET', %r{^/foo_path$}]]
+    jwt.revocation_requests = [['GET', %r{^/bar_path$}]]
   end
 end

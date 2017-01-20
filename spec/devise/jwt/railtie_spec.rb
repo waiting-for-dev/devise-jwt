@@ -22,9 +22,21 @@ describe Devise::JWT::Railtie do
     )
   end
 
+  it 'does not override user defined dispatch_requests' do
+    expect(Warden::JWTAuth.config.dispatch_requests).to include(
+      ['GET', %r{^/foo_path$}]
+    )
+  end
+
   it 'configures revocation_requests using defaults' do
     expect(Warden::JWTAuth.config.revocation_requests).to include(
       ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}]
+    )
+  end
+
+  it 'does not override user defined revocation' do
+    expect(Warden::JWTAuth.config.revocation_requests).to include(
+      ['GET', %r{^/bar_path$}]
     )
   end
 
