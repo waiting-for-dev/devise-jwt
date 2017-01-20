@@ -11,25 +11,25 @@ describe Devise::JWT::Railtie do
   end
 
   it 'configure mappings using defaults' do
-    expect(Warden::JWTAuth.config.mappings).to eq(
+    expect(Warden::JWTAuth.config.mappings).to include(
       jwt_with_jti_matcher_user: JwtWithJtiMatcherUser
     )
   end
 
   it 'configures dispatch_requests using defaults' do
-    expect(Warden::JWTAuth.config.dispatch_requests).to eq(
-      [['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}]]
+    expect(Warden::JWTAuth.config.dispatch_requests).to include(
+      ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}]
     )
   end
 
   it 'configures revocation_requests using defaults' do
-    expect(Warden::JWTAuth.config.revocation_requests).to eq(
-      [['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}]]
+    expect(Warden::JWTAuth.config.revocation_requests).to include(
+      ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}]
     )
   end
 
   it 'configures revocation_strategies using defaults' do
-    expect(Warden::JWTAuth.config.revocation_strategies).to eq(
+    expect(Warden::JWTAuth.config.revocation_strategies).to include(
       jwt_with_jti_matcher_user: JwtWithJtiMatcherUser
     )
   end
