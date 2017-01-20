@@ -6,7 +6,7 @@ module Devise
   module JWT
     # Pluck to rails
     class Railtie < Rails::Railtie
-      initializer 'devise-jwt-middleares' do |app|
+      initializer 'devise-jwt-middleware' do |app|
         app.middleware.use Warden::JWTAuth::Middleware
       end
 
