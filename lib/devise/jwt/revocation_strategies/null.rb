@@ -13,8 +13,8 @@ module Devise
           false
         end
 
-        # @see Warden::JWTAuth::Interfaces::RevocationStrategy#jwt_revoke
-        def self.jwt_revoke(_payload, _user); end
+        # @see Warden::JWTAuth::Interfaces::RevocationStrategy#revoke_jwt
+        def self.revoke_jwt(_payload, _user); end
       end
     end
   end

@@ -24,8 +24,8 @@ module Devise
             payload['jti'] != user.jti
           end
 
-          # @see Warden::JWTAuth::Interfaces::RevocationStrategy#jwt_revoke
-          def self.jwt_revoke(_payload, user)
+          # @see Warden::JWTAuth::Interfaces::RevocationStrategy#revoke_jwt
+          def self.revoke_jwt(_payload, user)
             user.update_column(:jti, generate_jti)
           end
 

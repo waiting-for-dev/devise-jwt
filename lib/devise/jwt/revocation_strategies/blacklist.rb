@@ -19,8 +19,8 @@ module Devise
             exists?(jti: payload['jti'])
           end
 
-          # @see Warden::JWTAuth::Interfaces::RevocationStrategy#jwt_revoke
-          def self.jwt_revoke(payload, _user)
+          # @see Warden::JWTAuth::Interfaces::RevocationStrategy#revoke_jwt
+          def self.revoke_jwt(payload, _user)
             create(jti: payload['jti'])
           end
         end

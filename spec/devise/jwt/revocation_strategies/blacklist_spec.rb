@@ -22,9 +22,9 @@ describe Devise::JWT::RevocationStrategies::Blacklist do
     end
   end
 
-  describe '#jwt_revoke(payload, user)' do
+  describe '#revoke_jwt(payload, user)' do
     it 'adds payload jti to the blacklist' do
-      strategy.jwt_revoke(payload, :whatever)
+      strategy.revoke_jwt(payload, :whatever)
 
       expect(strategy.find_by(jti: '123')).not_to be_nil
     end

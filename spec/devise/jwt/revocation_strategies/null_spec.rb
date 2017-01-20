@@ -11,7 +11,7 @@ describe Devise::JWT::RevocationStrategies::Null do
     end
   end
 
-  describe '#jwt_revoke(payload, user)' do
+  describe '#revoke_jwt(payload, user)' do
     it('does nothing') {}
   end
 end
