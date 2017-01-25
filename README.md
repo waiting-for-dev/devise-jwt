@@ -1,4 +1,4 @@
-# Devise::JWT
+[[#]] Devise::JWT
 
 `devise-jwt` is a [devise](https://github.com/plataformatec/devise) extension which uses [JWT](https://jwt.io/) tokens for user authentication. It follows [secure by default](https://en.wikipedia.org/wiki/Secure_by_default) principle.
 
@@ -7,9 +7,9 @@ You can read about which security concerns this library takes into account and a
 - [Stand Up for JWT Revocation](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation/)
 - [JWT Recovation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/)
 - [JWT Secure Usage](http://waiting-for-dev.github.io/blog/2017/01/25/jwt_secure_usage/)
-- [A secure JWT authentication implementation for Rack and Rail](http://waiting-for-dev.github.io/blog/2017/01/26/a_secure_jwt_authentication_for_rack_and_rails)
+- [A secure JWT authentication implementation for Rack and Rails](http://waiting-for-dev.github.io/blog/2017/01/26/a_secure_jwt_authentication_for_rack_and_rails)
 
-`devise-jwt` is just a thin layer on top of [`warden-jwt_auth`][https://github.com/waiting-for-dev/warden-jwt_auth] which configures it to use out of the box for devise and Rails.
+`devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) which configures it to be used out of the box with devise and Rails.
 
 ## Installation
 
@@ -31,7 +31,7 @@ Or install it yourself as:
 
 ### Secret key configuration
 
-First of all, you have to configure which secret key will be used in order to sign generated tokens. You can do it in the devise initializer:
+First of all, you have to configure the secret key that will be used to sign generated tokens. You can do it in the devise initializer:
 
 ```ruby
 Devise.setup do |config|
@@ -42,22 +42,22 @@ Devise.setup do |config|
 end
 ```
 
-**Important:** You are encouraged not to reuse your application `secret_key_base` for this. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, better use an environment variable like in the example.
+**Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
 
 Currently, HS256 algorithm is the one in use.
 
 ### Model configuration
 
-You have to tell which user models you want to be authenticatable with JWT. For them, the authentication process will be like this:
+You have to tell which user models you want to be able to authenticate with JWT tokens. For them, the authentication process will be like this:
 
-- A user authenticates using devise create session request (for example, through email + password).
-- If the authentication succeeds, a JWT token is dispatched to the client through the `Authorization` response header, in the form of `Bearer #{token}`
-- The client can use that token to authenticate following requests for the same user, providing it through the `Authorization` request header, also in the form of `Bearer #{token}`
+- A user authenticates trough devise create session request (for example, with the standard `:database_authenticatable` module).
+- If the authentication succeeds, a JWT token is dispatched to the client in the `Authorization` response header, with format `Bearer #{token}`
+- The client can use this token to authenticate following requests for the same user, providing it in the `Authorization` request header, also with format `Bearer #{token}`
 - When the client visits devise destroy session request, the token is revoked.
 
 As you see, unlike other JWT authentication libraries, here it is expected that tokens will be revoked by the server. I wrote about [why I think JWT revocation is needed and useful](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation/).
 
-For example:
+An example configuration:
 
 ```ruby
 class User < ApplicationRecord
@@ -66,30 +66,43 @@ class User < ApplicationRecord
 end
 ```
 
+If you need to add something to the JWT payload, you can do it defining a `jwt_payload` in the user model. It must return a `Hash`. For instance:
+
+```ruby
+def jwt_payload
+  { 'foo' => 'bar' }
+end
+```
+
 ### Revocation strategies
 
-`devise-jwt` comes with two revocation strategies out of the box. They are implementations of what is discussed in the blog post [JWT Recovation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I discuss about their pros and cons.
+`devise-jwt` comes with two revocation strategies out of the box. They are implementations of what is discussed in the blog post [JWT Recovation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I also talk about their pros and cons.
 
 #### JTIMatcher
 
-Here, the model class acts itself as the revocation strategy. It needs a new string column `jti` to be added to the user. `jti` stands for JWT ID, and it is a standard claim meant to uniquely identify a token.
+Here, the model class acts itself as the revocation strategy. It needs a new string column with name `jti` to be added to the user. `jti` stands for JWT ID, and it is a standard claim meant to uniquely identify a token.
 
 It works like the following:
 
-- At the same time that a token is dispatched for a user, the `jti` claim is copied to the `jti` column.
-- At every authenticated request, the incoming token `jti` claim is matched against the `jti` column for that user. The authentication only succeeds if they are the same.
-- When the user requests to sign out, its `jti` column changes, so current token won't be valid anymore.
+- At the same time that a token is dispatched for a user, the `jti` claim is persisted to the `jti` column.
+- At every authenticated action, the incoming token `jti` claim is matched against the `jti` column for that user. The authentication only succeeds if they are the same.
+- When the user requests to sign out its `jti` column changes, so that the token won't be valid anymore.
 
-In order to use it, first you need to add the `jti` column to the user model. So, you have to set something like the following in a migration:
+In order to use it, you need to add the `jti` column to the user model. So, you have to set something like the following in a migration:
 
 ```ruby
 def change
   add_column :users, :jti, :string, null: false
   add_index :users, :jti, unique: true
+  # If you already have user records, you will need to initialize its `jti` column before setting it to not null. Your migration will look this way:
+  # add_column :users, :jti, :string
+  # User.all.each { |user| user.update_column(:jti, SecureRandom.uuid) }
+  # change_column_null :users, :jti, false
+  # add_index :users, :jti, unique: true
 end
 ```
 
-**Important:** You are encouraged to set the unique index in the `jti` column so that we can be sure at the database level that there aren't two valid tokens with same `jti` at the same time.
+**Important:** You are encouraged to set a unique index in the `jti` column. This way we can be sure at the database level that there aren't two valid tokens with same `jti` at the same time.
 
 Then, you have to add the strategy to the model class and configure it accordingly:
 
@@ -104,16 +117,16 @@ end
 
 #### Blacklist
 
-In this strategy, a database table is used as a blacklist of revoked JWT tokens. Only the `jti` claim, which uniquely identifies a token, is stored.
+In this strategy, a database table is used as a blacklist of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted.
 
 In order to use it, you need to create the blacklist table in a migration:
 
 ```ruby
 def change
-  create_table :blacklist do |t|
+  create_table :jwt_blacklist do |t|
     t.string :jti, null: false
   end
-  add_index :blacklist, :jti
+  add_index :jwt_blacklist, :jti
 end
 ```
 
@@ -122,16 +135,25 @@ For performance reasons, it is better if the `jti` column is an index.
 Then, you need to create the corresponding model and include the strategy:
 
 ```ruby
-class Blacklist < ApplicationRecord
+class JWTBlacklist < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Blacklist
 
-  self.table_name = 'blacklist'
+  self.table_name = 'jwt_blacklist'
+end
+```
+
+And configure the user model to use it:
+
+```ruby
+class User < ApplicationRecord
+  devise :database_authenticatable,
+         jwt_revocation_strategy: JWTBlacklist
 end
 ```
 
 #### Null strategy
 
-A [null object pattern](https://en.wikipedia.org/wiki/Null_Object_pattern) strategy, which does not revoke tokens, is provided out of the box just in case you are absolutely sure you don't need token revocation. You are encouraged **not to use it**.
+A [null object pattern](https://en.wikipedia.org/wiki/Null_Object_pattern) strategy, which does not revoke tokens, is provided out of the box just in case you are absolutely sure you don't need token revocation. It is recommended **not to use it**.
 
 ```ruby
 class User < ApplicationRecord
@@ -180,7 +202,7 @@ Secret key used to sign generated JWT tokens. You must set it.
 
 #### expiration_time
 
-Number of seconds while a JWT is valid since its generation. After that, it won't be valid anymore, even if it hasn't been revoked.
+Number of seconds while a JWT is valid after its generation. After that, it won't be valid anymore, even if it hasn't been revoked.
 
 Defaults to 3600 (1 hour).
 
@@ -199,7 +221,7 @@ jwt.dispatch_requests = [
                         ]
 ```
 
-**Important**: You are encouraged to delimit your regular expression with `^` and `$` delimiters to avoid unintentional matches.
+**Important**: You are encouraged to delimit your regular expression with `^` and `$` to avoid unintentional matches.
 
 #### revocation_requests 
 
@@ -216,7 +238,7 @@ jwt.revocation_requests = [
                           ]
 ```
 
-**Important**: You are encouraged to delimit your regular expression with `^` and `$` delimiters to avoid unintentional matches.
+**Important**: You are encouraged to delimit your regular expression with `^` and `$` to avoid unintentional matches.
 
 ## Development
 
