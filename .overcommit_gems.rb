@@ -11,5 +11,5 @@ gem 'bundler-audit', '~> 0.5'
 gem 'reek', '~> 4.5'
 
 # Ruby code style checking
-gem 'rubocop', '~> 0.43'
-gem 'rubocop-rspec', '~> 1.7'
+gem 'rubocop', '~> 0.47'
+gem 'rubocop-rspec', '~> 1.10'
