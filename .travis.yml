@@ -8,4 +8,4 @@ before_install:
   - bundle install --gemfile=.overcommit_gems.rb
 script:
   - bundle exec rspec
-  - bundle exec overcommit --run
+  - overcommit --run
