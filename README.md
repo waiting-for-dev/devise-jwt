@@ -250,10 +250,6 @@ jwt.revocation_requests = [
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
 There are docker and docker-compose files configured to create a development environment for this gem. So, if you use Docker you only need to run:
 
 `docker-compose up -d`
@@ -261,6 +257,14 @@ There are docker and docker-compose files configured to create a development env
 An then, for example:
 
 `docker-compose exec app rspec`
+
+This gem uses [overcommit](https://github.com/brigade/overcommit) to execute some code review engines. If you submit a pull request, it will be executed in the CI process. In order to set it up, you need to do:
+
+```ruby
+bundle install --gemfile=.overcommit_gems.rb
+overcommit --sign
+overcommit --run # To test if it works
+```
 
 ## Contributing
 
