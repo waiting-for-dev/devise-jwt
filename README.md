@@ -2,7 +2,6 @@
 
 [![Code Climate](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/gpa.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt)
 [![Test Coverage](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/coverage.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt/coverage)
-[![Issue Count](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/issue_count.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt)
 
 `devise-jwt` is a [devise](https://github.com/plataformatec/devise) extension which uses [JWT](https://jwt.io/) tokens for user authentication. It follows [secure by default](https://en.wikipedia.org/wiki/Secure_by_default) principle.
 
