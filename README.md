@@ -20,7 +20,7 @@ You can read about which security concerns this library takes into account and a
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise-jwt', '~> 0.1.0'
+gem 'devise-jwt', '~> 0.1.1'
 ```
 
 And then execute:
