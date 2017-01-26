@@ -5,6 +5,8 @@ require 'devise/jwt'
 require 'rails/all'
 require 'rspec/rails'
 require 'pry-byebug'
+require 'simplecov'
+SimpleCov.start
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path(
