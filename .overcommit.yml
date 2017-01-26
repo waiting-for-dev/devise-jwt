@@ -14,6 +14,7 @@ CommitMsg:
       - devise-jwt.gemspec
       - spec/fixtures/rails_app/**/*
       - README.md
+      - CHANGELOG.md
 
   HardTabs:
     enabled: true
