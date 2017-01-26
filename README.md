@@ -1,5 +1,6 @@
 # Devise::JWT
 
+[![Gem Version](https://badge.fury.io/rb/devise-jwt.svg)](https://badge.fury.io/rb/devise-jwt)
 [![Build Status](https://travis-ci.org/waiting-for-dev/devise-jwt.svg?branch=master)](https://travis-ci.org/waiting-for-dev/devise-jwt)
 [![Code Climate](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/gpa.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt)
 [![Test Coverage](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/coverage.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt/coverage)
