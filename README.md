@@ -273,6 +273,9 @@ overcommit --run # To test if it works
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/waiting-for-dev/devise-jwt. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
+## Release Policy
+
+`devise-jwt` follows the principles of [semantic versioning](http://semver.org/).
 
 ## License
 
