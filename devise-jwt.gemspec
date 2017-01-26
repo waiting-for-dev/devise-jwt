@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Marc Busqué"]
   spec.email         = ["marc@lamarciana.com"]
 
-  spec.summary       = %q{Devise & JWT.}
-  spec.description   = %q{Devise & JWT}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{JWT authentication for devise}
+  spec.description   = %q{JWT authentication for devise with configurable token revocation strategies}
+  spec.homepage      = "https://github.com/waiting-for-dev/devise-jwt"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

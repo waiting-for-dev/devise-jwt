@@ -9,7 +9,7 @@ You can read about which security concerns this library takes into account and a
 - [JWT Secure Usage](http://waiting-for-dev.github.io/blog/2017/01/25/jwt_secure_usage/)
 - [A secure JWT authentication implementation for Rack and Rails](http://waiting-for-dev.github.io/blog/2017/01/26/a_secure_jwt_authentication_for_rack_and_rails)
 
-`devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) which configures it to be used out of the box with devise and Rails.
+`devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) that configures it to be used out of the box with devise and Rails.
 
 ## Installation
 
@@ -50,12 +50,12 @@ Currently, HS256 algorithm is the one in use.
 
 You have to tell which user models you want to be able to authenticate with JWT tokens. For them, the authentication process will be like this:
 
-- A user authenticates trough devise create session request (for example, with the standard `:database_authenticatable` module).
+- A user authenticates trough devise create session request (for example, using the standard `:database_authenticatable` module).
 - If the authentication succeeds, a JWT token is dispatched to the client in the `Authorization` response header, with format `Bearer #{token}`
 - The client can use this token to authenticate following requests for the same user, providing it in the `Authorization` request header, also with format `Bearer #{token}`
 - When the client visits devise destroy session request, the token is revoked.
 
-As you see, unlike other JWT authentication libraries, here it is expected that tokens will be revoked by the server. I wrote about [why I think JWT revocation is needed and useful](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation/).
+As you see, unlike other JWT authentication libraries, it is expected that tokens will be revoked by the server. I wrote about [why I think JWT revocation is needed and useful](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation/).
 
 An example configuration:
 
@@ -66,7 +66,7 @@ class User < ApplicationRecord
 end
 ```
 
-If you need to add something to the JWT payload, you can do it defining a `jwt_payload` in the user model. It must return a `Hash`. For instance:
+If you need to add something to the JWT payload, you can do it defining a `jwt_payload` method in the user model. It must return a `Hash`. For instance:
 
 ```ruby
 def jwt_payload
@@ -86,7 +86,7 @@ It works like the following:
 
 - At the same time that a token is dispatched for a user, the `jti` claim is persisted to the `jti` column.
 - At every authenticated action, the incoming token `jti` claim is matched against the `jti` column for that user. The authentication only succeeds if they are the same.
-- When the user requests to sign out its `jti` column changes, so that the token won't be valid anymore.
+- When the user requests to sign out its `jti` column changes, so that provided token won't be valid anymore.
 
 In order to use it, you need to add the `jti` column to the user model. So, you have to set something like the following in a migration:
 
@@ -94,7 +94,7 @@ In order to use it, you need to add the `jti` column to the user model. So, you 
 def change
   add_column :users, :jti, :string, null: false
   add_index :users, :jti, unique: true
-  # If you already have user records, you will need to initialize its `jti` column before setting it to not null. Your migration will look this way:
+  # If you already have user records, you will need to initialize its `jti` column before setting it to not nullable. Your migration will look this way:
   # add_column :users, :jti, :string
   # User.all.each { |user| user.update_column(:jti, SecureRandom.uuid) }
   # change_column_null :users, :jti, false
@@ -112,6 +112,14 @@ class User < ApplicationRecord
   
   devise :database_authenticatable,
          jwt_revocation_strategy: self
+end
+```
+
+Be aware that this strategy makes uses of `jwt_payload` method in the user model, so if you need to use it don't forget to call `super`:
+
+```ruby
+def jwt_payload
+  super.merge('foo' => 'bar')
 end
 ```
 
@@ -142,7 +150,7 @@ class JWTBlacklist < ApplicationRecord
 end
 ```
 
-And configure the user model to use it:
+Last, configure the user model to use it:
 
 ```ruby
 class User < ApplicationRecord
@@ -246,9 +254,17 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
+There are docker and docker-compose files configured to create a development environment for this gem. So, if you use Docker you only need to run:
+
+`docker-compose up -d`
+
+An then, for example:
+
+`docker-compose exec app rspec`
+
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/devise-jwt. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/waiting-for-dev/devise-jwt. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
