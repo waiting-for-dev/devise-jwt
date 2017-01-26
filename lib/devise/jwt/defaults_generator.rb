@@ -53,9 +53,20 @@ module Devise
       def request_for(named_route)
         named_path = "#{named_route}_path"
         route = routes.named_routes[named_route]
-        method = route.verb
+        method = method_for_route(route)
         path = /^#{routes.url_helpers.send(named_path)}$/
         [method, path]
+      end
+
+      # :reek:UtilityFunction
+      # @see https://github.com/rails/rails/pull/21849
+      def method_for_route(route)
+        verb = route.verb
+        if Rails.version.to_i < 5
+          verb.source.match(/\w+/)[0]
+        else
+          verb
+        end
       end
     end
   end
