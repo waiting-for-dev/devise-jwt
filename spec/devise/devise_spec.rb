@@ -4,10 +4,10 @@ require 'spec_helper'
 
 describe Devise do
   describe '::jwt' do
-    it 'yields to Warden::JWTAuth.config' do
+    it 'yields to Devise::JWT.config' do
       described_class.jwt { |jwt| jwt.expiration_time = 900 }
 
-      expect(Warden::JWTAuth.config.expiration_time).to eq(900)
+      expect(Devise::JWT.config.expiration_time).to eq(900)
     end
   end
 

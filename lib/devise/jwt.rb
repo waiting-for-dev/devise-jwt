@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'forwardable'
 require 'devise'
 require 'active_support/core_ext/module/attribute_accessors'
 require 'warden/jwt_auth'
@@ -15,12 +16,33 @@ module Devise
   #
   # @see Warden::JWTAuth
   def self.jwt
-    yield(Warden::JWTAuth.config)
+    yield(Devise::JWT.config)
   end
 
   add_module(:jwt_authenticatable, strategy: :jwt)
 
   # JWT extension for devise
   module JWT
+    extend Dry::Configurable
+
+    setting(:secret) do |value|
+      forward_to_warden(:secret, value)
+    end
+
+    setting(:expiration_time) do |value|
+      forward_to_warden(:expiration_time, value)
+    end
+
+    setting(:dispatch_requests) do |value|
+      forward_to_warden(:dispatch_requests, value)
+    end
+
+    setting(:revocation_requests) do |value|
+      forward_to_warden(:revocation_requests, value)
+    end
+
+    def self.forward_to_warden(setting, value)
+      Warden::JWTAuth.config.send("#{setting}=", value)
+    end
   end
 end
