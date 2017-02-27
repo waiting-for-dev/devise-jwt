@@ -16,29 +16,29 @@ describe Devise::JWT::DefaultsGenerator do
   end
 
   describe 'dispatch_requests' do
-    # rubocop:disable RSpec/ExampleLength
     it 'adds create session requests for devise models with jwt' do
-      expect(defaults[:dispatch_requests]).to eq(
-        [
-          ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}],
-          ['POST', %r{^/jwt_with_blacklist_users/sign_in$}],
-          ['POST', %r{^/jwt_with_null_users/sign_in$}]
-        ]
+      expect(defaults[:dispatch_requests]).to include(
+        ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}],
+        ['POST', %r{^/jwt_with_blacklist_users/sign_in$}],
+        ['POST', %r{^/jwt_with_null_users/sign_in$}]
+      )
+    end
+
+    it 'adds registration requests for devise models with jwt' do
+      expect(defaults[:dispatch_requests]).to include(
+        ['POST', %r{^/jwt_with_jti_matcher_users$}]
       )
     end
   end
 
   describe 'revocation_requests' do
     it 'adds destroy session requests for devise models with jwt' do
-      expect(defaults[:revocation_requests]).to eq(
-        [
-          ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
-          ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}],
-          ['POST', %r{^/jwt_with_null_users/sign_out$}]
-        ]
+      expect(defaults[:revocation_requests]).to include(
+        ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
+        ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}],
+        ['POST', %r{^/jwt_with_null_users/sign_out$}]
       )
     end
-    # rubocop:enable RSpec/ExampleLength
   end
 
   describe 'revocation_strategies' do

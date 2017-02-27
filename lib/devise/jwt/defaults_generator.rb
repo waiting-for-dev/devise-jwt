@@ -56,8 +56,18 @@ module Devise
       end
 
       def add_dispatch_requests(mapping)
+        add_sign_in_request(mapping)
+        add_registration_request(mapping)
+      end
+
+      def add_sign_in_request(mapping)
         return unless mapping.routes.member?(:session)
         defaults[:dispatch_requests] << sign_in_request(mapping)
+      end
+
+      def add_registration_request(mapping)
+        return unless mapping.routes.member?(:registration)
+        defaults[:dispatch_requests] << registration_request(mapping)
       end
 
       def add_revocation_requests(mapping)
@@ -76,12 +86,17 @@ module Devise
         [method, /^#{path}$/]
       end
 
+      def registration_request(mapping)
+        path = extract_path(mapping, :registration)
+        ['POST', /^#{path}$/]
+      end
+
+      # :reek:FeatureEnvy
       def extract_path(mapping, name)
         prefix, scope, request = path_parts(mapping, name)
-        '/' +
-          (prefix ? "#{prefix}/" : '') +
-          scope +
-          (request ? "/#{request}" : '')
+        [prefix, scope, request].delete_if do |item|
+          !item || item.empty?
+        end.join('/').prepend('/')
       end
 
       # :reek:UtilityFunction
