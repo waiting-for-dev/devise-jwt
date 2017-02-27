@@ -61,7 +61,7 @@ describe 'Token revocation', type: :request do
 
     it 'does not revoke JWT' do
       auth = sign_in(jwt_with_null_user_session_path, user_params)
-      sign_out(destroy_jwt_with_null_user_session_path, auth)
+      sign_out(destroy_jwt_with_null_user_session_path, auth, :post)
 
       get_with_auth('/jwt_with_null_user_auth_action', auth)
 

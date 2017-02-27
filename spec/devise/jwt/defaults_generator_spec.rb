@@ -34,7 +34,7 @@ describe Devise::JWT::DefaultsGenerator do
         [
           ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
           ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}],
-          ['DELETE', %r{^/jwt_with_null_users/sign_out$}]
+          ['POST', %r{^/jwt_with_null_users/sign_out$}]
         ]
       )
     end

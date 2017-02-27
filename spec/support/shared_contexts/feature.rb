@@ -13,9 +13,9 @@ shared_context 'feature' do
     response.headers['Authorization']
   end
 
-  def sign_out(destroy_session_path, auth)
-    delete(destroy_session_path,
-           headers: auth_headers(auth))
+  def sign_out(destroy_session_path, auth, method = :delete)
+    send(method, destroy_session_path,
+         headers: auth_headers(auth))
   end
 
   def get_with_auth(path, auth)
