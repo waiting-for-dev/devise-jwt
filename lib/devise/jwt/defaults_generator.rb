@@ -7,33 +7,34 @@ module Devise
     #
     # @see Warden::JWTAuth
     class DefaultsGenerator
-      attr_reader :routes, :devise_mappings
+      attr_reader :devise_mappings
 
       def initialize
-        @routes = Rails.application.routes
-        @devise_mappings = Devise.mappings
+        @devise_mappings = Devise.mappings.select do |_scope, mapping|
+          mapping.modules.member?(:jwt_authenticatable)
+        end
       end
 
       def mappings
         @mappings ||= devise_mappings.each_with_object({}) do |tuple, hash|
           scope, mapping = tuple
-          modules = mapping.modules
-          next unless modules.include?(:jwt_authenticatable)
           hash[scope] = mapping.to
         end
       end
 
       def dispatch_requests
-        scopes.each_with_object([]) do |scope, array|
-          named_route = "#{scope}_session"
-          array << request_for(named_route)
+        devise_mappings.each_with_object([]) do |tuple, array|
+          _scope, mapping = tuple
+          next unless mapping.routes.member?(:session)
+          array << sign_in_request(mapping)
         end
       end
 
       def revocation_requests
-        scopes.each_with_object([]) do |scope, array|
-          named_route = "destroy_#{scope}_session"
-          array << request_for(named_route)
+        devise_mappings.each_with_object([]) do |tuple, array|
+          _scope, mapping = tuple
+          next unless mapping.routes.member?(:session)
+          array << sign_out_request(mapping)
         end
       end
 
@@ -46,27 +47,32 @@ module Devise
 
       private
 
-      def scopes
-        mappings.keys
+      def sign_in_request(mapping)
+        path = extract_path(mapping, :sign_in)
+        ['POST', /^#{path}$/]
       end
 
-      def request_for(named_route)
-        named_path = "#{named_route}_path"
-        route = routes.named_routes[named_route]
-        method = method_for_route(route)
-        path = /^#{routes.url_helpers.send(named_path)}$/
-        [method, path]
+      def sign_out_request(mapping)
+        path = extract_path(mapping, :sign_out)
+        method = mapping.sign_out_via.to_s.upcase
+        [method, /^#{path}$/]
+      end
+
+      def extract_path(mapping, name)
+        prefix, scope, request = path_parts(mapping, name)
+        '/' +
+          (prefix ? "#{prefix}/" : '') +
+          scope +
+          (request ? "/#{request}" : '')
       end
 
       # :reek:UtilityFunction
-      # @see https://github.com/rails/rails/pull/21849
-      def method_for_route(route)
-        verb = route.verb
-        if Rails.version.to_i < 5
-          verb.source.match(/\w+/)[0]
-        else
-          verb
-        end
+      def path_parts(mapping, name)
+        [
+          mapping.instance_variable_get(:@path_prefix),
+          mapping.path,
+          mapping.path_names[name]
+        ]
       end
     end
   end

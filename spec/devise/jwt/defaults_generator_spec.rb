@@ -50,23 +50,4 @@ describe Devise::JWT::DefaultsGenerator do
       )
     end
   end
-
-  context 'when rails version is less than 5' do
-    # Fixture application is Rails 5. For now, instead of adding the burden of
-    # another fixture app for Rails 4 we prefer mocking its behavior
-    before do
-      allow(Rails).to receive(:version).and_return('4.0')
-      # rubocop:disable RSpec/AnyInstance
-      allow_any_instance_of(
-        ActionDispatch::Journey::Route
-      ).to receive(:verb).and_return(/^GET$/)
-      # rubocop:enable RSpec/AnyInstance
-    end
-
-    # https://github.com/rails/rails/pull/21849
-    it 'correctly extract request methods returned as regexps' do
-      first_extracted_method = defaults.dispatch_requests.first.first
-      expect(first_extracted_method).to eq('GET')
-    end
-  end
 end
