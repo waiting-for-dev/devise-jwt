@@ -13,12 +13,12 @@ module Devise
           Rails.application.reload_routes!
 
           Warden::JWTAuth.configure do |config|
-            defaults = DefaultsGenerator.new
+            defaults = DefaultsGenerator.call
 
-            config.mappings = defaults.mappings
-            config.dispatch_requests.push(*defaults.dispatch_requests)
-            config.revocation_requests.push(*defaults.revocation_requests)
-            config.revocation_strategies = defaults.revocation_strategies
+            config.mappings = defaults[:mappings]
+            config.dispatch_requests.push(*defaults[:dispatch_requests])
+            config.revocation_requests.push(*defaults[:revocation_requests])
+            config.revocation_strategies = defaults[:revocation_strategies]
           end
         end
       end

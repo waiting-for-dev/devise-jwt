@@ -7,45 +7,63 @@ module Devise
     #
     # @see Warden::JWTAuth
     class DefaultsGenerator
-      attr_reader :devise_mappings
+      attr_reader :devise_mappings, :defaults
+
+      def self.call
+        new.call
+      end
 
       def initialize
-        @devise_mappings = Devise.mappings.select do |_scope, mapping|
-          mapping.modules.member?(:jwt_authenticatable)
-        end
+        @devise_mappings = Devise.mappings
+        @defaults = {
+          mappings: {},
+          revocation_strategies: {},
+          dispatch_requests: [],
+          revocation_requests: []
+        }
       end
 
-      def mappings
-        @mappings ||= devise_mappings.each_with_object({}) do |tuple, hash|
-          scope, mapping = tuple
-          hash[scope] = mapping.to
+      def call
+        devise_mappings.each do |scope, mapping|
+          next unless jwt_mapping?(mapping)
+          add_defaults(scope, mapping)
         end
-      end
-
-      def dispatch_requests
-        devise_mappings.each_with_object([]) do |tuple, array|
-          _scope, mapping = tuple
-          next unless mapping.routes.member?(:session)
-          array << sign_in_request(mapping)
-        end
-      end
-
-      def revocation_requests
-        devise_mappings.each_with_object([]) do |tuple, array|
-          _scope, mapping = tuple
-          next unless mapping.routes.member?(:session)
-          array << sign_out_request(mapping)
-        end
-      end
-
-      def revocation_strategies
-        mappings.each_with_object({}) do |tuple, hash|
-          scope, model = tuple
-          hash[scope] = model.jwt_revocation_strategy
-        end
+        defaults
       end
 
       private
+
+      def add_defaults(scope, mapping)
+        add_mapping(scope, mapping)
+        add_revocation_strategy(scope, mapping)
+        add_dispatch_requests(mapping)
+        add_revocation_requests(mapping)
+      end
+
+      # :reek:UtilityFunction
+      def jwt_mapping?(mapping)
+        mapping.modules.member?(:jwt_authenticatable)
+      end
+
+      def add_mapping(scope, mapping)
+        model = mapping.to
+        defaults[:mappings][scope] = model
+      end
+
+      def add_revocation_strategy(scope, mapping)
+        model = mapping.to
+        defaults[:revocation_strategies][scope] = model.jwt_revocation_strategy
+      end
+
+      def add_dispatch_requests(mapping)
+        return unless mapping.routes.member?(:session)
+        defaults[:dispatch_requests] << sign_in_request(mapping)
+      end
+
+      def add_revocation_requests(mapping)
+        return unless mapping.routes.member?(:session)
+        defaults[:revocation_requests] << sign_out_request(mapping)
+      end
 
       def sign_in_request(mapping)
         path = extract_path(mapping, :sign_in)
