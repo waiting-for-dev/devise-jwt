@@ -24,9 +24,21 @@ describe Devise::JWT::DefaultsGenerator do
       )
     end
 
+    it 'does not add create session requests for devise models without jwt' do
+      expect(defaults[:dispatch_requests]).not_to include(
+        ['POST', %r{^/no_jwt_users/sign_in$}]
+      )
+    end
+
     it 'adds registration requests for devise models with jwt' do
       expect(defaults[:dispatch_requests]).to include(
         ['POST', %r{^/jwt_with_jti_matcher_users$}]
+      )
+    end
+
+    it 'does not add registration requests for devise models without jwt' do
+      expect(defaults[:dispatch_requests]).not_to include(
+        ['POST', %r{^/no_jwt_users$}]
       )
     end
   end
@@ -37,6 +49,12 @@ describe Devise::JWT::DefaultsGenerator do
         ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
         ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}],
         ['POST', %r{^/jwt_with_null_users/sign_out$}]
+      )
+    end
+
+    it 'does not add destroy session requests for devise models without jwt' do
+      expect(defaults[:revocation_requests]).not_to include(
+        ['POST', %r{^/no_jwt_users/sign_out$}]
       )
     end
   end
