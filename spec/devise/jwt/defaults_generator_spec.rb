@@ -19,8 +19,13 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds create session requests for devise models with jwt' do
       expect(defaults[:dispatch_requests]).to include(
         ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}],
-        ['POST', %r{^/jwt_with_blacklist_users/sign_in$}],
-        ['POST', %r{^/jwt_with_null_users/sign_in$}]
+        ['POST', %r{^/jwt_with_blacklist_users/sign_in$}]
+      )
+    end
+
+    it 'respect route scopes for create session requests' do
+      expect(defaults[:dispatch_requests]).to include(
+        ['POST', %r{^/a/scope/jwt_with_null_users/sign_in$}]
       )
     end
 
@@ -36,6 +41,12 @@ describe Devise::JWT::DefaultsGenerator do
       )
     end
 
+    it 'respect route scopes for registration requests' do
+      expect(defaults[:dispatch_requests]).to include(
+        ['POST', %r{^/a/scope/jwt_with_null_users$}]
+      )
+    end
+
     it 'does not add registration requests for devise models without jwt' do
       expect(defaults[:dispatch_requests]).not_to include(
         ['POST', %r{^/no_jwt_users$}]
@@ -47,8 +58,13 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds destroy session requests for devise models with jwt' do
       expect(defaults[:revocation_requests]).to include(
         ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
-        ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}],
-        ['POST', %r{^/jwt_with_null_users/sign_out$}]
+        ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}]
+      )
+    end
+
+    it 'respect route scopes for destroy session requests' do
+      expect(defaults[:revocation_requests]).to include(
+        ['POST', %r{^/a/scope/jwt_with_null_users/sign_out$}]
       )
     end
 

@@ -94,17 +94,18 @@ module Devise
       # :reek:FeatureEnvy
       def extract_path(mapping, name)
         prefix, scope, request = path_parts(mapping, name)
-        [prefix, scope, request].delete_if do |item|
-          !item || item.empty?
-        end.join('/').prepend('/')
+        [prefix, scope, request].compact.join('/').prepend('/')
       end
 
       # :reek:UtilityFunction
       def path_parts(mapping, name)
+        prefix = mapping.instance_variable_get(:@path_prefix)
+        path = mapping.path
+        path_name = mapping.path_names[name]
         [
-          mapping.instance_variable_get(:@path_prefix),
-          mapping.path,
-          mapping.path_names[name]
+          prefix && prefix.gsub(%r{^/}, ''),
+          path,
+          path_name && !path_name.empty? ? path_name : nil
         ]
       end
     end
