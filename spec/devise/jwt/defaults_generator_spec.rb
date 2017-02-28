@@ -58,20 +58,25 @@ describe Devise::JWT::DefaultsGenerator do
   describe 'revocation_requests' do
     it 'adds destroy session requests for devise models with jwt' do
       expect(defaults[:revocation_requests]).to include(
-        ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}],
-        ['DELETE', %r{^/jwt_with_blacklist_users/sign_out$}]
+        ['DELETE', %r{^/jwt_with_jti_matcher_users/sign_out$}]
+      )
+    end
+
+    it 'respect sign_out_via configuration for destroy session requests' do
+      expect(defaults[:revocation_requests]).to include(
+        ['POST', %r{^/jwt_with_blacklist_users/sign_out$}]
       )
     end
 
     it 'respect route scopes for destroy session requests' do
       expect(defaults[:revocation_requests]).to include(
-        ['POST', %r{^/a/scope/jwt_with_null_users/sign_out$}]
+        ['DELETE', %r{^/a/scope/jwt_with_null_users/sign_out$}]
       )
     end
 
     it 'does not add destroy session requests for devise models without jwt' do
       expect(defaults[:revocation_requests]).not_to include(
-        ['POST', %r{^/no_jwt_users/sign_out$}]
+        ['DELETE', %r{^/no_jwt_users/sign_out$}]
       )
     end
   end

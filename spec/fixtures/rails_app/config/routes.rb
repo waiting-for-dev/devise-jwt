@@ -18,11 +18,11 @@ Rails.application.routes.draw do
              defaults: { format: :json }
 
   devise_for :jwt_with_blacklist_users,
-             defaults: { format: :json }
+             defaults: { format: :json },
+             sign_out_via: :post
 
   scope 'a/scope' do
     devise_for :jwt_with_null_users,
-               defaults: { format: :json },
-               sign_out_via: :post
+               defaults: { format: :json }
   end
 end
