@@ -37,7 +37,8 @@ describe Devise::JWT::DefaultsGenerator do
 
     it 'adds registration requests for devise models with jwt' do
       expect(defaults[:dispatch_requests]).to include(
-        ['POST', %r{^/jwt_with_jti_matcher_users$}]
+        ['POST', %r{^/jwt_with_jti_matcher_users$}],
+        ['POST', %r{^/jwt_with_blacklist_users$}]
       )
     end
 
