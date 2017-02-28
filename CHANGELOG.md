@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Dispatch token on sign up
 - Speed up initialization
+
 ### Fixed
 - Do not depend on assumed helpers to build default paths
 - Use `sign_out_via` devise option to set revocation request methods
