@@ -116,7 +116,7 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
   
   devise :database_authenticatable,
-         jwt_revocation_strategy: self
+         :jwt_authenticatable, jwt_revocation_strategy: self
 end
 ```
 
@@ -160,7 +160,7 @@ Last, configure the user model to use it:
 ```ruby
 class User < ApplicationRecord
   devise :database_authenticatable,
-         jwt_revocation_strategy: JWTBlacklist
+         :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
 end
 ```
 
