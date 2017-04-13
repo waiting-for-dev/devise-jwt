@@ -5,8 +5,10 @@ require 'spec_helper'
 describe Devise::JWT::RevocationStrategies::JTIMatcher do
   include_context 'fixtures'
 
-  subject(:model) { JwtWithJtiMatcherUser }
   subject(:strategy) { JwtWithJtiMatcherUser }
+
+  let(:model) { JwtWithJtiMatcherUser }
+
   let(:user) { jwt_with_jti_matcher_user }
 
   context 'Callbacks' do
@@ -39,7 +41,7 @@ describe Devise::JWT::RevocationStrategies::JTIMatcher do
 
   describe '#revoke_jwt(payload, user)' do
     it 'changes user jti column' do
-      expect { strategy.revoke_jwt('whatever', user) }.to change { user.jti }
+      expect { strategy.revoke_jwt('whatever', user) }.to(change { user.jti })
     end
   end
 

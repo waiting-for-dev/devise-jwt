@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe Devise::JWT::RevocationStrategies::Blacklist do
   subject(:strategy) { Blacklist }
+
   let(:payload) { { 'jti' => '123' } }
 
   describe '#jwt_revoked?(payload, user)' do
