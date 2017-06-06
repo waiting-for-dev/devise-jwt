@@ -46,7 +46,9 @@ describe 'Authorization', type: :request do
     end
 
     it 'authorizes requests with a valid token' do
-      auth = sign_in(jwt_with_blacklist_user_session_path, user_params)
+      auth = sign_in(
+        jwt_with_blacklist_user_session_path, user_params, format: :json
+      )
 
       get_with_auth('/jwt_with_blacklist_user_auth_action', auth)
 

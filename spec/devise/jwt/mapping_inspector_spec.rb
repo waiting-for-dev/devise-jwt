@@ -112,4 +112,18 @@ describe Devise::JWT::MappingInspector do
       end
     end
   end
+
+  describe '#formats' do
+    context 'when scope has no configured formats' do
+      it 'returns an array with a nil element' do
+        expect(jwt_with_jti_matcher_inspector.formats).to eq([nil])
+      end
+    end
+
+    context 'when scope has configured formats' do
+      it 'returns them' do
+        expect(jwt_with_blacklist_inspector.formats).to eq(%i[json xml])
+      end
+    end
+  end
 end

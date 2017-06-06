@@ -42,6 +42,21 @@ module Devise
       forward_to_warden(:revocation_requests, value)
     end
 
+    # A hash of warden scopes as keys and an array of request formats that will
+    # be processed as values. When a scope is not present or if it has a nil
+    # item, requests without format will be taken into account.
+    #
+    # For example, with following configuration, `user` scope would dispatch and
+    # revoke tokens in `json` requests, while `admin_user` would do it in `xml`
+    # and with no format.
+    #
+    # @example
+    # {
+    #   user: [:json],
+    #   admin_user: [nil, :xml]
+    # }
+    setting :request_formats, {}
+
     def self.forward_to_warden(setting, value)
       Warden::JWTAuth.config.send("#{setting}=", value)
     end

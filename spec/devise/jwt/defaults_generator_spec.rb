@@ -18,10 +18,21 @@ describe Devise::JWT::DefaultsGenerator do
   describe 'dispatch_requests' do
     it 'adds create session requests for devise models with jwt' do
       expect(defaults[:dispatch_requests]).to include(
-        ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}],
+        ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}]
+      )
+    end
+
+    # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
+    it 'respects configured format segment for create session requests' do
+      expect(defaults[:dispatch_requests]).to include(
+        ['POST', %r{^/jwt_with_blacklist_users/sign_in.json$}],
+        ['POST', %r{^/jwt_with_blacklist_users/sign_in.xml$}]
+      )
+      expect(defaults[:dispatch_requests]).not_to include(
         ['POST', %r{^/jwt_with_blacklist_users/sign_in$}]
       )
     end
+    # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
 
     it 'respect route scopes for create session requests' do
       expect(defaults[:dispatch_requests]).to include(
@@ -37,10 +48,21 @@ describe Devise::JWT::DefaultsGenerator do
 
     it 'adds registration requests for devise models with jwt' do
       expect(defaults[:dispatch_requests]).to include(
-        ['POST', %r{^/jwt_with_jti_matcher_users$}],
+        ['POST', %r{^/jwt_with_jti_matcher_users$}]
+      )
+    end
+
+    # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
+    it 'respects configured format segment for registration requests' do
+      expect(defaults[:dispatch_requests]).to include(
+        ['POST', %r{^/jwt_with_blacklist_users.json$}],
+        ['POST', %r{^/jwt_with_blacklist_users.xml$}]
+      )
+      expect(defaults[:dispatch_requests]).not_to include(
         ['POST', %r{^/jwt_with_blacklist_users$}]
       )
     end
+    # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
 
     it 'respect route scopes for registration requests' do
       expect(defaults[:dispatch_requests]).to include(
@@ -62,9 +84,21 @@ describe Devise::JWT::DefaultsGenerator do
       )
     end
 
+    # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
+    it 'respects configured format segment for destroy session requests' do
+      expect(defaults[:revocation_requests]).to include(
+        ['POST', %r{^/jwt_with_blacklist_users/sign_out.json$}],
+        ['POST', %r{^/jwt_with_blacklist_users/sign_out.xml$}]
+      )
+      expect(defaults[:revocation_requests]).not_to include(
+        ['POST', %r{^/jwt_with_blacklist_users/sign_out$}]
+      )
+    end
+    # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
+
     it 'respect sign_out_via configuration for destroy session requests' do
       expect(defaults[:revocation_requests]).to include(
-        ['POST', %r{^/jwt_with_blacklist_users/sign_out$}]
+        ['POST', %r{^/jwt_with_blacklist_users/sign_out.json$}]
       )
     end
 

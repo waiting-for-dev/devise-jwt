@@ -59,13 +59,18 @@ describe 'Token dispatch', type: :request do
     end
 
     it 'dispatches JWT in sign_in requests' do
-      sign_in(jwt_with_blacklist_user_session_path, sign_in_params)
+      sign_in(
+        jwt_with_blacklist_user_session_path, sign_in_params, format: :json
+      )
 
       expect(response.headers['Authorization']).not_to be_nil
     end
 
     it 'dispatches JWT in registration requests' do
-      sign_up(jwt_with_blacklist_user_registration_path, registration_params)
+      sign_up(
+        jwt_with_blacklist_user_registration_path,
+        registration_params, format: :json
+      )
 
       expect(response.headers['Authorization']).not_to be_nil
     end

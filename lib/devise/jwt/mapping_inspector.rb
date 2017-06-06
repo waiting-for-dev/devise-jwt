@@ -44,6 +44,10 @@ module Devise
         end
       end
 
+      def formats
+        JWT.config.request_formats[scope] || default_formats
+      end
+
       private
 
       def path_parts(name)
@@ -63,6 +67,10 @@ module Devise
 
       def sign_out_via
         mapping.sign_out_via.to_s.upcase
+      end
+
+      def default_formats
+        [nil]
       end
     end
   end

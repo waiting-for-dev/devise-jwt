@@ -253,6 +253,28 @@ jwt.revocation_requests = [
 
 **Important**: You are encouraged to delimit your regular expression with `^` and `$` to avoid unintentional matches.
 
+#### request_formats
+
+Request formats that must be processed (in order to dispatch or revoke tokens).
+
+It must be a hash of devise scopes as keys and an array of request formats as
+values. When a scope is not present or if it has a nil item, requests without
+format will be taken into account.
+
+For example, with following configuration, `user` scope would dispatch and
+revoke tokens in `json` requests (as in `/users/sign_in.json`), while
+`admin_user` would do it in `xml` and with no format (as in
+`/admin_user/sign_in.xml` and `/admin_user/sign_in`).
+
+```ruby
+jwt.request_formats = {
+                        user: [:json],
+                        admin_user: [nil, :xml]
+                      }
+```
+
+By default, only requests without format are processed.
+
 ## Development
 
 There are docker and docker-compose files configured to create a development environment for this gem. So, if you use Docker you only need to run:

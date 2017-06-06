@@ -38,14 +38,20 @@ describe 'Token revocation', type: :request do
       }
     end
 
+    # rubocop:disable RSpec/ExampleLength
     it 'revokes JWT in sign_out' do
-      auth = sign_in(jwt_with_blacklist_user_session_path, user_params)
-      sign_out(destroy_jwt_with_blacklist_user_session_path, auth, :post)
+      auth = sign_in(
+        jwt_with_blacklist_user_session_path, user_params, format: :json
+      )
+      sign_out(
+        destroy_jwt_with_blacklist_user_session_path, auth, :post, format: :json
+      )
 
       get_with_auth('/jwt_with_blacklist_user_auth_action', auth)
 
       expect(response.status).to eq(401)
     end
+    # rubocop:enable RSpec/ExampleLength
   end
 
   context 'JWT user with Null revocation' do
