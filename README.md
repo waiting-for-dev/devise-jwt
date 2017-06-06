@@ -55,7 +55,7 @@ Currently, HS256 algorithm is the one in use.
 
 You have to tell which user models you want to be able to authenticate with JWT tokens. For them, the authentication process will be like this:
 
-- A user authenticates trough devise create session request (for example, using the standard `:database_authenticatable` module).
+- A user authenticates through devise create session request (for example, using the standard `:database_authenticatable` module).
 - If the authentication succeeds, a JWT token is dispatched to the client in the `Authorization` response header, with format `Bearer #{token}` (tokens are also dispatched on a successful sign up).
 - The client can use this token to authenticate following requests for the same user, providing it in the `Authorization` request header, also with format `Bearer #{token}`
 - When the client visits devise destroy session request, the token is revoked.
