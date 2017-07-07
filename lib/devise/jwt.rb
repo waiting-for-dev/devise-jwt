@@ -10,6 +10,7 @@ require 'devise/jwt/defaults_generator'
 require 'devise/jwt/railtie'
 require 'devise/jwt/models'
 require 'devise/jwt/revocation_strategies'
+require 'devise/jwt/warden_strategy'
 
 # Authentication library
 module Devise
