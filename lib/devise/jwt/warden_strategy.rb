@@ -2,9 +2,9 @@
 
 module Devise
   module JWT
-    # Overload
+    # Wrapper around the Warden Stategy
     module WardenStrategy
-      # Overload
+      # Overload the authenticate! method
       def authenticate!
         super
         env['devise.skip_trackable'] = true if valid?
