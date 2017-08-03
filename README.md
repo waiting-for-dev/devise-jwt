@@ -147,7 +147,7 @@ end
 ```
 For performance reasons, it is better if the `jti` column is an index.
 
-Note, if you used the blacklist strategy in a previous version you may not have the fields *revoked_at* and *expiration_time.* If not run the following migration:
+Note, if you used the blacklist strategy in a previous version you may not have the field *exp.* If not run the following migration:
 ```ruby
 class AddExpirationTimeToJWTBlacklist < ActiveRecord::Migration
   def change
