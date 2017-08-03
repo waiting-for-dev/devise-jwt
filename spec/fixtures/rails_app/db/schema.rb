@@ -14,8 +14,7 @@ ActiveRecord::Schema.define(version: 20170802000822) do
 
   create_table "blacklist", force: :cascade do |t|
     t.string "jti", null: false
-    t.datetime "revoked_at", default: "2017-08-03 02:40:58"
-    t.datetime "expiration_time"
+    t.datetime "exp", default: "2017-08-03 17:49:43", null: false
   end
 
   create_table "jwt_with_blacklist_users", force: :cascade do |t|
