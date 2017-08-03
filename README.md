@@ -140,12 +140,24 @@ In order to use it, you need to create the blacklist table in a migration:
 def change
   create_table :jwt_blacklist do |t|
     t.string :jti, null: false
+    t.datetime :revoked_at, default: Time.now
+    t.datetime :expiration_time
   end
   add_index :jwt_blacklist, :jti
 end
 ```
-
 For performance reasons, it is better if the `jti` column is an index.
+
+Note, if you used the blacklist strategy in a previous version you may not have the fields *revoked_at* and *expiration_time.* If not run the following migration:
+```
+class AddRevokedAtAndExpirationTimeToJWTBlacklist < ActiveRecord::Migration
+  def change
+    add_column :JWTblacklist, :revoked_at, :datetime, default: Time.now
+    add_column :JWTblacklist, :expiration_time, :datetime
+  end
+end
+
+```
 
 Then, you need to create the corresponding model and include the strategy:
 
