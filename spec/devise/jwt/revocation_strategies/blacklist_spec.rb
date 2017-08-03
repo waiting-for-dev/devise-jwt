@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Devise::JWT::RevocationStrategies::Blacklist do
   subject(:strategy) { Blacklist }
 
-  let(:payload) { { 'jti' => '123' } }
+  let(:payload) { { 'jti' => '123', 'exp' => '1501717440' } }
 
   describe '#jwt_revoked?(payload, user)' do
     context 'when payload jti is in the blacklist' do
@@ -28,6 +28,21 @@ describe Devise::JWT::RevocationStrategies::Blacklist do
       strategy.revoke_jwt(payload, :whatever)
 
       expect(strategy.find_by(jti: '123')).not_to be_nil
+    end
+  end
+
+  describe '#revoke_jwt(payload, user)' do
+    it 'populates revoked_at' do
+      strategy.revoke_jwt(payload, :whatever)
+      expect(strategy.find_by(jti: '123').revoked_at).not_to be_nil
+    end
+  end
+
+  describe '#revoke_jwt(payload, user)' do
+    it 'populates expiration_time' do
+      strategy.revoke_jwt(payload, :whatever)
+      exp = strategy.find_by(jti: '123').expiration_time
+      expect(exp).equal? Time.at(payload['exp'].to_i)
     end
   end
 end

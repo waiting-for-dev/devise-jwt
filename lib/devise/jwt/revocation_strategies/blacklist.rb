@@ -21,7 +21,8 @@ module Devise
 
           # @see Warden::JWTAuth::Interfaces::RevocationStrategy#revoke_jwt
           def self.revoke_jwt(payload, _user)
-            create(jti: payload['jti'])
+            create(jti: payload['jti'],
+                   expiration_time: Time.at(payload['exp'].to_i))
           end
         end
       end
