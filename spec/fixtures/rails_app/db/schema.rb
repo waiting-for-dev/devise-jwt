@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802000822) do
+ActiveRecord::Schema.define(version: 20170804032446) do
 
-  create_table "blacklist", force: :cascade do |t|
+  create_table "jwt_blacklist", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", default: "2017-08-03 17:49:43", null: false
   end
