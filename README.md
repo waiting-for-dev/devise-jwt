@@ -151,7 +151,7 @@ Note, if you used the blacklist strategy in a previous version you may not have 
 ```ruby
 class AddExpirationTimeToJWTBlacklist < ActiveRecord::Migration
   def change
-    add_column :jwt_blacklist, :exp, :datetime, null: false, default: Time.now
+    add_column :jwt_blacklist, :exp, :datetime, null: false
   end
 end
 

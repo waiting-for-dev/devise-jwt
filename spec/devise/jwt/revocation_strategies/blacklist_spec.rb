@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Devise::JWT::RevocationStrategies::Blacklist do
-  subject(:strategy) { Blacklist }
+  subject(:strategy) { JWTBlacklist }
 
   let(:payload) { { 'jti' => '123', 'exp' => '1501717440' } }
 
