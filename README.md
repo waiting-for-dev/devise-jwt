@@ -81,6 +81,8 @@ def jwt_payload
 end
 ```
 
+Note: if you are making cross-domain requests, make sure that you add `Authorization` header to the list of allowed request headers and exposed response headers. You can use something like [rack-cors](https://github.com/cyu/rack-cors) for that.
+
 ### Revocation strategies
 
 `devise-jwt` comes with two revocation strategies out of the box. They are implementations of what is discussed in the blog post [JWT Revocation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I also talk about their pros and cons.
@@ -147,7 +149,8 @@ end
 ```
 For performance reasons, it is better if the `jti` column is an index.
 
-Note, if you used the blacklist strategy in a previous version you may not have the field *exp.* If not run the following migration:
+Note: if you used the blacklist strategy before vesion 0.4.0 you may not have the field *exp.* If not, run the following migration:
+
 ```ruby
 class AddExpirationTimeToJWTBlacklist < ActiveRecord::Migration
   def change
