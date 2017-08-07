@@ -32,6 +32,7 @@ describe Devise::JWT::RevocationStrategies::Blacklist do
 
     it 'populates exp (expiration_time)' do
       strategy.revoke_jwt(payload, :whatever)
+
       exp = strategy.find_by(jti: '123').exp
       expect(exp).equal? Time.at(payload['exp'].to_i)
     end
