@@ -7,6 +7,11 @@
 
 `devise-jwt` is a [devise](https://github.com/plataformatec/devise) extension which uses [JWT](https://jwt.io/) tokens for user authentication. It follows [secure by default](https://en.wikipedia.org/wiki/Secure_by_default) principle.
 
+This gem is just a replacement for cookies when these can't be used. As
+cookies, a token expired with `devise-jwt` will mandatorily have an expiration
+time. If you need that your users never sign out, you will be better off with a
+solution using refresh tokens, like some implementation of OAuth2.
+
 You can read about which security concerns this library takes into account and about JWT generic secure usage in the following series of posts:
 
 - [Stand Up for JWT Revocation](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation/)
