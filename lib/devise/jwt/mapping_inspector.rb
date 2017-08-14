@@ -27,6 +27,10 @@ module Devise
         mapping.to
       end
 
+      def class_name
+        mapping.class_name
+      end
+
       def path(name)
         prefix, scope, request = path_parts(name)
         [prefix, scope, request].compact.join('/').prepend('/')
