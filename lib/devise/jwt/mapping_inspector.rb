@@ -29,7 +29,7 @@ module Devise
 
       def path(name)
         prefix, scope, request = path_parts(name)
-        [prefix, scope, request].compact.join('/').prepend('/')
+        [prefix, scope, request].compact.delete_if(&:empty?).join('/').prepend('/')
       end
 
       # :reek:ControlParameter
