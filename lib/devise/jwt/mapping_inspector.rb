@@ -27,9 +27,12 @@ module Devise
         mapping.to
       end
 
+      # :reek:FeatureEnvy
       def path(name)
         prefix, scope, request = path_parts(name)
-        [prefix, scope, request].compact.join('/').prepend('/')
+        [prefix, scope, request].delete_if do |item|
+          !item || item.empty?
+        end.join('/').prepend('/')
       end
 
       # :reek:ControlParameter
