@@ -11,8 +11,8 @@ describe Devise::JWT::RevocationStrategies::JTIMatcher do
 
   let(:user) { jwt_with_jti_matcher_user }
 
-  context 'Callbacks' do
-    context 'Before create' do
+  describe 'Callbacks' do
+    context 'with before create' do
       it 'initializes jti' do
         expect(user.jti).not_to be_nil
       end

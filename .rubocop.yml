@@ -5,6 +5,10 @@ RSpec/NestedGroups:
   Max: 3
 RSpec/MessageExpectation:
   EnforcedStyle: 'expect'
+RSpec/ContextWording:
+  Exclude:
+    - "spec/support/shared_contexts/*rb"
+    - "spec/features/*rb"
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*.rb"
