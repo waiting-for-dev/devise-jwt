@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.3] - 2017-11-23
+### Fixed
+- Return `nil` and not raise when user is not found in model
+
 ## [0.4.2] - 2017-11-21
 ### Fixed
 - Update `warden-jwt_auth` dependency
