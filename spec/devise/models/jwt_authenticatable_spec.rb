@@ -12,6 +12,10 @@ describe Devise::Models::JwtAuthenticatable do
     it 'finds record which has given `sub` as `id`' do
       expect(model.find_for_jwt_authentication(user.id)).to eq(user)
     end
+
+    it 'returns nil when user is not found' do
+      expect(model.find_for_jwt_authentication('none')).to be_nil
+    end
   end
 
   describe '#jwt_subject' do
