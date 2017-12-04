@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.4] - 2017-12-04
+### Fixed
+- Configure classes as strings to avoid problems with Rails STI
+
 ## [0.4.3] - 2017-11-23
 ### Fixed
 - Return `nil` and not raise when user is not found in model
