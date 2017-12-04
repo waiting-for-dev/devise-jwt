@@ -45,14 +45,14 @@ module Devise
       def add_mapping(inspector)
         scope = inspector.scope
         model = inspector.model
-        defaults[:mappings][scope] = model
+        defaults[:mappings][scope] = model.name
       end
 
       # :reek:FeatureEnvy
       def add_revocation_strategy(inspector)
         scope = inspector.scope
-        model = inspector.model
-        defaults[:revocation_strategies][scope] = model.jwt_revocation_strategy
+        strategy = inspector.model.jwt_revocation_strategy
+        defaults[:revocation_strategies][scope] = strategy.name
       end
 
       def add_dispatch_requests(inspector)
