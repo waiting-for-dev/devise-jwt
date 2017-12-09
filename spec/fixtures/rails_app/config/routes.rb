@@ -7,6 +7,10 @@ Rails.application.routes.draw do
       to: 'application#jwt_with_blacklist_user_auth_action',
       defauts: { format: :json }
 
+  get '/jwt_with_whitelist_user_auth_action',
+      to: 'application#jwt_with_whitelist_user_auth_action',
+      defauts: { format: :json }
+
   get '/jwt_with_null_user_auth_action',
       to: 'application#jwt_with_null_user_auth_action',
       defauts: { format: :json }
@@ -18,6 +22,10 @@ Rails.application.routes.draw do
              defaults: { format: :json }
 
   devise_for :jwt_with_blacklist_users,
+             defaults: { format: :json },
+             sign_out_via: :post
+  
+  devise_for :jwt_with_whitelist_users,
              defaults: { format: :json },
              sign_out_via: :post
 
