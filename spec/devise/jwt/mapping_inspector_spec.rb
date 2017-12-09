@@ -15,6 +15,10 @@ describe Devise::JWT::MappingInspector do
     described_class.new(:jwt_with_blacklist_user)
   end
 
+  let(:jwt_with_whitelist_inspector) do
+    described_class.new(:jwt_with_whitelist_user)
+  end
+
   let(:no_jwt_inspector) { described_class.new(:no_jwt_user) }
 
   describe '#jwt?' do

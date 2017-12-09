@@ -10,6 +10,7 @@ describe Devise::JWT::DefaultsGenerator do
       expect(defaults[:mappings]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
         jwt_with_blacklist_user: 'JwtWithBlacklistUser',
+        jwt_with_whitelist_user: 'JwtWithWhitelistUser',
         jwt_with_null_user: 'JwtWithNullUser'
       )
     end
@@ -120,6 +121,7 @@ describe Devise::JWT::DefaultsGenerator do
       expect(defaults[:revocation_strategies]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
         jwt_with_blacklist_user: 'JWTBlacklist',
+        jwt_with_whitelist_user: 'JwtWithWhitelistUser',
         jwt_with_null_user: 'Devise::JWT::RevocationStrategies::Null'
       )
     end
