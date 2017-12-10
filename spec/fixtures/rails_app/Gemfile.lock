@@ -147,7 +147,6 @@ DEPENDENCIES
   rails (~> 5.0.1)
   sqlite3
   tzinfo-data
-  warden-jwt_auth
 
 BUNDLED WITH
    1.16.0
