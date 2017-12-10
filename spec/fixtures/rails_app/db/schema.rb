@@ -14,15 +14,7 @@ ActiveRecord::Schema.define(version: 20171209162500) do
 
   create_table "jwt_blacklist", force: :cascade do |t|
     t.string   "jti",                                 null: false
-    t.datetime "exp", default: '2017-12-09 17:08:38', null: false
-  end
-
-  create_table "jwt_whitelists", force: :cascade do |t|
-    t.string  "jti",                        null: false
-    t.string  "aud",                        null: false
-    t.integer "jwt_with_whitelist_user_id"
-    t.index ["jti"], name: "index_jwt_whitelists_on_jti", unique: true
-    t.index ["jwt_with_whitelist_user_id"], name: "index_jwt_whitelists_on_jwt_with_whitelist_user_id"
+    t.datetime "exp", default: '2017-12-10 15:13:16', null: false
   end
 
   create_table "jwt_with_blacklist_users", force: :cascade do |t|
@@ -109,6 +101,14 @@ ActiveRecord::Schema.define(version: 20171209162500) do
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_no_jwt_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_no_jwt_users_on_reset_password_token", unique: true
+  end
+
+  create_table "whitelisted_jwts", force: :cascade do |t|
+    t.string  "jti",                        null: false
+    t.string  "aud"
+    t.integer "jwt_with_whitelist_user_id"
+    t.index ["jti"], name: "index_whitelisted_jwts_on_jti", unique: true
+    t.index ["jwt_with_whitelist_user_id"], name: "index_whitelisted_jwts_on_jwt_with_whitelist_user_id"
   end
 
 end
