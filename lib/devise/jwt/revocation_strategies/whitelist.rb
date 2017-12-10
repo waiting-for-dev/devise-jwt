@@ -9,32 +9,38 @@ module Devise
       # has a :has_many :jwt_whitelist association.
       # The JwtWhitelist table must include `jti`, `aud` and `user_id` columns
       #
-      # In order to tell whether a token is revoked, it just tries to find the `jti` and `aud`
-      # values from the token on the `jwt_whitelist` table for the respective user.
+      # In order to tell whether a token is revoked, it just tries to find the
+      # `jti` and `aud` values from the token on the `jwt_whitelist` table for
+      # the respective user.
       # If the values don't exist means the token was revoked.
-      # On revocation, it deletes the matching record from the `jwt_whitelist`table.
+      # On revocation, it deletes the matching record from the `jwt_whitelist`
+      # table.
       # On sign in, it creates a new record with the `jti` and `aud` values.
       module Whitelist
         extend ActiveSupport::Concern
 
         included do
+          has_many :whitelisted_jwts, dependent: :destroy
+
           # @see Warden::JWTAuth::Interfaces::RevocationStrategy#jwt_revoked?
           def self.jwt_revoked?(payload, user)
-            !user.jwt_whitelist.exists?(payload.slice('jti', 'aud'))
+            !user.whitelisted_jwts.exists?(payload.slice('jti', 'aud'))
           end
 
           # @see Warden::JWTAuth::Interfaces::RevocationStrategy#revoke_jwt
           def self.revoke_jwt(payload, user)
-            user.jwt_whitelist.find_or_initialize_by(payload.slice('jti', 'aud')).destroy
+            user
+              .whitelisted_jwts
+              .find_or_initialize_by(payload.slice('jti', 'aud'))
+              .destroy
           end
         end
 
         # Warden::JWTAuth::Interfaces::User#on_jwt_dispatch
-        def on_jwt_dispatch(token, payload)
-          jwt_whitelist.create!(payload.slice('jti', 'aud'))
+        def on_jwt_dispatch(_token, payload)
+          whitelisted_jwts.create!(payload.slice('jti', 'aud'))
         end
       end
     end
   end
 end
-
