@@ -1,8 +1,6 @@
 class JwtWithWhitelistUser < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Whitelist
 
-  has_many :jwt_whitelist, dependent: :destroy
-
   devise :database_authenticatable,
          :registerable,
          :jwt_authenticatable,
