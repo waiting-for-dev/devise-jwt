@@ -6,15 +6,16 @@ module Devise
   module JWT
     module RevocationStrategies
       # This strategy must be included in the user model, and requires that it
-      # has a :has_many :jwt_whitelist association.
+      # has a :has_many :whitelisted_jwts association.
       # The JwtWhitelist table must include `jti`, `aud` and `user_id` columns
       #
       # In order to tell whether a token is revoked, it just tries to find the
-      # `jti` and `aud` values from the token on the `jwt_whitelist` table for
-      # the respective user.
+      # `jti` and `aud` values from the token on the `whitelisted_jwts`
+      # table for the respective user.
+      #
       # If the values don't exist means the token was revoked.
-      # On revocation, it deletes the matching record from the `jwt_whitelist`
-      # table.
+      # On revocation, it deletes the matching record from the 
+      # `whitelisted_jwts` table.
       # On sign in, it creates a new record with the `jti` and `aud` values.
       module Whitelist
         extend ActiveSupport::Concern
