@@ -76,6 +76,35 @@ describe 'Token dispatch', type: :request do
     end
   end
 
+  context 'JWT user with whitelist revocation' do
+    let(:user) { jwt_with_whitelist_user }
+    let(:sign_in_params) do
+      {
+        jwt_with_whitelist_user: {
+          email: user.email,
+          password: user.password
+        }
+      }
+    end
+    let(:registration_params) do
+      {
+        jwt_with_whitelist_user: generic_registration_params
+      }
+    end
+
+    it 'dispatches JWT in sign_in requests' do
+      sign_in(jwt_with_whitelist_user_session_path, sign_in_params)
+
+      expect(response.headers['Authorization']).not_to be_nil
+    end
+
+    it 'dispatches JWT in registration requests' do
+      sign_up(jwt_with_whitelist_user_registration_path, registration_params)
+
+      expect(response.headers['Authorization']).not_to be_nil
+    end
+  end
+
   context 'JWT user with Null revocation' do
     let(:user) { jwt_with_null_user }
     let(:sign_in_params) do

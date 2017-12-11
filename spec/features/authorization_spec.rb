@@ -34,6 +34,34 @@ describe 'Authorization', type: :request do
     end
   end
 
+  context 'JWT user with whitelist revocation' do
+    let(:user) { jwt_with_whitelist_user }
+    let(:user_params) do
+      {
+        jwt_with_whitelist_user: {
+          email: user.email,
+          password: user.password
+        }
+      }
+    end
+
+    it 'authorizes requests with a valid token' do
+      auth = sign_in(jwt_with_whitelist_user_session_path, user_params)
+
+      get_with_auth('/jwt_with_whitelist_user_auth_action', auth)
+
+      expect(response.status).to eq(200)
+    end
+
+    it 'unauthorizes requests with an invalid token' do
+      auth = 'Bearer 123'
+
+      get_with_auth('/jwt_with_whitelist_user_auth_action', auth)
+
+      expect(response.status).to eq(401)
+    end
+  end
+
   context 'JWT user with Blacklist revocation' do
     let(:user) { jwt_with_blacklist_user }
     let(:user_params) do
