@@ -86,6 +86,14 @@ def jwt_payload
 end
 ```
 
+You can add a hook method `on_jwt_dispatch` on the user model. It is executed when a token dispatched for that user instance, and it takes `token` and `payload` as parameters.
+
+```ruby
+def on_jwt_dispatch(token, payload)
+  do_something(token, payload)
+end
+```
+
 Note: if you are making cross-domain requests, make sure that you add `Authorization` header to the list of allowed request headers and exposed response headers. You can use something like [rack-cors](https://github.com/cyu/rack-cors) for that, for example:
 
 ```ruby
@@ -103,7 +111,7 @@ end
 
 ### Revocation strategies
 
-`devise-jwt` comes with two revocation strategies out of the box. They are implementations of what is discussed in the blog post [JWT Revocation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I also talk about their pros and cons.
+`devise-jwt` comes with three revocation strategies out of the box. Some of them are implementations of what is discussed in the blog post [JWT Revocation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I also talk about their pros and cons.
 
 #### JTIMatcher
 
@@ -194,6 +202,71 @@ Last, configure the user model to use it:
 class User < ApplicationRecord
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
+end
+```
+
+#### Whitelist
+
+Here, the model itself acts also as a revocation strategy, but it needs to have
+a one-to-many association with another table which stores the tokens (in fact
+their `jti` claim, which uniquely identifies them) valids for each user record.
+
+The workflow is as the following:
+
+- Once a token is dispatched for a user, its `jti` claim is stored in the
+  associated table.
+- At every authentication, the incoming token `jti` is matched against all the
+  `jti` associated to that user. The authentication only succeeds if one of
+  them matches.
+- On a sign out, the token `jti` is deleted from the associated table.
+
+In fact, besides the `jti` claim, the `aud` claim is also stored and matched at
+every authentication. This, together with the [aud_header](#aud_header)
+configuration parameter, can be used to differentiate between clients or
+devices for the same user.
+
+In order to use it, you have to create yourself the associated table and model.
+The association table must be called `whitelisted_jwts`:
+
+```ruby
+def change
+  create_table :whitelisted_jwts do |t|
+    t.string :jti, null: false
+    t.string :aud
+    # If you want to leverage the `aud` claim, add to it a `NOT NULL` constraint:
+    # t.string :aud, null: false
+    t.references :your_user_table, foreign_key: true
+  end
+  
+  add_index :whitelisted_jwts, :jti, unique: true
+end
+```
+Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time.
+
+And then, the model:
+
+```ruby
+class WhitelistedJwt < ApplicationRecord
+end
+```
+
+Finally, include de strategy in the model and configure it:
+
+```ruby
+class User < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::Whitelist
+  
+  devise :database_authenticatable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
+end
+```
+
+Be aware that this strategy makes uses of `on_jwt_dispatch` method in the user model, so if you need to use it don't forget to call `super`:
+
+```ruby
+def on_jwt_dispatch(token, payload)
+  super
+  do_something(token, payload)
 end
 ```
 
@@ -307,6 +380,22 @@ jwt.request_formats = {
 ```
 
 By default, only requests without format are processed.
+
+#### aud_header
+
+Request header which content will be stored to the `aud` claim in the payload.
+
+It is used to validate whether an incoming token was originally issued to the
+same client, checking if `aud` and the `aud_header` header value match. If you
+don't want to differentiate between clients, you don't need to provide that
+header.
+
+**Important:** Be aware that this workflow is not bullet proof. In some
+scenarios a user can handcraft the request headers, therefore being able to
+impersonate any client. In such cases you could need something more robust,
+like an OAuth workflow with client id and client secret.
+
+Defaults to `JWT_AUD`.
 
 ## Development
 
