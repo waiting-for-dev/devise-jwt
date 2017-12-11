@@ -54,6 +54,27 @@ describe 'Token revocation', type: :request do
     # rubocop:enable RSpec/ExampleLength
   end
 
+  context 'JWT user with whitelist revocation' do
+    let(:user) { jwt_with_whitelist_user }
+    let(:user_params) do
+      {
+        jwt_with_whitelist_user: {
+          email: user.email,
+          password: user.password
+        }
+      }
+    end
+
+    it 'revokes JWT in sign_out' do
+      auth = sign_in(jwt_with_whitelist_user_session_path, user_params)
+      sign_out(destroy_jwt_with_whitelist_user_session_path, auth)
+
+      get_with_auth('/jwt_with_whitelist_user_auth_action', auth)
+
+      expect(response.status).to eq(401)
+    end
+  end
+
   context 'JWT user with Null revocation' do
     let(:user) { jwt_with_null_user }
     let(:user_params) do
