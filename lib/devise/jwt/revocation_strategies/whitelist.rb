@@ -14,7 +14,7 @@ module Devise
       # table for the respective user.
       #
       # If the values don't exist means the token was revoked.
-      # On revocation, it deletes the matching record from the 
+      # On revocation, it deletes the matching record from the
       # `whitelisted_jwts` table.
       # On sign in, it creates a new record with the `jti` and `aud` values.
       module Whitelist
