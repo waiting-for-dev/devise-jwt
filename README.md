@@ -160,7 +160,7 @@ end
 
 #### Blacklist
 
-In this strategy, a database table is used as a blacklist of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted.
+In this strategy, a database table is used as a blacklist of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted. The `exp` claim is also stored to allow the clean-up of staled tokens.
 
 In order to use it, you need to create the blacklist table in a migration:
 
@@ -225,6 +225,8 @@ every authentication. This, together with the [aud_header](#aud_header)
 configuration parameter, can be used to differentiate between clients or
 devices for the same user.
 
+The `exp` claim is also stored to allow the clean-up of staled tokens.
+
 In order to use it, you have to create yourself the associated table and model.
 The association table must be called `whitelisted_jwts`:
 
@@ -235,6 +237,7 @@ def change
     t.string :aud
     # If you want to leverage the `aud` claim, add to it a `NOT NULL` constraint:
     # t.string :aud, null: false
+    t.datetime :exp, null: false
     t.references :your_user_table, foreign_key: true
   end
   

@@ -11,7 +11,9 @@ describe Devise::JWT::RevocationStrategies::Whitelist do
 
   let(:user) { jwt_with_whitelist_user }
 
-  let(:payload) { { 'jti' => '123', 'aud' => 'client1' } }
+  let(:payload) do
+    { 'jti' => '123', 'aud' => 'client1', 'exp' => Time.at(1_501_717_440) }
+  end
 
   describe '#jwt_revoked?(payload, user)' do
     context 'when jti and aud in payload exist on jwt_whitelist' do

@@ -5,9 +5,10 @@ require 'active_support/concern'
 module Devise
   module JWT
     module RevocationStrategies
-      # This strategy must be included in the user model, and requires that it
-      # has a :has_many :whitelisted_jwts association.
-      # The JwtWhitelist table must include `jti`, `aud` and `user_id` columns
+      # This strategy must be included in the user model.
+      #
+      # The JwtWhitelist table must include `jti`, `aud`, `exp` and `user_id`
+      # columns
       #
       # In order to tell whether a token is revoked, it just tries to find the
       # `jti` and `aud` values from the token on the `whitelisted_jwts`
@@ -16,6 +17,7 @@ module Devise
       # If the values don't exist means the token was revoked.
       # On revocation, it deletes the matching record from the
       # `whitelisted_jwts` table.
+      #
       # On sign in, it creates a new record with the `jti` and `aud` values.
       module Whitelist
         extend ActiveSupport::Concern
@@ -35,8 +37,13 @@ module Devise
         end
 
         # Warden::JWTAuth::Interfaces::User#on_jwt_dispatch
+        # :reek:FeatureEnvy
         def on_jwt_dispatch(_token, payload)
-          whitelisted_jwts.create!(payload.slice('jti', 'aud'))
+          whitelisted_jwts.create!(
+            jti: payload['jti'],
+            aud: payload['aud'],
+            exp: Time.at(payload['exp'].to_i)
+          )
         end
       end
     end
