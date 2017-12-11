@@ -37,4 +37,14 @@ describe Devise::JWT::RevocationStrategies::Whitelist do
         .to(change { user.whitelisted_jwts.count }.by(-1))
     end
   end
+
+  describe '#on_jwt_dispatch(token, payload)' do
+    it 'creates whitelisted_jwt record from the payload' do
+      jwt_with_whitelist_user.on_jwt_dispatch(:token, payload)
+
+      expect(
+        jwt_with_whitelist_user.whitelisted_jwts.exists?(payload)
+      ).to eq(true)
+    end
+  end
 end
