@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.0] - 2017-12-11
+### Added
+- Added whitelist strategy
+- Update `warden-jwt_auth` dependency
+
 ## [0.4.4] - 2017-12-04
 ### Fixed
 - Configure classes as strings to avoid problems with Rails STI
