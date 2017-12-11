@@ -42,6 +42,10 @@ module Devise
       forward_to_warden(:revocation_requests, value)
     end
 
+    setting(:aud_header) do |value|
+      forward_to_warden(:aud_header, value)
+    end
+
     # A hash of warden scopes as keys and an array of request formats that will
     # be processed as values. When a scope is not present or if it has a nil
     # item, requests without format will be taken into account.
