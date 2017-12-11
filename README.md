@@ -39,6 +39,8 @@ Or install it yourself as:
 
 ## Usage
 
+First you need to configure devise to work in an API application. You can follow the instructions in this project wiki page [Configuring devise for APIs](https://github.com/waiting-for-dev/devise-jwt/wiki/Configuring-devise-for-APIs) (you are more than welcome to improve them).
+
 ### Secret key configuration
 
 First of all, you have to configure the secret key that will be used to sign generated tokens. You can do it in the devise initializer:
