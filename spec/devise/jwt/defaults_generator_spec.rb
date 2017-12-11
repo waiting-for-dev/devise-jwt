@@ -6,6 +6,7 @@ describe Devise::JWT::DefaultsGenerator do
   subject(:defaults) { described_class.call }
 
   describe 'mappings' do
+    # rubocop:disable RSpec/ExampleLength
     it 'adds devise models with jwt as strings' do
       expect(defaults[:mappings]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
@@ -14,6 +15,7 @@ describe Devise::JWT::DefaultsGenerator do
         jwt_with_null_user: 'JwtWithNullUser'
       )
     end
+    # rubocop:enable RSpec/ExampleLength
   end
 
   describe 'dispatch_requests' do
@@ -117,6 +119,7 @@ describe Devise::JWT::DefaultsGenerator do
   end
 
   describe 'revocation_strategies' do
+    # rubocop:disable RSpec/ExampleLength
     it 'adds strategies configured for each devise model with jwt' do
       expect(defaults[:revocation_strategies]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
@@ -125,5 +128,6 @@ describe Devise::JWT::DefaultsGenerator do
         jwt_with_null_user: 'Devise::JWT::RevocationStrategies::Null'
       )
     end
+    # rubocop:enable RSpec/ExampleLength
   end
 end
