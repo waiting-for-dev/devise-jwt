@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.1] - 2017-12-11
+### Added
+- Update `warden-jwt_auth` dependency to ensure JWT scopes are not fetched from
+  session
+
 ## [0.5.0] - 2017-12-11
 ### Added
 - Added whitelist strategy
