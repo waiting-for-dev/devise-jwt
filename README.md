@@ -309,6 +309,48 @@ class User < ApplicationRecord
 end
 ```
 
+### Testing
+
+Models configured with `:jwt_authenticatable` can't be retrieved from the
+session. For this reason, `sign_in` devise testing helper methods won't work as
+expected.
+
+What you need to do in order to authenticate test environment requests is the
+same that you will do in production: to provide a valid token in the
+`Authorization` header (in the form of `Bearer #{token}`) at every request.
+
+There are two ways you can get a valid token:
+
+- Inspecting the `Authorization` response header after a valid sign in request.
+- Manually creating it.
+
+The first option tests the real workflow of your application, but it can slow
+things if you perform it at every test.
+
+For the second option, a test helper is provided in order to add the
+`Authorization` name/value pair to given request headers. You can use it as in
+the following example:
+
+```ruby
+# First, require the helper module
+require 'devise/jwt/test_helpers'
+
+# ...
+
+  it 'tests something' do
+    user = fetch_my_user()
+    headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
+    # This will add a valid token for `user` in the `Authorization` header
+    auth_headers = Devise::JWT::TestHelpers.auth_headers(headers, user)
+    
+    get '/my/end_point', headers: auth_headers
+    
+    expect_something()
+  end
+```
+
+Usually you will wrap this in your own test helper.
+
 ### Configuration reference
 
 This library can be configured calling `jwt` on devise config object:
