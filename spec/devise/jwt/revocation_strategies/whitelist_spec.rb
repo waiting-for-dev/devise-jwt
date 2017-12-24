@@ -32,11 +32,20 @@ describe Devise::JWT::RevocationStrategies::Whitelist do
   end
 
   describe '#revoke_jwt(payload, user)' do
-    before { user.whitelisted_jwts.create(payload) }
+    context 'when jti in payload exists on jwt_whitelist' do
+      before { user.whitelisted_jwts.create(payload) }
 
-    it 'deletes matching jwt_whitelist record' do
-      expect { strategy.revoke_jwt(payload, user) }
-        .to(change { user.whitelisted_jwts.count }.by(-1))
+      it 'deletes matching jwt_whitelist record' do
+        expect { strategy.revoke_jwt(payload, user) }
+          .to(change { user.whitelisted_jwts.count }.by(-1))
+      end
+    end
+
+    context 'when jti in payload does not exist on jwt_whitelist' do
+      it 'remain unchanged' do
+        expect { strategy.revoke_jwt(payload, user) }
+          .not_to change(user.whitelisted_jwts, :count)
+      end
     end
   end
 
