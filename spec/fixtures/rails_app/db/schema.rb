@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171211114759) do
+ActiveRecord::Schema.define(version: 20171230182243) do
 
   create_table "jwt_blacklist", force: :cascade do |t|
     t.string "jti", null: false
-    t.datetime "exp", default: "2017-12-10 15:13:16", null: false
+    t.datetime "exp", default: "2017-12-11 09:46:10", null: false
+    t.index ["jti"], name: "index_jwt_blacklist_on_jti", unique: true
   end
 
   create_table "jwt_with_blacklist_users", force: :cascade do |t|
@@ -107,7 +108,7 @@ ActiveRecord::Schema.define(version: 20171211114759) do
     t.string "jti", null: false
     t.string "aud"
     t.integer "jwt_with_whitelist_user_id"
-    t.datetime "exp", default: "2017-12-11 11:49:05", null: false
+    t.datetime "exp", default: "2017-12-11 11:49:00", null: false
     t.index ["jti"], name: "index_whitelisted_jwts_on_jti", unique: true
     t.index ["jwt_with_whitelist_user_id"], name: "index_whitelisted_jwts_on_jwt_with_whitelist_user_id"
   end

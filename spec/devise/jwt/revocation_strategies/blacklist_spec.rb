@@ -36,5 +36,11 @@ describe Devise::JWT::RevocationStrategies::Blacklist do
       exp = strategy.find_by(jti: '123').exp
       expect(exp).equal? Time.at(payload['exp'].to_i)
     end
+
+    it 'does not crash when token has already been revoked' do
+      strategy.revoke_jwt(payload, :whatever)
+
+      strategy.revoke_jwt(payload, :whatever)
+    end
   end
 end
