@@ -12,3 +12,5 @@ RSpec/ContextWording:
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*.rb"
+Style/SafeNavigation:
+  Enabled: false
