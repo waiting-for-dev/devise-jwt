@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.3] - 2017-12-31
+### Fixed
+- Do not crash for consecutive revocations of same token in blacklist &
+  whitelist strategies
+- Update `warden-jwt_auth` dependency to allow a JWT scope to be fetched from
+  session in a html request
+
 ## [0.5.2] - 2017-12-23
 ### Added
 - Added a test helper to authenticate request headers
