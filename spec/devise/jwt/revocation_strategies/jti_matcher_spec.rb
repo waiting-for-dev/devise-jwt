@@ -41,7 +41,7 @@ describe Devise::JWT::RevocationStrategies::JTIMatcher do
 
   describe '#revoke_jwt(payload, user)' do
     it 'changes user jti column' do
-      expect { strategy.revoke_jwt('whatever', user) }.to(change { user.jti })
+      expect { strategy.revoke_jwt('whatever', user) }.to(change(user, :jti))
     end
   end
 
