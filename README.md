@@ -111,6 +111,42 @@ config.middleware.insert_before 0, Rack::Cors do
 end
 ```
 
+#### Session storage caveat
+
+If you are working with a Rails application that has session storage enabled
+and a default devise setup, chances are that same origin requests will be
+authenticated from the session regardless of a token being present in the
+headers or not.
+
+This is so because of the following default devise workflow:
+
+- When a user signs in with `:database_authenticatable` strategy, the user is
+  stored in the session unless one of the following conditions is met:
+  - Session is disabled.
+  - Devise `config.skip_session_storage` includes `:params_auth`.
+  - [Rails Request forgery
+    protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html)
+    handles an unverified request (but this is usually deactivated for API
+    requests).
+- Warden (the engine below devise), authenticates any request that has the user
+  in the session without even reaching to any strategy (`:jwt_authenticatable`
+  in our case).
+
+So, if you want to avoid this caveat you have two options:
+
+- Disable the session. If you are developing an API, probably you don't need
+  it. In order to disable it, change `config/initializers/session_store.rb` to:
+  ```ruby
+  Rails.application.config.session_store :disabled
+  ```
+  Notice that if you created the application with the `--api` flag you already
+  have the session disabled.
+- If you still need the session for any other purpose, disable
+  `:database_authenticatable` user storage. In `config/initializers/devise.rb`:
+  ```ruby
+  config.skip_session_storage = [:http_auth, :params_auth]
+  ```
+
 ### Revocation strategies
 
 `devise-jwt` comes with three revocation strategies out of the box. Some of them are implementations of what is discussed in the blog post [JWT Revocation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I also talk about their pros and cons.
@@ -311,9 +347,9 @@ end
 
 ### Testing
 
-Models configured with `:jwt_authenticatable` can't be retrieved from the
-session. For this reason, `sign_in` devise testing helper methods won't work as
-expected.
+Models configured with `:jwt_authenticatable` usually won't be retrieved from
+the session. For this reason, `sign_in` devise testing helper methods won't
+work as expected.
 
 What you need to do in order to authenticate test environment requests is the
 same that you will do in production: to provide a valid token in the
