@@ -14,7 +14,7 @@ describe Devise::JWT::MappingInspector do
   let(:jwt_with_blacklist_inspector) do
     described_class.new(:jwt_with_blacklist_user)
   end
-  
+
   let(:jwt_with_whitelist_inspector) do
     described_class.new(:jwt_with_whitelist_user)
   end
@@ -114,10 +114,10 @@ describe Devise::JWT::MappingInspector do
           ['POST']
         )
       end
-      
+
       it 'accepts sign_out_via option when it contains multiple methods' do
         expect(jwt_with_whitelist_inspector.methods(:sign_out)).to match_array(
-          ['GET', 'DELETE']
+          %w[GET DELETE]
         )
       end
     end

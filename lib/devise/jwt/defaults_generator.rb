@@ -91,16 +91,17 @@ module Devise
       def requests(inspector, name)
         path = inspector.path(name)
         methods = inspector.methods(name)
-        inspector.formats.each_with_object([]) do |format, memo|
-          methods.each do |method|
-            memo << request_for_format(path, method, format)
-          end
+        inspector.formats.each_with_object([]) do |format, requests|
+          requests.push(*requests_for_format(path, methods, format))
         end
       end
 
-      def request_for_format(path, method, format)
+      # :reek:UtilityFunction
+      def requests_for_format(path, methods, format)
         path_regexp = format ? /^#{path}.#{format}$/ : /^#{path}$/
-        [method, path_regexp]
+        methods.map do |method|
+          [method, path_regexp]
+        end
       end
     end
   end
