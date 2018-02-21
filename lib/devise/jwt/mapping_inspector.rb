@@ -38,13 +38,10 @@ module Devise
       # :reek:ControlParameter
       def methods(name)
         method = case name
-        when :sign_in
-          'POST'
-        when :sign_out
-          sign_out_via
-        when :registration
-          'POST'
-        end
+                 when :sign_in      then 'POST'
+                 when :sign_out     then sign_out_via
+                 when :registration then 'POST'
+                 end
         Array(method)
       end
 
@@ -66,7 +63,9 @@ module Devise
       end
 
       def sign_out_via
-        Array(mapping.sign_out_via).map(&:to_s).map(&:upcase)
+        Array(mapping.sign_out_via).map do |method|
+          method.to_s.upcase
+        end
       end
 
       def default_formats
