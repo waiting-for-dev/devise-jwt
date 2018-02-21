@@ -90,9 +90,11 @@ module Devise
       # :reek:FeatureEnvy
       def requests(inspector, name)
         path = inspector.path(name)
-        method = inspector.method(name)
-        inspector.formats.map do |format|
-          request_for_format(path, method, format)
+        methods = inspector.methods(name)
+        inspector.formats.each_with_object([]) do |format, memo|
+          methods.each do |method|
+            memo << request_for_format(path, method, format)
+          end
         end
       end
 

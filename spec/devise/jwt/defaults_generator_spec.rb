@@ -101,7 +101,9 @@ describe Devise::JWT::DefaultsGenerator do
 
     it 'respect sign_out_via configuration for destroy session requests' do
       expect(defaults[:revocation_requests]).to include(
-        ['POST', %r{^/jwt_with_blacklist_users/sign_out.json$}]
+        ['POST',   %r{^/jwt_with_blacklist_users/sign_out.json$}],
+        ['GET',    %r{^/jwt_with_whitelist_users/sign_out$}],
+        ['DELETE', %r{^/jwt_with_whitelist_users/sign_out$}]
       )
     end
 

@@ -14,6 +14,10 @@ describe Devise::JWT::MappingInspector do
   let(:jwt_with_blacklist_inspector) do
     described_class.new(:jwt_with_blacklist_user)
   end
+  
+  let(:jwt_with_whitelist_inspector) do
+    described_class.new(:jwt_with_whitelist_user)
+  end
 
   let(:no_jwt_inspector) { described_class.new(:no_jwt_user) }
 
@@ -83,31 +87,37 @@ describe Devise::JWT::MappingInspector do
     end
   end
 
-  describe '#method' do
+  describe '#methods' do
     context 'when name is :sign_in' do
-      it "returns 'POST'" do
-        expect(jwt_with_jti_matcher_inspector.method(:sign_in)).to eq('POST')
+      it "returns ['POST']" do
+        expect(jwt_with_jti_matcher_inspector.methods(:sign_in)).to eq(['POST'])
       end
     end
 
     context 'when name is :registration' do
-      it "returns 'POST'" do
-        expect(jwt_with_jti_matcher_inspector.method(:registration)).to eq(
-          'POST'
+      it "returns ['POST']" do
+        expect(jwt_with_jti_matcher_inspector.methods(:registration)).to eq(
+          ['POST']
         )
       end
     end
 
     context 'when name is :sign_out' do
       it 'returns mapping sign_out_via option as upcased string' do
-        expect(jwt_with_jti_matcher_inspector.method(:sign_out)).to eq(
-          'DELETE'
+        expect(jwt_with_jti_matcher_inspector.methods(:sign_out)).to eq(
+          ['DELETE']
         )
       end
 
       it 'respects when sign_out_via option is not the default' do
-        expect(jwt_with_blacklist_inspector.method(:sign_out)).to eq(
-          'POST'
+        expect(jwt_with_blacklist_inspector.methods(:sign_out)).to eq(
+          ['POST']
+        )
+      end
+      
+      it 'accepts sign_out_via option when it contains multiple methods' do
+        expect(jwt_with_whitelist_inspector.methods(:sign_out)).to match_array(
+          ['GET', 'DELETE']
         )
       end
     end

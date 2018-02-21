@@ -26,7 +26,8 @@ Rails.application.routes.draw do
              sign_out_via: :post
 
   devise_for :jwt_with_whitelist_users,
-             defaults: { format: :json }
+             defaults: { format: :json },
+             sign_out_via: [:get, :delete]
 
   scope 'a/scope' do
     devise_for :jwt_with_null_users,
