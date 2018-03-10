@@ -21,3 +21,8 @@ Provide following information. Please, format pasted output as code. Feel free t
 - Output of `Devise::JWT.config`
 - Output of `Warden::JWTAuth.config`
 - Output of `Devise.mappings`
+- If your issue is related with not getting a JWT from the server:
+  - Involved request path, method and request headers
+  - Response headers for that request
+- If your issue is related with not being able to revoke a JWT:
+  - Involved request path, method and request headers
