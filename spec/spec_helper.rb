@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'devise/jwt'
 require 'rails/all'
 require 'rspec/rails'
@@ -10,7 +10,7 @@ SimpleCov.start
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path(
-  '../fixtures/rails_app/config/environment', __FILE__
+  'fixtures/rails_app/config/environment', __dir__
 )
 
 SPEC_ROOT = Pathname(__FILE__).dirname
