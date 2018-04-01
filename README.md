@@ -182,7 +182,7 @@ Then, you have to add the strategy to the model class and configure it according
 ```ruby
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
-  
+
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 end
@@ -276,13 +276,15 @@ def change
     # If you want to leverage the `aud` claim, add to it a `NOT NULL` constraint:
     # t.string :aud, null: false
     t.datetime :exp, null: false
-    t.references :your_user_table, foreign_key: true
+    t.references :your_user_table, foreign_key: { on_delete: :cascade }, null: false
   end
-  
+
   add_index :whitelisted_jwts, :jti, unique: true
 end
 ```
 Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time.
+
+Definining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database. You can read more about referential integrity in this [blog post](https://robots.thoughtbot.com/referential-integrity-with-foreign-keys).
 
 And then, the model:
 
@@ -296,7 +298,7 @@ Finally, include de strategy in the model and configure it:
 ```ruby
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Whitelist
-  
+
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 end
@@ -333,7 +335,7 @@ module MyCustomStrategy
   def self.jwt_revoked?(payload, user)
     # Does something to check whether the JWT token is revoked for given user
   end
-  
+
   def self.revoke_jwt(payload, user)
     # Does something to revoke the JWT token for given user
   end
@@ -378,9 +380,9 @@ require 'devise/jwt/test_helpers'
     headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
     # This will add a valid token for `user` in the `Authorization` header
     auth_headers = Devise::JWT::TestHelpers.auth_headers(headers, user)
-    
+
     get '/my/end_point', headers: auth_headers
-    
+
     expect_something()
   end
 ```
@@ -425,7 +427,7 @@ jwt.dispatch_requests = [
 
 **Important**: You are encouraged to delimit your regular expression with `^` and `$` to avoid unintentional matches.
 
-#### revocation_requests 
+#### revocation_requests
 
 Besides the destroy session one, additional requests where JWT tokens should be revoked.
 
