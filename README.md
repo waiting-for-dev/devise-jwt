@@ -282,9 +282,7 @@ def change
   add_index :whitelisted_jwts, :jti, unique: true
 end
 ```
-Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time.
-
-Definining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database. You can read more about referential integrity in this [blog post](https://robots.thoughtbot.com/referential-integrity-with-foreign-keys).
+Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time. Definining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database.
 
 And then, the model:
 
