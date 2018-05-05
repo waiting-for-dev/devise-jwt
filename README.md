@@ -291,7 +291,7 @@ class WhitelistedJwt < ApplicationRecord
 end
 ```
 
-Finally, include de strategy in the model and configure it:
+Finally, include the strategy in the model and configure it:
 
 ```ruby
 class User < ApplicationRecord
