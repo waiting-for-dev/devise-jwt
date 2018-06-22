@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.7] - 2018-06-22
+### Added
+- Use `primary_key` instead of `id` to fetch resource.
+
 ## [0.5.6] - 2018-02-22
 ### Fixed
 - Work with more than one `sign_out_via` configured
