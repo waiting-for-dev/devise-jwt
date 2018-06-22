@@ -17,7 +17,7 @@ module Devise
 
       included do
         def self.find_for_jwt_authentication(sub)
-          find_by(id: sub)
+          find_by(self.primary_key.to_sym => sub)
         end
       end
 
