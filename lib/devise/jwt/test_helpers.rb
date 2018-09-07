@@ -22,13 +22,16 @@ module Devise
       # the header name configured in `Devise::JWT.config.aud_header`.
       #
       # :reek:LongParameterList
+      # :reek:ManualDispatch
       def self.auth_headers(headers, user, scope: nil, aud: nil)
         scope ||= Devise::Mapping.find_scope!(user)
         aud ||= headers[Warden::JWTAuth.config.aud_header]
         token, payload = Warden::JWTAuth::UserEncoder.new.call(
           user, scope, aud
         )
-        user.on_jwt_dispatch(token, payload) if user.respond_to?(:on_jwt_dispatch)
+        if user.respond_to?(:on_jwt_dispatch)
+          user.on_jwt_dispatch(token, payload)
+        end
         Warden::JWTAuth::HeaderParser.to_headers(headers, token)
       end
     end
