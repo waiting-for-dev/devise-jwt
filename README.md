@@ -196,6 +196,12 @@ def jwt_payload
 end
 ```
 
+Here is a command to generate code for User model
+
+```bash
+rails g devise_jwt:jti_matcher User
+```
+
 #### Blacklist
 
 In this strategy, a database table is used as a blacklist of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted. The `exp` claim is also stored to allow the clean-up of staled tokens.
@@ -211,6 +217,7 @@ def change
   add_index :jwt_blacklist, :jti
 end
 ```
+
 For performance reasons, it is better if the `jti` column is an index.
 
 Note: if you used the blacklist strategy before vesion 0.4.0 you may not have the field *exp.* If not, run the following migration:
@@ -241,6 +248,12 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
 end
+```
+
+Here is a command to generate code for User model
+
+```bash
+rails g devise_jwt:blacklist User
 ```
 
 #### Whitelist
@@ -282,6 +295,7 @@ def change
   add_index :whitelisted_jwts, :jti, unique: true
 end
 ```
+
 Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time. Definining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database.
 
 And then, the model:
@@ -309,6 +323,12 @@ def on_jwt_dispatch(token, payload)
   super
   do_something(token, payload)
 end
+```
+
+Here is a command to generate code for User model
+
+```bash
+rails g devise_jwt:whitelist User
 ```
 
 #### Null strategy
@@ -398,6 +418,7 @@ Devise.setup do |config|
   end
 end
 ```
+
 #### secret
 
 Secret key used to sign generated JWT tokens. You must set it.
