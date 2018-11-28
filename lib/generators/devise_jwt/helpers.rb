@@ -23,11 +23,10 @@ module DeviseJwt
       end
 
       def migration_version
-        if Rails::VERSION::MAJOR >= 5
-          "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
-        else
-          nil
-        end
+        major = Rails::VERSION::MAJOR
+        minon = Rails::VERSION::MINOR
+        @m_version ||= "[#{major}.#{minon}]" if major >= 5
+        @m_version
       end
 
       def model_path
