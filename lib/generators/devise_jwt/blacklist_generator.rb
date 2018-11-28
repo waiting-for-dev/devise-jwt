@@ -28,14 +28,8 @@ module DeviseJwt
 
       def generate_model
         model_subpath = 'app/models/jwt_blacklist.rb'
-        model_path = Rails.root.join(model_subpath)
-
-        unless File.exist?(model_path)
-          invoke(
-            'active_record:model',
-            ['JWTBlacklist'],
-            migration: false
-          )
+        unless File.exist?(Rails.root.join(model_subpath))
+          invoke('active_record:model', ['JWTBlacklist'], migration: false)
         end
 
         content = <<-CONTENT
@@ -44,11 +38,7 @@ module DeviseJwt
   self.table_name = 'jwt_blacklist'
         CONTENT
 
-        inject_into_class(
-          model_subpath,
-          'JwtBlacklist',
-          content
-        )
+        inject_into_class(model_subpath, 'JwtBlacklist', content)
       end
 
       def inject_devise_content
@@ -60,11 +50,7 @@ module DeviseJwt
         CONTENT
 
         if File.exist?(model_path)
-          inject_into_class(
-            model_path,
-            model_name.camelize,
-            content
-          )
+          inject_into_class(model_path, model_name.camelize, content)
         else
           puts "Warning: #{model_path} does not exist!"
         end
