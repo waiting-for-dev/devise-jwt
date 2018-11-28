@@ -5,7 +5,7 @@ require_relative 'helpers'
 
 module DeviseJwt
   module Generators
-    # Generator class for JTIMatcher revocation strategy
+    # Generator for JTIMatcher revocation strategy
     class JtiMatcherGenerator < ActiveRecord::Generators::Base
       desc <<-DESC.strip_heredoc
         Set up JTIMatcher revocation strategy.
@@ -51,7 +51,7 @@ module DeviseJwt
           'New migration was created.',
           "Then, open #{model_path} and finish configurating",
           '',
-          'If you have any questions, see https://github.com/waiting-for-dev/devise-jwt#jtimatcher'
+          'If you have any questions, open https://github.com/waiting-for-dev/devise-jwt#jtimatcher'
         ].each do |str|
           puts str
         end
