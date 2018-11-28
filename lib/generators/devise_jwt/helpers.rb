@@ -22,13 +22,11 @@ module DeviseJwt
         end
       end
 
-      def rails5_and_up?
-        Rails::VERSION::MAJOR >= 5
-      end
-
       def migration_version
-        if rails5_and_up?
+        if Rails::VERSION::MAJOR >= 5
           "[#{Rails::VERSION::MAJOR}.#{Rails::VERSION::MINOR}]"
+        else
+          nil
         end
       end
 

@@ -36,11 +36,7 @@ module DeviseJwt
         CONTENT
 
         if File.exist?(model_path)
-          inject_into_class(
-            model_path,
-            model_name.camelize,
-            content
-          )
+          inject_into_class(model_path, model_name.camelize, content)
         else
           puts "Warning: #{model_path} does not exist!"
         end
