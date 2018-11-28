@@ -20,7 +20,7 @@ module DeviseJwt
 
       def copy_migration
         migration_template(
-          'migration_jti.rb',
+          'migration_jti.erb',
           "#{migration_path}/add_jti_columns_to_#{table_name}.rb",
           migration_version: migration_version
         )

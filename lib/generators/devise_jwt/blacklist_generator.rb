@@ -20,7 +20,7 @@ module DeviseJwt
 
       def copy_migration
         migration_template(
-          'migration_blacklist.rb',
+          'migration_blacklist.erb',
           "#{migration_path}/devise_jwt_create_jwt_blacklist.rb",
           migration_version: migration_version
         )
