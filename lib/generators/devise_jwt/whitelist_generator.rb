@@ -5,7 +5,7 @@ require_relative 'helpers'
 
 module DeviseJwt
   module Generators
-    # Generator class for whitelist revocation strategy
+    # Generator for whitelist revocation strategy
     class WhitelistGenerator < ActiveRecord::Generators::Base
       desc <<-DESC.strip_heredoc
         Set up Whitelist revocation strategy.
@@ -65,7 +65,7 @@ module DeviseJwt
           'New migration and a model were created.',
           "Then, open #{model_path} and finish configurating",
           '',
-          'If you have any questions, see https://github.com/waiting-for-dev/devise-jwt#whitelist'
+          'If you have any questions, open https://github.com/waiting-for-dev/devise-jwt#whitelist'
         ].each do |str|
           puts str
         end

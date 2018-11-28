@@ -5,7 +5,7 @@ require_relative 'helpers'
 
 module DeviseJwt
   module Generators
-    # Generator class for blacklist revocation strategy
+    # Generator for blacklist revocation strategy
     class BlacklistGenerator < ActiveRecord::Generators::Base
       desc <<-DESC.strip_heredoc
         Set up Blacklist revocation strategy.
@@ -53,10 +53,10 @@ module DeviseJwt
 
       def inject_devise_content
         content = <<-CONTENT
-  # backlist
+  # blacklist
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
-  # backlist
+  # blacklist
         CONTENT
 
         if File.exist?(model_path)
@@ -75,7 +75,7 @@ module DeviseJwt
           'New migration and a model were created.',
           "Then, open #{model_path} and finish configurating",
           '',
-          'If you have any questions, see https://github.com/waiting-for-dev/devise-jwt#blacklist'
+          'If you have any questions, open https://github.com/waiting-for-dev/devise-jwt#blacklist'
         ].each do |str|
           puts str
         end
