@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddJTIColumnsTo<%= model_name.camelize %> < ActiveRecord::Migration<%= migration_version %>
+class AddJtiColumnsTo<%= table_name.camelize %> < ActiveRecord::Migration<%= migration_version %>
   def change
     add_column :<%= table_name_pl %>, :jti, :string, null: false
     add_index :<%= table_name_pl %>, :jti, unique: true
@@ -8,6 +8,6 @@ class AddJTIColumnsTo<%= model_name.camelize %> < ActiveRecord::Migration<%= mig
     # add_column :<%= table_name_pl %>, :jti, :string
     # User.all.each { |user| user.update_column(:jti, SecureRandom.uuid) }
     # change_column_null :<%= table_name_pl %>, :jti, false
-    # add_index :<%= table_name %>, :jti, unique: true
+    # add_index :<%= table_name_pl %>, :jti, unique: true
   end
 end

@@ -3,8 +3,9 @@
 require 'rails/generators/active_record'
 require_relative 'helpers'
 
-module Devise_Jwt
+module DeviseJwt
   module Generators
+    # Generator class for blacklist revocation strategy
     class BlacklistGenerator < ActiveRecord::Generators::Base
       desc <<-DESC.strip_heredoc
         Set up Blacklist revocation strategy.
@@ -14,12 +15,12 @@ module Devise_Jwt
           rails g devise_jwt:blacklist Admin
       DESC
 
-      include Devise_Jwt::Generators::Helpers
-      source_root File.expand_path("../templates", __FILE__)
+      include DeviseJwt::Generators::Helpers
+      source_root File.expand_path('templates', __dir__)
 
       def copy_migration
         migration_template(
-          "migration_blacklist.rb",
+          'migration_blacklist.rb',
           "#{migration_path}/devise_jwt_create_jwt_blacklist.rb",
           migration_version: migration_version
         )
@@ -31,7 +32,7 @@ module Devise_Jwt
 
         unless File.exist?(model_path)
           invoke(
-            "active_record:model",
+            'active_record:model',
             ['JWTBlacklist'],
             migration: false
           )
@@ -41,11 +42,11 @@ module Devise_Jwt
   include Devise::JWT::RevocationStrategies::Blacklist
 
   self.table_name = 'jwt_blacklist'
-CONTENT
+        CONTENT
 
         inject_into_class(
           model_subpath,
-          'JWTBlacklist',
+          'JwtBlacklist',
           content
         )
       end
@@ -54,9 +55,9 @@ CONTENT
         content = <<-CONTENT
   # backlist
   devise :database_authenticatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
+         :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
   # backlist
-CONTENT
+        CONTENT
 
         if File.exist?(model_path)
           inject_into_class(

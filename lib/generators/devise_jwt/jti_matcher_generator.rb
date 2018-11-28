@@ -3,9 +3,10 @@
 require 'rails/generators/active_record'
 require_relative 'helpers'
 
-module Devise_Jwt
+module DeviseJwt
   module Generators
-    class Jti_MatcherGenerator < ActiveRecord::Generators::Base
+    # Generator class for JTIMatcher revocation strategy
+    class JtiMatcherGenerator < ActiveRecord::Generators::Base
       desc <<-DESC.strip_heredoc
         Set up JTIMatcher revocation strategy.
 
@@ -14,12 +15,12 @@ module Devise_Jwt
           rails g devise_jwt:jti_matcher Admin
       DESC
 
-      include Devise_Jwt::Generators::Helpers
-      source_root File.expand_path("../templates", __FILE__)
+      include DeviseJwt::Generators::Helpers
+      source_root File.expand_path('templates', __dir__)
 
       def copy_migration
         migration_template(
-          "migration_jti.rb",
+          'migration_jti.rb',
           "#{migration_path}/add_jti_columns_to_#{table_name}.rb",
           migration_version: migration_version
         )
@@ -32,7 +33,7 @@ module Devise_Jwt
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
   # jti_matcher
-CONTENT
+        CONTENT
 
         if File.exist?(model_path)
           inject_into_class(

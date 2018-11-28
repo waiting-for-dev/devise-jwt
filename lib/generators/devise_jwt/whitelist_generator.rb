@@ -3,8 +3,9 @@
 require 'rails/generators/active_record'
 require_relative 'helpers'
 
-module Devise_Jwt
+module DeviseJwt
   module Generators
+    # Generator class for whitelist revocation strategy
     class WhitelistGenerator < ActiveRecord::Generators::Base
       desc <<-DESC.strip_heredoc
         Set up Whitelist revocation strategy.
@@ -14,12 +15,12 @@ module Devise_Jwt
           rails g devise_jwt:whitelist Admin
       DESC
 
-      include Devise_Jwt::Generators::Helpers
-      source_root File.expand_path("../templates", __FILE__)
+      include DeviseJwt::Generators::Helpers
+      source_root File.expand_path('templates', __dir__)
 
       def copy_migration
         migration_template(
-          "migration_whitelist.rb",
+          'migration_whitelist.rb',
           "#{migration_path}/devise_jwt_create_jwt_whitelist.rb",
           migration_version: migration_version
         )
@@ -29,13 +30,13 @@ module Devise_Jwt
         model_subpath = 'app/models/whitelisted_jwt.rb'
         model_path = Rails.root.join(model_subpath)
 
-        unless File.exist?(model_path)
-          invoke(
-            "active_record:model",
-            ['WhitelistedJwt'],
-            migration: false
-          )
-        end
+        return if File.exist?(model_path)
+
+        invoke(
+          'active_record:model',
+          ['WhitelistedJwt'],
+          migration: false
+        )
       end
 
       def inject_devise_content
@@ -46,7 +47,7 @@ module Devise_Jwt
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: self
   # whitelist
-CONTENT
+        CONTENT
 
         if File.exist?(model_path)
           inject_into_class(

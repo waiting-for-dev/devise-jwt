@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-module Devise_Jwt
+module DeviseJwt
   module Generators
+    # some functions
     module Helpers
       private
 
@@ -17,7 +18,7 @@ module Devise_Jwt
         if Rails.version >= '5.0.3'
           db_migrate_path
         else
-          @migration_path ||= File.join("db", "migrate")
+          @migration_path ||= File.join('db', 'migrate')
         end
       end
 
@@ -32,7 +33,7 @@ module Devise_Jwt
       end
 
       def model_path
-        File.join("app", "models", "#{model_name}.rb")
+        File.join('app', 'models', "#{model_name}.rb")
       end
     end
   end
