@@ -27,6 +27,7 @@ module Devise
         devise_mappings.each_key do |scope|
           inspector = MappingInspector.new(scope)
           next unless inspector.jwt?
+
           add_defaults(inspector)
         end
         defaults
@@ -62,16 +63,19 @@ module Devise
 
       def add_sign_in_request(inspector)
         return unless inspector.session?
+
         defaults[:dispatch_requests].push(*sign_in_requests(inspector))
       end
 
       def add_registration_request(inspector)
         return unless inspector.registration?
+
         defaults[:dispatch_requests].push(*registration_requests(inspector))
       end
 
       def add_revocation_requests(inspector)
         return unless inspector.session?
+
         defaults[:revocation_requests].push(*sign_out_requests(inspector))
       end
 
