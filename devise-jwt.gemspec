@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'devise', '~> 4.0'
   spec.add_dependency 'warden-jwt_auth', '~> 0.3.6'
 
-  spec.add_development_dependency "bundler", "~> 1.12"
+  spec.add_development_dependency "bundler", "> 1"
   spec.add_development_dependency "rake", "~> 12.3"
   spec.add_development_dependency "rspec", "~> 3.8"
   spec.add_development_dependency "pry-byebug", "~> 3.7"
