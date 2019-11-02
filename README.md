@@ -132,7 +132,7 @@ This is so because of the following default devise workflow:
   in the session without even reaching to any strategy (`:jwt_authenticatable`
   in our case).
 
-So, if you want to avoid this caveat you have two options:
+So, if you want to avoid this caveat you have three options:
 
 - Disable the session. If you are developing an API, probably you don't need
   it. In order to disable it, change `config/initializers/session_store.rb` to:
@@ -145,6 +145,15 @@ So, if you want to avoid this caveat you have two options:
   `:database_authenticatable` user storage. In `config/initializers/devise.rb`:
   ```ruby
   config.skip_session_storage = [:http_auth, :params_auth]
+  ```
+- If you are using Devise for another model (e.g. `AdminUser`) and doesn't want
+  to disable session storage for devise entirely, you can disable it on a
+  per-model basis:
+  ```ruby
+  class User << ApplicationRecord
+    devise :database_authenticable #, your other enabled modules...
+    self.skip_session_storage = [:http_auth, :params_auth]
+  end
   ```
 
 ### Revocation strategies
