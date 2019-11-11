@@ -236,7 +236,7 @@ end
 Then, you need to create the corresponding model and include the strategy:
 
 ```ruby
-class JWTBlacklist < ApplicationRecord
+class JwtBlacklist < ApplicationRecord
   include Devise::JWT::RevocationStrategies::Blacklist
 
   self.table_name = 'jwt_blacklist'
@@ -248,7 +248,7 @@ Last, configure the user model to use it:
 ```ruby
 class User < ApplicationRecord
   devise :database_authenticatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
+         :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
 end
 ```
 
