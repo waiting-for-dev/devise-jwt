@@ -150,7 +150,7 @@ So, if you want to avoid this caveat you have three options:
   to disable session storage for devise entirely, you can disable it on a
   per-model basis:
   ```ruby
-  class User << ApplicationRecord
+  class User < ApplicationRecord
     devise :database_authenticable #, your other enabled modules...
     self.skip_session_storage = [:http_auth, :params_auth]
   end
