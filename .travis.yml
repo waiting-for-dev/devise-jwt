@@ -1,9 +1,9 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.4
   - 2.5
   - 2.6
+  - 2.7
 before_install:
   - gem update --system --no-doc
   - bundle install --gemfile=.overcommit_gems.rb
