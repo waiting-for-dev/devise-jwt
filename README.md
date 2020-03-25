@@ -166,7 +166,7 @@ Here, the model class acts itself as the revocation strategy. It needs a new str
 
 It works like the following:
 
-- At the same time that a token is dispatched for a user, the `jti` claim is persisted to the `jti` column.
+- When a token is dispatched for a user, the `jti` claim is taken from the `jti` column in the model (which has been initialized when the record has been created).
 - At every authenticated action, the incoming token `jti` claim is matched against the `jti` column for that user. The authentication only succeeds if they are the same.
 - When the user requests to sign out its `jti` column changes, so that provided token won't be valid anymore.
 
