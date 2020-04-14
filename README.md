@@ -151,7 +151,7 @@ So, if you want to avoid this caveat you have three options:
   per-model basis:
   ```ruby
   class User < ApplicationRecord
-    devise :database_authenticable #, your other enabled modules...
+    devise :database_authenticatable #, your other enabled modules...
     self.skip_session_storage = [:http_auth, :params_auth]
   end
   ```
