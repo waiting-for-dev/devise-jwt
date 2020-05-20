@@ -15,10 +15,10 @@ module Devise
           Warden::JWTAuth.configure do |config|
             defaults = DefaultsGenerator.call
 
-            config.mappings = defaults[:mappings]
-            config.dispatch_requests.push(*defaults[:dispatch_requests])
-            config.revocation_requests.push(*defaults[:revocation_requests])
-            config.revocation_strategies = defaults[:revocation_strategies]
+            config.mappings = config.mappings.merge(defaults[:mappings])
+            config.dispatch_requests = config.dispatch_requests.push(*defaults[:dispatch_requests])
+            config.revocation_requests = config.revocation_requests.push(*defaults[:revocation_requests])
+            config.revocation_strategies = config.revocation_strategies.merge(defaults[:revocation_strategies])
           end
         end
       end

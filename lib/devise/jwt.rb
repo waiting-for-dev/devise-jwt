@@ -34,6 +34,14 @@ module Devise
       forward_to_warden(:expiration_time, value)
     end
 
+    setting(:mappings) do |value|
+      forward_to_warden(:mappings, value)
+    end
+
+    setting(:revocation_strategies) do |value|
+      forward_to_warden(:revocation_strategies, value)
+    end
+
     setting(:dispatch_requests) do |value|
       forward_to_warden(:dispatch_requests, value)
     end

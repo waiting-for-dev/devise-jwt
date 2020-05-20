@@ -275,10 +275,10 @@ Devise.setup do |config|
   # JWT configuration
   config.jwt do |jwt|
     jwt.secret = 'dwdwdwdwdwdwedwedwedwddw'
-    jwt.dispatch_requests = [['GET', %r{^/foo_path$}]]
-    jwt.revocation_requests = [['GET', %r{^/bar_path$}]]
-    jwt.request_formats = {
-      jwt_with_blacklist_user: %i[json xml]
-    }
+    jwt.mappings = { no_jwt_user: NoJwtUser }
+    jwt.revocation_strategies = { no_jwt_user: NoJwtUser }
+    jwt.dispatch_requests = [['POST', %r{^/api/v1/no_jwt_user/sign_in$}]]
+    jwt.revocation_requests = [['DELETE', %r{^/api/v1/no_jwt_user/sign_out$}]]
+    jwt.request_formats = { jwt_with_blacklist_user: %i[json xml] }
   end
 end

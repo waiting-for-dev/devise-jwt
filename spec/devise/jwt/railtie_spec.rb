@@ -16,6 +16,12 @@ describe Devise::JWT::Railtie do
     )
   end
 
+  it 'does not override user defined mapping' do
+    expect(Warden::JWTAuth.config.mappings).to include(
+      no_jwt_user: NoJwtUser
+    )
+  end
+
   it 'configures dispatch_requests using defaults' do
     expect(Warden::JWTAuth.config.dispatch_requests).to include(
       ['POST', %r{^/jwt_with_jti_matcher_users/sign_in$}]
@@ -24,7 +30,7 @@ describe Devise::JWT::Railtie do
 
   it 'does not override user defined dispatch_requests' do
     expect(Warden::JWTAuth.config.dispatch_requests).to include(
-      ['GET', %r{^/foo_path$}]
+      ['POST', %r{^/api/v1/no_jwt_user/sign_in$}]
     )
   end
 
@@ -34,9 +40,9 @@ describe Devise::JWT::Railtie do
     )
   end
 
-  it 'does not override user defined revocation' do
+  it 'does not override user defined revocation_requests' do
     expect(Warden::JWTAuth.config.revocation_requests).to include(
-      ['GET', %r{^/bar_path$}]
+      ['DELETE', %r{^/api/v1/no_jwt_user/sign_out$}]
     )
   end
 
