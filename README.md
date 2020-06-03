@@ -80,12 +80,11 @@ class User < ApplicationRecord
 end
 ```
 
-If you need to add something to the JWT payload, you can do it defining a `jwt_payload` method in the user model.
-It must return a `Hash` and be merged into the original one, or else it will be overriden. For instance:
+If you need to add something to the JWT payload, you can do it defining a `jwt_payload` method in the user model. It must return a `Hash`. For instance:
 
 ```ruby
 def jwt_payload
-  super.merge({ 'foo' => 'bar' })
+  { 'foo' => 'bar' }
 end
 ```
 
