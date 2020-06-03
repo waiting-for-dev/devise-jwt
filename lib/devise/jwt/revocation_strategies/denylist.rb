@@ -10,7 +10,7 @@ module Devise
       #
       # In order to tell whether a token is revoked, it just checks whether
       # `jti` is in the table. On revocation, creates a new record with it.
-      module Blacklist
+      module Denylist
         extend ActiveSupport::Concern
 
         included do

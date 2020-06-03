@@ -1,5 +1,5 @@
-class JwtWithWhitelistUser < ApplicationRecord
-  include Devise::JWT::RevocationStrategies::Whitelist
+class JwtWithAllowlistUser < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::Allowlist
 
   devise :database_authenticatable,
          :registerable,

@@ -9,17 +9,17 @@ shared_context 'fixtures' do
     )
   end
 
-  let(:jwt_with_blacklist_model) { JwtWithBlacklistUser }
-  let(:jwt_with_blacklist_user) do
-    jwt_with_blacklist_model.create(
+  let(:jwt_with_denylist_model) { JwtWithDenylistUser }
+  let(:jwt_with_denylist_user) do
+    jwt_with_denylist_model.create(
       email: 'an@user.com',
       password: 'password'
     )
   end
 
-  let(:jwt_with_whitelist_model) { JwtWithWhitelistUser }
-  let(:jwt_with_whitelist_user) do
-    jwt_with_whitelist_model.create(
+  let(:jwt_with_allowlist_model) { JwtWithAllowlistUser }
+  let(:jwt_with_allowlist_user) do
+    jwt_with_allowlist_model.create(
       email: 'an@user.com',
       password: 'password'
     )

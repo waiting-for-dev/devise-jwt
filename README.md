@@ -76,7 +76,7 @@ An example configuration:
 ```ruby
 class User < ApplicationRecord
   devise :database_authenticatable,
-         :jwt_authenticatable, jwt_revocation_strategy: Blacklist
+         :jwt_authenticatable, jwt_revocation_strategy: Denylist
 end
 ```
 
@@ -205,29 +205,29 @@ def jwt_payload
 end
 ```
 
-#### Blacklist
+#### Denylist
 
-In this strategy, a database table is used as a blacklist of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted. The `exp` claim is also stored to allow the clean-up of staled tokens.
+In this strategy, a database table is used as a list of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted. The `exp` claim is also stored to allow the clean-up of staled tokens.
 
-In order to use it, you need to create the blacklist table in a migration:
+In order to use it, you need to create the denylist table in a migration:
 
 ```ruby
 def change
-  create_table :jwt_blacklist do |t|
+  create_table :jwt_denylist do |t|
     t.string :jti, null: false
     t.datetime :exp, null: false
   end
-  add_index :jwt_blacklist, :jti
+  add_index :jwt_denylist, :jti
 end
 ```
 For performance reasons, it is better if the `jti` column is an index.
 
-Note: if you used the blacklist strategy before vesion 0.4.0 you may not have the field *exp.* If not, run the following migration:
+Note: if you used the denylist strategy before vesion 0.4.0 you may not have the field *exp.* If not, run the following migration:
 
 ```ruby
-class AddExpirationTimeToJWTBlacklist < ActiveRecord::Migration
+class AddExpirationTimeToJWTDenylist < ActiveRecord::Migration
   def change
-    add_column :jwt_blacklist, :exp, :datetime, null: false
+    add_column :jwt_denylist, :exp, :datetime, null: false
   end
 end
 
@@ -236,10 +236,10 @@ end
 Then, you need to create the corresponding model and include the strategy:
 
 ```ruby
-class JwtBlacklist < ApplicationRecord
-  include Devise::JWT::RevocationStrategies::Blacklist
+class JwtDenylist < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::Denylist
 
-  self.table_name = 'jwt_blacklist'
+  self.table_name = 'jwt_denylist'
 end
 ```
 
@@ -248,11 +248,11 @@ Last, configure the user model to use it:
 ```ruby
 class User < ApplicationRecord
   devise :database_authenticatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtBlacklist
+         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 end
 ```
 
-#### Whitelist
+#### Allowlist
 
 Here, the model itself acts also as a revocation strategy, but it needs to have
 a one-to-many association with another table which stores the tokens (in fact
@@ -275,11 +275,11 @@ devices for the same user.
 The `exp` claim is also stored to allow the clean-up of staled tokens.
 
 In order to use it, you have to create yourself the associated table and model.
-The association table must be called `whitelisted_jwts`:
+The association table must be called `allowlisted_jwts`:
 
 ```ruby
 def change
-  create_table :whitelisted_jwts do |t|
+  create_table :allowlisted_jwts do |t|
     t.string :jti, null: false
     t.string :aud
     # If you want to leverage the `aud` claim, add to it a `NOT NULL` constraint:
@@ -288,7 +288,7 @@ def change
     t.references :your_user_table, foreign_key: { on_delete: :cascade }, null: false
   end
 
-  add_index :whitelisted_jwts, :jti, unique: true
+  add_index :allowlisted_jwts, :jti, unique: true
 end
 ```
 Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time. Definining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database.
@@ -296,7 +296,7 @@ Important: You are encouraged to set a unique index in the jti column. This way 
 And then, the model:
 
 ```ruby
-class WhitelistedJwt < ApplicationRecord
+class AllowlistedJwt < ApplicationRecord
 end
 ```
 
@@ -304,7 +304,7 @@ Finally, include the strategy in the model and configure it:
 
 ```ruby
 class User < ApplicationRecord
-  include Devise::JWT::RevocationStrategies::Whitelist
+  include Devise::JWT::RevocationStrategies::Allowlist
 
   devise :database_authenticatable,
          :jwt_authenticatable, jwt_revocation_strategy: self

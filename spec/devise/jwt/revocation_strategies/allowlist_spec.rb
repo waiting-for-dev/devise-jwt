@@ -2,29 +2,29 @@
 
 require 'spec_helper'
 
-describe Devise::JWT::RevocationStrategies::Whitelist do
+describe Devise::JWT::RevocationStrategies::Allowlist do
   include_context 'fixtures'
 
-  subject(:strategy) { JwtWithWhitelistUser }
+  subject(:strategy) { JwtWithAllowlistUser }
 
-  let(:model) { JwtWithWhitelistUser }
+  let(:model) { JwtWithAllowlistUser }
 
-  let(:user) { jwt_with_whitelist_user }
+  let(:user) { jwt_with_allowlist_user }
 
   let(:payload) do
     { 'jti' => '123', 'aud' => 'client1', 'exp' => Time.at(1_501_717_440) }
   end
 
   describe '#jwt_revoked?(payload, user)' do
-    context 'when jti and aud in payload exist on jwt_whitelist' do
-      before { user.whitelisted_jwts.create(payload) }
+    context 'when jti and aud in payload exist on jwt_allowlist' do
+      before { user.allowlisted_jwts.create(payload) }
 
       it 'returns false' do
         expect(strategy.jwt_revoked?(payload, user)).to eq(false)
       end
     end
 
-    context 'when jti and aud payload does not exist on jwt_whitelist' do
+    context 'when jti and aud payload does not exist on jwt_allowlist' do
       it 'returns true' do
         expect(strategy.jwt_revoked?(payload, user)).to eq(true)
       end
@@ -32,11 +32,11 @@ describe Devise::JWT::RevocationStrategies::Whitelist do
   end
 
   describe '#revoke_jwt(payload, user)' do
-    before { user.whitelisted_jwts.create(payload) }
+    before { user.allowlisted_jwts.create(payload) }
 
-    it 'deletes matching jwt_whitelist record' do
+    it 'deletes matching jwt_allowlist record' do
       expect { strategy.revoke_jwt(payload, user) }
-        .to(change { user.whitelisted_jwts.count }.by(-1))
+        .to(change { user.allowlisted_jwts.count }.by(-1))
     end
 
     it 'does not crash when token has already been revoked' do
@@ -47,11 +47,11 @@ describe Devise::JWT::RevocationStrategies::Whitelist do
   end
 
   describe '#on_jwt_dispatch(token, payload)' do
-    it 'creates whitelisted_jwt record from the payload' do
-      jwt_with_whitelist_user.on_jwt_dispatch(:token, payload)
+    it 'creates allowlisted_jwt record from the payload' do
+      jwt_with_allowlist_user.on_jwt_dispatch(:token, payload)
 
       expect(
-        jwt_with_whitelist_user.whitelisted_jwts.exists?(payload)
+        jwt_with_allowlist_user.allowlisted_jwts.exists?(payload)
       ).to eq(true)
     end
   end

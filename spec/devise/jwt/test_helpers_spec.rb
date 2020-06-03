@@ -58,11 +58,11 @@ describe Devise::JWT::TestHelpers do
     end
 
     it 'calls on_jwt_dispatch method on the user model' do
-      user = jwt_with_whitelist_user
+      user = jwt_with_allowlist_user
       auth_headers = described_class.auth_headers(headers, user)
       payload = payload_from_headers(auth_headers)
 
-      expect(user.whitelisted_jwts.first.jti).to eq(payload['jti'])
+      expect(user.allowlisted_jwts.first.jti).to eq(payload['jti'])
     end
   end
 end

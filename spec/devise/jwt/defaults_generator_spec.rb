@@ -10,8 +10,8 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds devise models with jwt as strings' do
       expect(defaults[:mappings]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
-        jwt_with_blacklist_user: 'JwtWithBlacklistUser',
-        jwt_with_whitelist_user: 'JwtWithWhitelistUser',
+        jwt_with_denylist_user: 'JwtWithDenylistUser',
+        jwt_with_allowlist_user: 'JwtWithAllowlistUser',
         jwt_with_null_user: 'JwtWithNullUser'
       )
     end
@@ -28,11 +28,11 @@ describe Devise::JWT::DefaultsGenerator do
     # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
     it 'respects configured format segment for create session requests' do
       expect(defaults[:dispatch_requests]).to include(
-        ['POST', %r{^/jwt_with_blacklist_users/sign_in.json$}],
-        ['POST', %r{^/jwt_with_blacklist_users/sign_in.xml$}]
+        ['POST', %r{^/jwt_with_denylist_users/sign_in.json$}],
+        ['POST', %r{^/jwt_with_denylist_users/sign_in.xml$}]
       )
       expect(defaults[:dispatch_requests]).not_to include(
-        ['POST', %r{^/jwt_with_blacklist_users/sign_in$}]
+        ['POST', %r{^/jwt_with_denylist_users/sign_in$}]
       )
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
@@ -58,11 +58,11 @@ describe Devise::JWT::DefaultsGenerator do
     # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
     it 'respects configured format segment for registration requests' do
       expect(defaults[:dispatch_requests]).to include(
-        ['POST', %r{^/jwt_with_blacklist_users.json$}],
-        ['POST', %r{^/jwt_with_blacklist_users.xml$}]
+        ['POST', %r{^/jwt_with_denylist_users.json$}],
+        ['POST', %r{^/jwt_with_denylist_users.xml$}]
       )
       expect(defaults[:dispatch_requests]).not_to include(
-        ['POST', %r{^/jwt_with_blacklist_users$}]
+        ['POST', %r{^/jwt_with_denylist_users$}]
       )
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
@@ -90,20 +90,20 @@ describe Devise::JWT::DefaultsGenerator do
     # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
     it 'respects configured format segment for destroy session requests' do
       expect(defaults[:revocation_requests]).to include(
-        ['POST', %r{^/jwt_with_blacklist_users/sign_out.json$}],
-        ['POST', %r{^/jwt_with_blacklist_users/sign_out.xml$}]
+        ['POST', %r{^/jwt_with_denylist_users/sign_out.json$}],
+        ['POST', %r{^/jwt_with_denylist_users/sign_out.xml$}]
       )
       expect(defaults[:revocation_requests]).not_to include(
-        ['POST', %r{^/jwt_with_blacklist_users/sign_out$}]
+        ['POST', %r{^/jwt_with_denylist_users/sign_out$}]
       )
     end
     # rubocop:enable RSpec/ExampleLength, RSpec/MultipleExpectations
 
     it 'respect sign_out_via configuration for destroy session requests' do
       expect(defaults[:revocation_requests]).to include(
-        ['POST',   %r{^/jwt_with_blacklist_users/sign_out.json$}],
-        ['GET',    %r{^/jwt_with_whitelist_users/sign_out$}],
-        ['DELETE', %r{^/jwt_with_whitelist_users/sign_out$}]
+        ['POST',   %r{^/jwt_with_denylist_users/sign_out.json$}],
+        ['GET',    %r{^/jwt_with_allowlist_users/sign_out$}],
+        ['DELETE', %r{^/jwt_with_allowlist_users/sign_out$}]
       )
     end
 
@@ -125,8 +125,8 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds strategies configured for each devise model with jwt' do
       expect(defaults[:revocation_strategies]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
-        jwt_with_blacklist_user: 'JWTBlacklist',
-        jwt_with_whitelist_user: 'JwtWithWhitelistUser',
+        jwt_with_denylist_user: 'JWTDenylist',
+        jwt_with_allowlist_user: 'JwtWithAllowlistUser',
         jwt_with_null_user: 'Devise::JWT::RevocationStrategies::Null'
       )
     end

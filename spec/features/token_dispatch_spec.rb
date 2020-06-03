@@ -42,11 +42,11 @@ describe 'Token dispatch', type: :request do
     end
   end
 
-  context 'JWT user with Blacklist revocation' do
-    let(:user) { jwt_with_blacklist_user }
+  context 'JWT user with Denylist revocation' do
+    let(:user) { jwt_with_denylist_user }
     let(:sign_in_params) do
       {
-        jwt_with_blacklist_user: {
+        jwt_with_denylist_user: {
           email: user.email,
           password: user.password
         }
@@ -54,13 +54,13 @@ describe 'Token dispatch', type: :request do
     end
     let(:registration_params) do
       {
-        jwt_with_blacklist_user: generic_registration_params
+        jwt_with_denylist_user: generic_registration_params
       }
     end
 
     it 'dispatches JWT in sign_in requests' do
       sign_in(
-        jwt_with_blacklist_user_session_path, sign_in_params, format: :json
+        jwt_with_denylist_user_session_path, sign_in_params, format: :json
       )
 
       expect(response.headers['Authorization']).not_to be_nil
@@ -68,7 +68,7 @@ describe 'Token dispatch', type: :request do
 
     it 'dispatches JWT in registration requests' do
       sign_up(
-        jwt_with_blacklist_user_registration_path,
+        jwt_with_denylist_user_registration_path,
         registration_params, format: :json
       )
 
@@ -76,11 +76,11 @@ describe 'Token dispatch', type: :request do
     end
   end
 
-  context 'JWT user with whitelist revocation' do
-    let(:user) { jwt_with_whitelist_user }
+  context 'JWT user with allowlist revocation' do
+    let(:user) { jwt_with_allowlist_user }
     let(:sign_in_params) do
       {
-        jwt_with_whitelist_user: {
+        jwt_with_allowlist_user: {
           email: user.email,
           password: user.password
         }
@@ -88,18 +88,18 @@ describe 'Token dispatch', type: :request do
     end
     let(:registration_params) do
       {
-        jwt_with_whitelist_user: generic_registration_params
+        jwt_with_allowlist_user: generic_registration_params
       }
     end
 
     it 'dispatches JWT in sign_in requests' do
-      sign_in(jwt_with_whitelist_user_session_path, sign_in_params)
+      sign_in(jwt_with_allowlist_user_session_path, sign_in_params)
 
       expect(response.headers['Authorization']).not_to be_nil
     end
 
     it 'dispatches JWT in registration requests' do
-      sign_up(jwt_with_whitelist_user_registration_path, registration_params)
+      sign_up(jwt_with_allowlist_user_registration_path, registration_params)
 
       expect(response.headers['Authorization']).not_to be_nil
     end

@@ -1,2 +1,0 @@
-class WhitelistedJwt < ApplicationRecord
-end

@@ -27,11 +27,11 @@ describe 'Token revocation', type: :request do
     end
   end
 
-  context 'JWT user with Blacklist revocation' do
-    let(:user) { jwt_with_blacklist_user }
+  context 'JWT user with Denylist revocation' do
+    let(:user) { jwt_with_denylist_user }
     let(:user_params) do
       {
-        jwt_with_blacklist_user: {
+        jwt_with_denylist_user: {
           email: user.email,
           password: user.password
         }
@@ -41,24 +41,24 @@ describe 'Token revocation', type: :request do
     # rubocop:disable RSpec/ExampleLength
     it 'revokes JWT in sign_out' do
       auth = sign_in(
-        jwt_with_blacklist_user_session_path, user_params, format: :json
+        jwt_with_denylist_user_session_path, user_params, format: :json
       )
       sign_out(
-        destroy_jwt_with_blacklist_user_session_path, auth, :post, format: :json
+        destroy_jwt_with_denylist_user_session_path, auth, :post, format: :json
       )
 
-      get_with_auth('/jwt_with_blacklist_user_auth_action', auth)
+      get_with_auth('/jwt_with_denylist_user_auth_action', auth)
 
       expect(response.status).to eq(401)
     end
     # rubocop:enable RSpec/ExampleLength
   end
 
-  context 'JWT user with whitelist revocation' do
-    let(:user) { jwt_with_whitelist_user }
+  context 'JWT user with allowlist revocation' do
+    let(:user) { jwt_with_allowlist_user }
     let(:user_params) do
       {
-        jwt_with_whitelist_user: {
+        jwt_with_allowlist_user: {
           email: user.email,
           password: user.password
         }
@@ -66,10 +66,10 @@ describe 'Token revocation', type: :request do
     end
 
     it 'revokes JWT in sign_out' do
-      auth = sign_in(jwt_with_whitelist_user_session_path, user_params)
-      sign_out(destroy_jwt_with_whitelist_user_session_path, auth)
+      auth = sign_in(jwt_with_allowlist_user_session_path, user_params)
+      sign_out(destroy_jwt_with_allowlist_user_session_path, auth)
 
-      get_with_auth('/jwt_with_whitelist_user_auth_action', auth)
+      get_with_auth('/jwt_with_allowlist_user_auth_action', auth)
 
       expect(response.status).to eq(401)
     end

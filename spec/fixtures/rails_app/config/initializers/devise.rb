@@ -278,7 +278,7 @@ Devise.setup do |config|
     jwt.dispatch_requests = [['GET', %r{^/foo_path$}]]
     jwt.revocation_requests = [['GET', %r{^/bar_path$}]]
     jwt.request_formats = {
-      jwt_with_blacklist_user: %i[json xml]
+      jwt_with_denylist_user: %i[json xml]
     }
   end
 end

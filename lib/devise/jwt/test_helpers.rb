@@ -9,7 +9,7 @@ module Devise
       #
       # Side effects could happen if you have implemented
       # `on_jwt_dispatch` method on the user model (as it happens in
-      # the whitelist revocation strategy).
+      # the allowlist revocation strategy).
       #
       # Be aware that a fresh copy of `headers` is returned with the new
       # key/value pair added, instead of modifying given argument.

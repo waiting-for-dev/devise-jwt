@@ -11,12 +11,12 @@ describe Devise::JWT::MappingInspector do
     described_class.new(:jwt_with_null_user)
   end
 
-  let(:jwt_with_blacklist_inspector) do
-    described_class.new(:jwt_with_blacklist_user)
+  let(:jwt_with_denylist_inspector) do
+    described_class.new(:jwt_with_denylist_user)
   end
 
-  let(:jwt_with_whitelist_inspector) do
-    described_class.new(:jwt_with_whitelist_user)
+  let(:jwt_with_allowlist_inspector) do
+    described_class.new(:jwt_with_allowlist_user)
   end
 
   let(:no_jwt_inspector) { described_class.new(:no_jwt_user) }
@@ -110,13 +110,13 @@ describe Devise::JWT::MappingInspector do
       end
 
       it 'respects when sign_out_via option is not the default' do
-        expect(jwt_with_blacklist_inspector.methods(:sign_out)).to eq(
+        expect(jwt_with_denylist_inspector.methods(:sign_out)).to eq(
           ['POST']
         )
       end
 
       it 'accepts sign_out_via option when it contains multiple methods' do
-        expect(jwt_with_whitelist_inspector.methods(:sign_out)).to match_array(
+        expect(jwt_with_allowlist_inspector.methods(:sign_out)).to match_array(
           %w[GET DELETE]
         )
       end
@@ -132,7 +132,7 @@ describe Devise::JWT::MappingInspector do
 
     context 'when scope has configured formats' do
       it 'returns them' do
-        expect(jwt_with_blacklist_inspector.formats).to eq(%i[json xml])
+        expect(jwt_with_denylist_inspector.formats).to eq(%i[json xml])
       end
     end
   end
