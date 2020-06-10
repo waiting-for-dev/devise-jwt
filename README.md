@@ -21,6 +21,28 @@ You can read about which security concerns this library takes into account and a
 
 `devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) that configures it to be used out of the box with devise and Rails.
 
+## Upgrade notes
+
+### v0.7.0
+
+Since version v0.7.0 `Blacklist` revocation strategy has been renamed to `Denylist` while `Whitelist` has been renamed to `Allowlist`.
+
+For `Denylist`, you only need to update the `include` line you're using in your revocation strategy model:
+
+```ruby
+# include Devise::JWT::RevocationStrategies::Blacklist # before
+include Devise::JWT::RevocationStrategies::Denylist 
+```
+
+For `Whitelist`, you need to update the `include` line you're using in your user model:
+
+```ruby
+# include Devise::JWT::RevocationStrategies::Whitelist # before
+include Devise::JWT::RevocationStrategies::Allowlist
+```
+
+You also have to rename your `WhitelistedJwt` model to `AllowlistedJwt` and change the underlying database table to `allowlisted_jwts` (or configure the model to keep using the old name).
+
 ## Installation
 
 Add this line to your application's Gemfile:
