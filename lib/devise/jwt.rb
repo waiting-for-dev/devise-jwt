@@ -17,7 +17,9 @@ module Devise
   #
   # @see Warden::JWTAuth
   def self.jwt
+    Warden::JWTAuth.config.to_h
     yield(Devise::JWT.config)
+    Devise::JWT.config.to_h
   end
 
   add_module(:jwt_authenticatable, strategy: :jwt)
@@ -26,23 +28,31 @@ module Devise
   module JWT
     extend Dry::Configurable
 
-    setting(:secret) do |value|
+    def forward_to_warden(setting, value)
+      default = Warden::JWTAuth.config.send("#{setting}")
+      Warden::JWTAuth.config.send("#{setting}=", value || default)
+      Warden::JWTAuth.config.send("#{setting}")
+    end
+
+    module_function :forward_to_warden
+
+    setting(:secret, Warden::JWTAuth.config.secret) do |value|
       forward_to_warden(:secret, value)
     end
 
-    setting(:expiration_time) do |value|
+    setting(:expiration_time, Warden::JWTAuth.config.expiration_time ) do |value|
       forward_to_warden(:expiration_time, value)
     end
 
-    setting(:dispatch_requests) do |value|
+    setting(:dispatch_requests, Warden::JWTAuth.config.dispatch_requests) do |value|
       forward_to_warden(:dispatch_requests, value)
     end
 
-    setting(:revocation_requests) do |value|
+    setting(:revocation_requests, Warden::JWTAuth.config.revocation_requests) do |value|
       forward_to_warden(:revocation_requests, value)
     end
 
-    setting(:aud_header) do |value|
+    setting(:aud_header, Warden::JWTAuth.config.aud_header) do |value|
       forward_to_warden(:aud_header, value)
     end
 
@@ -60,9 +70,5 @@ module Devise
     #   admin_user: [nil, :xml]
     # }
     setting :request_formats, {}
-
-    def self.forward_to_warden(setting, value)
-      Warden::JWTAuth.config.send("#{setting}=", value)
-    end
   end
 end

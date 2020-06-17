@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.8.0] - 2020-07-06
+### Fixed
+- Fix compatibility with last version of dry-configurable
+
 ## [0.7.0] - 2020-06-03
 ### Fixed
 - Replace whitelist/blacklist terminology with allowlist/denylist
