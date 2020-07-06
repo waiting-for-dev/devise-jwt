@@ -18,6 +18,7 @@ Provide following information. Please, format pasted output as code. Feel free t
 
 - Version of `devise-jwt` in use
 - Version of `rails` in use
+- Version of `warden-jwt_auth` in use
 - Output of `Devise::JWT.config`
 - Output of `Warden::JWTAuth.config`
 - Output of `Devise.mappings`
