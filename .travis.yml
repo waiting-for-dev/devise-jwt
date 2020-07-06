@@ -1,10 +1,13 @@
 language: ruby
+cache: bundler
 rvm:
   - 2.5
   - 2.6
   - 2.7
+  - ruby-head
 before_install:
   - gem update --system --no-doc
+  - gem install bundler
   - bundle install --gemfile=.overcommit_gems.rb
 before_script:
   - git config --global user.email 'travis@travis.ci'
@@ -14,6 +17,9 @@ script:
   - bundle exec codeclimate-test-reporter
   - overcommit --sign
   - overcommit --run
+jobs:
+  allow_failures:
+    - rvm: ruby-head
 addons:
   code_climate:
     repo_token:
