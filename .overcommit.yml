@@ -46,9 +46,6 @@ PreCommit:
       - *default_excludes
       - bin/*
 
-  Reek:
-    enabled: true
-
   RuboCop:
     enabled: true
 

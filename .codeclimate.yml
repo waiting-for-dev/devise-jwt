@@ -8,8 +8,6 @@ engines:
     enabled: true
   rubocop:
     enabled: true
-  reek:
-    enabled: true
 ratings:
   paths:
   - "**.rb"

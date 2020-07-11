@@ -20,9 +20,6 @@ module Devise
       # autodetected.
       # @param aud [String] The aud claim. If `nil` it will be autodetected from
       # the header name configured in `Devise::JWT.config.aud_header`.
-      #
-      # :reek:LongParameterList
-      # :reek:ManualDispatch
       def self.auth_headers(headers, user, scope: nil, aud: nil)
         scope ||= Devise::Mapping.find_scope!(user)
         aud ||= headers[Warden::JWTAuth.config.aud_header]

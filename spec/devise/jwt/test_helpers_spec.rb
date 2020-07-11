@@ -9,7 +9,6 @@ describe Devise::JWT::TestHelpers do
   let(:headers) { { 'foo' => 'bar', 'JWT_AUD' => 'client' } }
   let(:user) { jwt_with_jti_matcher_user }
 
-  # :reek:UtilityFunction
   def payload_from_headers(headers)
     _method, token = headers['Authorization'].split
     Warden::JWTAuth::TokenDecoder.new.call(token)

@@ -42,14 +42,12 @@ module Devise
         add_revocation_requests(inspector)
       end
 
-      # :reek:FeatureEnvy
       def add_mapping(inspector)
         scope = inspector.scope
         model = inspector.model
         defaults[:mappings][scope] = model.name
       end
 
-      # :reek:FeatureEnvy
       def add_revocation_strategy(inspector)
         scope = inspector.scope
         strategy = inspector.model.jwt_revocation_strategy
@@ -91,7 +89,6 @@ module Devise
         requests(inspector, :registration)
       end
 
-      # :reek:FeatureEnvy
       def requests(inspector, name)
         path = inspector.path(name)
         methods = inspector.methods(name)
@@ -100,7 +97,6 @@ module Devise
         end
       end
 
-      # :reek:UtilityFunction
       def requests_for_format(path, methods, format)
         path_regexp = format ? /^#{path}.#{format}$/ : /^#{path}$/
         methods.map do |method|

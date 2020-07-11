@@ -27,7 +27,6 @@ module Devise
         mapping.to
       end
 
-      # :reek:FeatureEnvy
       def path(name)
         prefix, scope, request = path_parts(name)
         [prefix, scope, request].delete_if do |item|
@@ -35,7 +34,6 @@ module Devise
         end.join('/').prepend('/').gsub('//', '/')
       end
 
-      # :reek:ControlParameter
       def methods(name)
         method = case name
                  when :sign_in      then 'POST'

@@ -19,7 +19,6 @@ shared_context 'feature' do
     post(path, params: params)
   end
 
-  # :reek:LongParameterList
   def sign_out(destroy_session_path, auth, method = :delete, format: nil)
     path = format ? destroy_session_path + ".#{format}" : destroy_session_path
     send(method, path, headers: auth_headers(auth))

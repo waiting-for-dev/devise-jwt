@@ -38,7 +38,6 @@ module Devise
         end
 
         # Warden::JWTAuth::Interfaces::User#on_jwt_dispatch
-        # :reek:FeatureEnvy
         def on_jwt_dispatch(_token, payload)
           allowlisted_jwts.create!(
             jti: payload['jti'],
