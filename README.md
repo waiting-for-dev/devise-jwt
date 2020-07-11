@@ -521,14 +521,6 @@ An then, for example:
 
 `docker-compose exec app rspec`
 
-This gem uses [overcommit](https://github.com/brigade/overcommit) to execute some code review engines. If you submit a pull request, it will be executed in the CI process. In order to set it up, you need to do:
-
-```ruby
-bundle install --gemfile=.overcommit_gems.rb
-overcommit --sign
-overcommit --run # To test if it works
-```
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/waiting-for-dev/devise-jwt. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
