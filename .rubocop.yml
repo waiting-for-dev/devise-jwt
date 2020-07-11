@@ -5,6 +5,7 @@ AllCops:
     - Gemfile
     - devise-jwt.gemspec
     - spec/fixtures/rails_app/**/*
+    - vendor/**/*
 RSpec/NestedGroups:
   Max: 3
 RSpec/MessageExpectation:
