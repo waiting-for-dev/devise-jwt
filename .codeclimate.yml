@@ -16,3 +16,4 @@ exclude_paths:
   - Gemfile
   - bin/console
   - devise-jwt.gemspec
+  - vendor/
