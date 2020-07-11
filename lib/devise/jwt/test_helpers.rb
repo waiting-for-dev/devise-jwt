@@ -26,9 +26,7 @@ module Devise
         token, payload = Warden::JWTAuth::UserEncoder.new.call(
           user, scope, aud
         )
-        if user.respond_to?(:on_jwt_dispatch)
-          user.on_jwt_dispatch(token, payload)
-        end
+        user.respond_to?(:on_jwt_dispatch) if user.on_jwt_dispatch(token, payload)
         Warden::JWTAuth::HeaderParser.to_headers(headers, token)
       end
     end

@@ -25,7 +25,7 @@ require File.expand_path(
 )
 
 SPEC_ROOT = Pathname(__FILE__).dirname
-Dir[SPEC_ROOT.join('support/**/*.rb')].each do |file|
+Dir[SPEC_ROOT.join('support/**/*.rb')].sort.each do |file|
   require file
 end
 

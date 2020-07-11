@@ -8,5 +8,5 @@ gem 'overcommit', '~> 0.36'
 gem 'bundler-audit', '~> 0.5'
 
 # Ruby code style checking
-gem 'rubocop', '~> 0.47'
+gem 'rubocop', '~> 0.87'
 gem 'rubocop-rspec', '~> 1.10'
