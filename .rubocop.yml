@@ -1,6 +1,10 @@
 require: rubocop-rspec
 AllCops:
   TargetRubyVersion: 2.7
+  Exclude:
+    - Gemfile
+    - devise-jwt.gemspec
+    - spec/fixtures/rails_app/**/*
 RSpec/NestedGroups:
   Max: 3
 RSpec/MessageExpectation:
