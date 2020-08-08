@@ -31,7 +31,7 @@ For `Denylist`, you only need to update the `include` line you're using in your 
 
 ```ruby
 # include Devise::JWT::RevocationStrategies::Blacklist # before
-include Devise::JWT::RevocationStrategies::Denylist 
+include Devise::JWT::RevocationStrategies::Denylist
 ```
 
 For `Whitelist`, you need to update the `include` line you're using in your user model:
@@ -59,7 +59,7 @@ Or install it yourself as:
 
     $ gem install devise-jwt
 
-## Usage
+## Configuration
 
 First you need to configure devise to work in an API application. You can follow the instructions in this project wiki page [Configuring devise for APIs](https://github.com/waiting-for-dev/devise-jwt/wiki/Configuring-devise-for-APIs) (you are more than welcome to improve them).
 
@@ -133,50 +133,93 @@ config.middleware.insert_before 0, Rack::Cors do
 end
 ```
 
-#### Session storage caveat
+### Session storage
 
 If you are working with a Rails application that has session storage enabled
-and a default devise setup, chances are that same origin requests will be
-authenticated from the session regardless of a token being present in the
+and a default devise setup, same-origin requests will probably be
+authenticated from the session regardless of whether a token is present in the
 headers or not.
 
-This is so because of the following default devise workflow:
+This is because of the default Devise workflow:
 
-- When a user signs in with `:database_authenticatable` strategy, the user is
+- User signs in with `:database_authenticatable` strategy, and their identity is
   stored in the session unless one of the following conditions is met:
-  - Session is disabled.
-  - Devise `config.skip_session_storage` includes `:params_auth`.
-  - [Rails Request forgery
+  - the session is disabled;
+  - session storage is disabled for the login method or request format being used
+  - requests are rejected by [Rails cross-site-request forgery (CSRF)
     protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html)
-    handles an unverified request (but this is usually deactivated for API
-    requests).
-- Warden (the engine below devise), authenticates any request that has the user
-  in the session without even reaching to any strategy (`:jwt_authenticatable`
-  in our case).
+    (but this is usually deactivated for API requests).
+- Requests are authorised by Warden (the engine below Devise) if the user is stored in the session, without checking any authorisation strategy (`:jwt_authenticatable` in our case).
 
-So, if you want to avoid this caveat you have three options:
+So, if you want to avoid this problem you have several options:
 
-- Disable the session. If you are developing an API, probably you don't need
-  it. In order to disable it, change `config/initializers/session_store.rb` to:
+- Disable the session globally - if you are developing an API-only application, you probably don't need
+  it. To do this, add the following to `config/initializers/session_store.rb`:
   ```ruby
   Rails.application.config.session_store :disabled
   ```
-  Notice that if you created the application with the `--api` flag you already
-  have the session disabled.
-- If you still need the session for any other purpose, disable
-  `:database_authenticatable` user storage. In `config/initializers/devise.rb`:
+  (If you created the application with the `--api` flag, the session will be disabled by default.)
+- If you want to use Devise session management for one model (e.g. `AdminUser`) and not another
+  (e.g. `ApiUser`), and therefore don't want to disable session storage entirely, you can
+  disable  it on a per-model basis:
   ```ruby
-  config.skip_session_storage = [:http_auth, :params_auth]
-  ```
-- If you are using Devise for another model (e.g. `AdminUser`) and doesn't want
-  to disable session storage for devise entirely, you can disable it on a
-  per-model basis:
-  ```ruby
-  class User < ApplicationRecord
-    devise :database_authenticatable #, your other enabled modules...
+  class ApiUser < ApplicationRecord
+    devise :database_authenticatable # plus your other enabled modules...
     self.skip_session_storage = [:http_auth, :params_auth]
   end
   ```
+- If you need the session for a single model in some cases and not others, you can skip
+  `:database_authenticatable` session storage for authorisation via params in
+  `config/initializers/devise.rb`:
+  ```ruby
+  config.skip_session_storage = [:http_auth, :params_auth]
+  ```
+- Alternatively, if you need Devise session management for a single model to behave as normal for browser
+  users but to be disabled for API users, you can over-ride your Devise sessions controller in
+  `config/routes.rb` as explained in the Devise documentation:
+  ```ruby
+  devise_for :users, controllers: { sessions: 'users/sessions' }
+  ```
+  Then, disable session storage only for JSON requests, leaving it active for HTML requests, by adding to the `auth_options` in `app/controllers/users/sessions_controller.rb`:
+  ```ruby
+  protected
+    def auth_options
+      super.merge(store: !request.format.json?)
+    end
+  ```
+
+## Usage
+
+### Creating a session
+
+If you are not in API-only mode, you will need to prevent Rails from trying to verify an authenticity
+token (which is embedded in pages to prevent cross-site-request forgery) when creating a session. This
+is irrelevant to an API, which is usually stateless. You can do this by adding the following to your
+sessions controller:
+```ruby
+skip_before_action :verify_authenticity_token, only: :create
+```
+(If you have an application with browser login as well as API login, you will need to ensure that this line runs only for API login attempts. This can be achieved by having a separate endpoint for the API to use to create sessions, such as `/api/v1/sign_in` rather than Devise's default `/users/sign_in`.)
+
+### Responding to a request
+
+When your application receives a request to authorise an action, you can retrieve data from the JWT token
+payload in order to fulfil the user request. (NB You must remove "Bearer " from the start of the
+Authorization header's content before decoding the token!) For example, the user ID is stored in the `sub` field in the JWT payload:
+```ruby
+private
+  def current_user_id
+    begin
+      token = request.headers["Authorization"].gsub('Bearer ', '')
+      decoded_array = JWT.decode(token, ENV['DEVISE_JWT_SECRET_KEY'], true, { algorithm: 'HS256' })
+      payload = decoded_array.first
+    rescue #JWT::VerificationError
+      return nil
+    end
+    payload["sub"]
+  end
+```
+Other values in the payload can be retrieved in the same way.
 
 ### Revocation strategies
 
