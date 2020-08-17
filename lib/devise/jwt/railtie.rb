@@ -9,7 +9,15 @@ module Devise
       initializer 'devise-jwt-middleware' do |app|
         app.middleware.use Warden::JWTAuth::Middleware
 
-        ActiveSupport::Reloader.to_prepare do
+        config.to_prepare do
+          Warden::JWTAuth.configure do |config|
+            defaults = DefaultsGenerator.call
+
+            config.mappings = defaults[:mappings]
+          end
+        end
+
+        config.after_initialize do
           Rails.application.reload_routes!
 
           Warden::JWTAuth.configure do |config|
