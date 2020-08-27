@@ -48,7 +48,7 @@ You also have to rename your `WhitelistedJwt` model to `AllowlistedJwt` and chan
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'devise-jwt', '~> 0.6.0'
+gem 'devise-jwt', '~> 0.7.0'
 ```
 
 And then execute:
