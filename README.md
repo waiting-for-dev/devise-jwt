@@ -418,6 +418,9 @@ require 'devise/jwt/test_helpers'
 
 Usually you will wrap this in your own test helper.
 
+**IMPORTANT**
+When authenticating via `before_action :authenticate_user!`, ensure that you're passing in the **Accept**, **Content-Type**, and **Authorization** headers. Use `Devise::JWT::TestHelpers.auth_headers(headers, user)` to examine the valid header payloads
+
 ### Configuration reference
 
 This library can be configured calling `jwt` on devise config object:
