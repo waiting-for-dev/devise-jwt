@@ -21,6 +21,15 @@ module Devise
             config.revocation_strategies = defaults[:revocation_strategies]
           end
         end
+
+        ActiveSupport::Reloader.to_prepare do
+          Warden::JWTAuth.configure do |config|
+            defaults = DefaultsGenerator.call
+
+            config.mappings = defaults[:mappings]
+            config.revocation_strategies = defaults[:revocation_strategies]
+          end
+        end
       end
     end
   end
