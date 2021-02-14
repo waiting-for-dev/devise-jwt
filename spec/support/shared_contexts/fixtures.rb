@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 shared_context 'fixtures' do
   let(:jwt_with_jti_matcher_model) { JwtWithJtiMatcherUser }
   let(:jwt_with_jti_matcher_user) do
@@ -41,3 +42,4 @@ shared_context 'fixtures' do
     )
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 describe Devise::JWT::RevocationStrategies::Allowlist do
-  include_context 'fixtures'
-
   subject(:strategy) { JwtWithAllowlistUser }
+
+  include_context 'fixtures'
 
   let(:model) { JwtWithAllowlistUser }
 

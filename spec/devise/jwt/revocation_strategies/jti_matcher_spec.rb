@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 describe Devise::JWT::RevocationStrategies::JTIMatcher do
-  include_context 'fixtures'
-
   subject(:strategy) { JwtWithJtiMatcherUser }
+
+  include_context 'fixtures'
 
   let(:model) { JwtWithJtiMatcherUser }
 
