@@ -2,6 +2,11 @@ version: '2'
 services:
   app:
     build: .
-    command: tail -f Gemfile
+    image: devise_jwt
+    command: bash -c "bundle && tail -f Gemfile"
     volumes:
-      - .:/app
+      - .:/home/devise_jwt_user/app
+    tty: true
+    stdin_open: true
+    tmpfs:
+      - /tmp
