@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.8.1] - 2020-02-14
+## [0.8.1] - 2021-02-14
 ### Fixed
 - Fix behaviour on code reload
 - Support ruby 3.0 and deprecate ruby 2.5
