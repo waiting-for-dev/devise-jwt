@@ -1,0 +1,26 @@
+env:
+  RUBY_VERSION: 3.0.0
+
+name: Rails Specs
+on: [push,pull_request]
+jobs:
+  rspec-test:
+    name: RSpec
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundler install
+      - name: Run tests
+        run: bundler exec rspec spec/*
+      - name: Upload coverage results
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage
