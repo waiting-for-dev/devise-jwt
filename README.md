@@ -34,7 +34,7 @@ For `Denylist`, you only need to update the `include` line you're using in your 
 include Devise::JWT::RevocationStrategies::Denylist 
 ```
 
-For `Whitelist`, you need to update the `include` line you're using in your user model:
+For `Allowlist`, you need to update the `include` line you're using in your user model:
 
 ```ruby
 # include Devise::JWT::RevocationStrategies::Whitelist # before
