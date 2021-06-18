@@ -41,7 +41,7 @@ For `Allowlist`, you need to update the `include` line you're using in your user
 include Devise::JWT::RevocationStrategies::Allowlist
 ```
 
-You also have to rename your `WhitelistedJwt` model to `AllowlistedJwt` and change the underlying database table to `allowlisted_jwts` (or configure the model to keep using the old name).
+You also have to rename your `WhitelistedJwt` model to `AllowlistedJwt`, rename `model/whitelisted_jwt.rb` to `model/whitelisted_jwt.rb` and change the underlying database table to `allowlisted_jwts` (or configure the model to keep using the old name).
 
 ## Installation
 
