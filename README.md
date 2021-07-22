@@ -91,7 +91,7 @@ You have to tell which user models you want to be able to authenticate with JWT 
 
 See [request_formats](#request_formats) configuration option if you are using paths with a format segment (like `.json`) in order to use it properly.
 
-As you see, unlike other JWT authentication libraries, it is expected that tokens will be revoked by the server. I wrote about [why I think JWT revocation is needed and useful](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation/).
+As you see, unlike other JWT authentication libraries, it is expected that tokens will be revoked by the server. I wrote about [why I think JWT revocation is needed and useful](http://waiting-for-dev.github.io/blog/2017/01/23/stand_up_for_jwt_revocation).
 
 An example configuration:
 
