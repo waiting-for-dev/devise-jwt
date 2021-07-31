@@ -180,7 +180,7 @@ So, if you want to avoid this caveat you have three options:
 
 ### Revocation strategies
 
-`devise-jwt` comes with three revocation strategies out of the box. Some of them are implementations of what is discussed in the blog post [JWT Revocation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies/), where I also talk about their pros and cons.
+`devise-jwt` comes with three revocation strategies out of the box. Some of them are implementations of what is discussed in the blog post [JWT Revocation Strategies](http://waiting-for-dev.github.io/blog/2017/01/24/jwt_revocation_strategies), where I also talk about their pros and cons.
 
 #### JTIMatcher
 
