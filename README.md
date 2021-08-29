@@ -76,6 +76,31 @@ Devise.setup do |config|
 end
 ```
 
+If you are using Encrypted Credentials (Rails 5.2+), you can store the secret key in `config/credentials.yml.enc`.
+
+Open your credentials editor using `bin/rails credentials:edit` and add `devise_jwt_secret_key`. 
+
+**Note** you may need to set `$EDITOR` depending on your specific environment.
+
+```yml
+
+# Other secrets...
+
+# Used as the base secret for Devise JWT
+devise_jwt_secret_key: abc...xyz
+```
+
+Add the following to the devise initializer.
+
+```ruby
+Devise.setup do |config|
+  # ...
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.devise_jwt_secret_key!
+  end
+end
+```
+
 **Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
 
 Currently, HS256 algorithm is the one in use.
