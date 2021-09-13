@@ -34,27 +34,25 @@ module Devise
       Warden::JWTAuth.config.send(setting)
     end
 
-    setting(:secret, Warden::JWTAuth.config.secret) do |value|
-      forward_to_warden(:secret, value)
-    end
+    setting(:secret,
+            default: Warden::JWTAuth.config.secret,
+            constructor: ->(value) { forward_to_warden(:secret, value) })
 
-    setting(:expiration_time, Warden::JWTAuth.config.expiration_time) do |value|
-      forward_to_warden(:expiration_time, value)
-    end
+    setting(:expiration_time,
+            default: Warden::JWTAuth.config.expiration_time,
+            constructor: ->(value) { forward_to_warden(:expiration_time, value) })
 
     setting(:dispatch_requests,
-            Warden::JWTAuth.config.dispatch_requests) do |value|
-      forward_to_warden(:dispatch_requests, value)
-    end
+            default: Warden::JWTAuth.config.dispatch_requests,
+            constructor: ->(value) { forward_to_warden(:dispatch_requests, value) })
 
     setting(:revocation_requests,
-            Warden::JWTAuth.config.revocation_requests) do |value|
-      forward_to_warden(:revocation_requests, value)
-    end
+            default: Warden::JWTAuth.config.revocation_requests,
+            constructor: ->(value) { forward_to_warden(:revocation_requests, value) })
 
-    setting(:aud_header, Warden::JWTAuth.config.aud_header) do |value|
-      forward_to_warden(:aud_header, value)
-    end
+    setting(:aud_header,
+            default: Warden::JWTAuth.config.aud_header,
+            constructor: ->(value) { forward_to_warden(:aud_header, value) })
 
     # A hash of warden scopes as keys and an array of request formats that will
     # be processed as values. When a scope is not present or if it has a nil
@@ -69,6 +67,6 @@ module Devise
     #   user: [:json],
     #   admin_user: [nil, :xml]
     # }
-    setting :request_formats, {}
+    setting :request_formats, default: {}
   end
 end
