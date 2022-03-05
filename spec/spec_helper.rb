@@ -15,7 +15,6 @@ require 'action_view/railtie'
 require 'rails/test_unit/railtie'
 
 require 'rspec/rails'
-require 'pry-byebug'
 require 'simplecov'
 SimpleCov.start
 

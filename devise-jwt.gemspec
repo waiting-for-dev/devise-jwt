@@ -27,7 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "> 1"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec"
-  spec.add_development_dependency "pry-byebug", "~> 3.7"
   # Needed to test the rails fixture application
   spec.add_development_dependency 'rails', '~> 6.0'
   spec.add_development_dependency 'sqlite3', '~> 1.3'
