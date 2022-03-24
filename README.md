@@ -102,6 +102,14 @@ class User < ApplicationRecord
 end
 ```
 
+To use an alternative key for your JWT subject, override `jwt_subject_key` to return a symbol for the accessor to call. e.g.
+
+```ruby
+def self.jwt_subject_key
+  :uuid
+end
+```
+
 If you need to add something to the JWT payload, you can do it defining a `jwt_payload` method in the user model. It must return a `Hash`. For instance:
 
 ```ruby

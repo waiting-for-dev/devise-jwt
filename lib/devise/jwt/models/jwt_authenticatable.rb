@@ -17,12 +17,16 @@ module Devise
 
       included do
         def self.find_for_jwt_authentication(sub)
-          find_by(primary_key => sub)
+          find_by(jwt_subject_key => sub)
+        end
+
+        def self.jwt_subject_key
+          primary_key
         end
       end
 
       def jwt_subject
-        id
+        send(self.jwt_subject_key)
       end
     end
   end
