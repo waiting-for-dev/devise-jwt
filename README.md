@@ -21,6 +21,22 @@ You can read about which security concerns this library takes into account and a
 
 `devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) that configures it to be used out of the box with Devise and Rails.
 
+## Table of Contents
+
+- [Upgrade Notes](#upgrade-notes) 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Secret key configuration](#secret-key-configuration)
+  - [Model configuration](#model-configuration)
+  - [Session storage caveat](#session-storage-caveat)
+  - [Revocation strategies](#revocation-strategies)
+  - [Testing](#testing)
+  - [Configuration reference](#configuration-reference)
+- [Development](#development)
+- [Contributing](#contributing)
+- [Release Policy](#release-policy)
+- [License](#release-policy)
+
 ## Upgrade notes
 
 ### v0.7.0
