@@ -5,10 +5,10 @@
 [![Code Climate](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/gpa.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt)
 [![Test Coverage](https://codeclimate.com/github/waiting-for-dev/devise-jwt/badges/coverage.svg)](https://codeclimate.com/github/waiting-for-dev/devise-jwt/coverage)
 
-`devise-jwt` is a [devise](https://github.com/plataformatec/devise) extension which uses [JWT](https://jwt.io/) tokens for user authentication. It follows [secure by default](https://en.wikipedia.org/wiki/Secure_by_default) principle.
+`devise-jwt` is a [Devise](https://github.com/plataformatec/devise) extension which uses [JWT](https://jwt.io/) tokens for user authentication. It follows [secure by default](https://en.wikipedia.org/wiki/Secure_by_default) principle.
 
-This gem is just a replacement for cookies when these can't be used. As
-cookies, a token expired with `devise-jwt` will mandatorily have an expiration
+This gem is just a replacement for cookies when these can't be used. As with
+cookies, a `devise-jwt` token will mandatorily have an expiration
 time. If you need that your users never sign out, you will be better off with a
 solution using refresh tokens, like some implementation of OAuth2.
 
@@ -19,7 +19,7 @@ You can read about which security concerns this library takes into account and a
 - [JWT Secure Usage](http://waiting-for-dev.github.io/blog/2017/01/25/jwt_secure_usage)
 - [A secure JWT authentication implementation for Rack and Rails](http://waiting-for-dev.github.io/blog/2017/01/26/a_secure_jwt_authentication_implementation_for_rack_and_rails)
 
-`devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) that configures it to be used out of the box with devise and Rails.
+`devise-jwt` is just a thin layer on top of [`warden-jwt_auth`](https://github.com/waiting-for-dev/warden-jwt_auth) that configures it to be used out of the box with Devise and Rails.
 
 ## Upgrade notes
 
@@ -61,11 +61,11 @@ Or install it yourself as:
 
 ## Usage
 
-First you need to configure devise to work in an API application. You can follow the instructions in this project wiki page [Configuring devise for APIs](https://github.com/waiting-for-dev/devise-jwt/wiki/Configuring-devise-for-APIs) (you are more than welcome to improve them).
+First, you need to configure Devise to work in an API application. You can follow the instructions in this project wiki page [Configuring Devise for APIs](https://github.com/waiting-for-dev/devise-jwt/wiki/Configuring-devise-for-APIs) (you are more than welcome to improve them).
 
 ### Secret key configuration
 
-First of all, you have to configure the secret key that will be used to sign generated tokens. You can do it in the devise initializer:
+You have to configure the secret key that will be used to sign generated tokens. You can do it in the Devise initializer:
 
 ```ruby
 Devise.setup do |config|
@@ -90,7 +90,7 @@ Open your credentials editor using `bin/rails credentials:edit` and add `devise_
 devise_jwt_secret_key: abc...xyz
 ```
 
-Add the following to the devise initializer.
+Add the following to the Devise initializer.
 
 ```ruby
 Devise.setup do |config|
@@ -109,10 +109,10 @@ Currently, HS256 algorithm is the one in use.
 
 You have to tell which user models you want to be able to authenticate with JWT tokens. For them, the authentication process will be like this:
 
-- A user authenticates through devise create session request (for example, using the standard `:database_authenticatable` module).
+- A user authenticates through Devise create session request (for example, using the standard `:database_authenticatable` module).
 - If the authentication succeeds, a JWT token is dispatched to the client in the `Authorization` response header, with format `Bearer #{token}` (tokens are also dispatched on a successful sign up).
 - The client can use this token to authenticate following requests for the same user, providing it in the `Authorization` request header, also with format `Bearer #{token}`
-- When the client visits devise destroy session request, the token is revoked.
+- When the client visits Devise destroy session request, the token is revoked.
 
 See [request_formats](#request_formats) configuration option if you are using paths with a format segment (like `.json`) in order to use it properly.
 
@@ -127,7 +127,7 @@ class User < ApplicationRecord
 end
 ```
 
-If you need to add something to the JWT payload, you can do it defining a `jwt_payload` method in the user model. It must return a `Hash`. For instance:
+If you need to add something to the JWT payload, you can do it by defining a `jwt_payload` method in the user model. It must return a `Hash`. For instance:
 
 ```ruby
 def jwt_payload
@@ -161,11 +161,11 @@ end
 #### Session storage caveat
 
 If you are working with a Rails application that has session storage enabled
-and a default devise setup, chances are that same origin requests will be
+and a default Devise setup, chances are the same origin requests will be
 authenticated from the session regardless of a token being present in the
 headers or not.
 
-This is so because of the following default devise workflow:
+This is so because of the following default Devise workflow:
 
 - When a user signs in with `:database_authenticatable` strategy, the user is
   stored in the session unless one of the following conditions is met:
@@ -175,13 +175,13 @@ This is so because of the following default devise workflow:
     protection](http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html)
     handles an unverified request (but this is usually deactivated for API
     requests).
-- Warden (the engine below devise), authenticates any request that has the user
-  in the session without even reaching to any strategy (`:jwt_authenticatable`
+- Warden (the engine below Devise), authenticates any request that the user has
+  in the session without requiring a strategy (`:jwt_authenticatable`
   in our case).
 
 So, if you want to avoid this caveat you have three options:
 
-- Disable the session. If you are developing an API, probably you don't need
+- Disable the session. If you are developing an API, you probably don't need
   it. In order to disable it, change `config/initializers/session_store.rb` to:
   ```ruby
   Rails.application.config.session_store :disabled
@@ -194,7 +194,7 @@ So, if you want to avoid this caveat you have three options:
   config.skip_session_storage = [:http_auth, :params_auth]
   ```
 - If you are using Devise for another model (e.g. `AdminUser`) and doesn't want
-  to disable session storage for devise entirely, you can disable it on a
+  to disable session storage for Devise entirely, you can disable it on a
   per-model basis:
   ```ruby
   class User < ApplicationRecord
@@ -209,7 +209,7 @@ So, if you want to avoid this caveat you have three options:
 
 #### JTIMatcher
 
-Here, the model class acts itself as the revocation strategy. It needs a new string column with name `jti` to be added to the user. `jti` stands for JWT ID, and it is a standard claim meant to uniquely identify a token.
+Here, the model class acts as the revocation strategy. It needs a new string column named `jti` to be added to the user. `jti` stands for JWT ID, and it is a standard claim meant to uniquely identify a token.
 
 It works like the following:
 
@@ -254,7 +254,7 @@ end
 
 #### Denylist
 
-In this strategy, a database table is used as a list of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted. The `exp` claim is also stored to allow the clean-up of staled tokens.
+In this strategy, a database table is used as a list of revoked JWT tokens. The `jti` claim, which uniquely identifies a token, is persisted. The `exp` claim is also stored to allow the clean-up of stale tokens.
 
 In order to use it, you need to create the denylist table in a migration:
 
@@ -269,7 +269,7 @@ end
 ```
 For performance reasons, it is better if the `jti` column is an index.
 
-Note: if you used the denylist strategy before vesion 0.4.0 you may not have the field *exp.* If not, run the following migration:
+Note: if you used the denylist strategy before version 0.4.0 you may not have the field *exp.* If not, run the following migration:
 
 ```ruby
 class AddExpirationTimeToJWTDenylist < ActiveRecord::Migration
@@ -301,9 +301,9 @@ end
 
 #### Allowlist
 
-Here, the model itself acts also as a revocation strategy, but it needs to have
+Here, the model itself also acts as a revocation strategy, but it needs to have
 a one-to-many association with another table which stores the tokens (in fact
-their `jti` claim, which uniquely identifies them) valids for each user record.
+their `jti` claim, which uniquely identifies them) that are valid for each user record.
 
 The workflow is as the following:
 
@@ -321,7 +321,7 @@ devices for the same user.
 
 The `exp` claim is also stored to allow the clean-up of staled tokens.
 
-In order to use it, you have to create yourself the associated table and model.
+In order to use it, you have to create the associated table and model.
 The association table must be called `allowlisted_jwts`:
 
 ```ruby
@@ -338,7 +338,7 @@ def change
   add_index :allowlisted_jwts, :jti, unique: true
 end
 ```
-Important: You are encouraged to set a unique index in the jti column. This way we can be sure at the database level that there aren't two valid tokens with same jti at the same time. Definining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database.
+Important: You are encouraged to set a unique index in the `jti` column. This way we can be sure at the database level that there aren't two valid tokens with the same `jti` at the same time. Defining `foreign_key: { on_delete: :cascade }, null: false` on `t.references :your_user_table` helps to keep referential integrity of your database.
 
 And then, the model:
 
@@ -380,7 +380,7 @@ end
 
 #### Custom strategies
 
-You can also implement your own strategies. They just need to implement two methods: `jwt_revoked?` and `revoke_jwt`, both of them accepting as parameters the JWT payload and the user record, in this order.
+You can also implement your own strategies. They just need to implement two methods: `jwt_revoked?` and `revoke_jwt`, both of them accept the JWT payload and the user record as parameters, in this order.
 
 For instance:
 
@@ -404,10 +404,10 @@ end
 ### Testing
 
 Models configured with `:jwt_authenticatable` usually won't be retrieved from
-the session. For this reason, `sign_in` devise testing helper methods won't
+the session. For this reason, `sign_in` Devise testing helper methods won't
 work as expected.
 
-What you need to do in order to authenticate test environment requests is the
+What you need to do to authenticate test environment requests is the
 same that you will do in production: to provide a valid token in the
 `Authorization` header (in the form of `Bearer #{token}`) at every request.
 
@@ -445,7 +445,7 @@ Usually you will wrap this in your own test helper.
 
 ### Configuration reference
 
-This library can be configured calling `jwt` on devise config object:
+This library can be configured calling `jwt` on Devise config object:
 
 ```ruby
 Devise.setup do |config|
@@ -456,17 +456,17 @@ end
 ```
 #### secret
 
-Secret key used to sign generated JWT tokens. You must set it.
+Secret key is used to sign generated JWT tokens. You must set it.
 
 #### expiration_time
 
 Number of seconds while a JWT is valid after its generation. After that, it won't be valid anymore, even if it hasn't been revoked.
 
-Defaults to 3600 (1 hour).
+Defaults to 3600 seconds (1 hour).
 
 #### dispatch_requests
 
-Besides the create session one, additional requests where JWT tokens should be dispatched.
+Besides the create session one, there are additional requests where JWT tokens should be dispatched.
 
 It must be a bidimensional array, each item being an array of two elements: the request method and a regular expression that must match the request path.
 
@@ -483,7 +483,7 @@ jwt.dispatch_requests = [
 
 #### revocation_requests
 
-Besides the destroy session one, additional requests where JWT tokens should be revoked.
+Besides the destroy session one, there are additional requests where JWT tokens should be revoked.
 
 It must be a bidimensional array, each item being an array of two elements: the request method and a regular expression that must match the request path.
 
@@ -502,7 +502,7 @@ jwt.revocation_requests = [
 
 Request formats that must be processed (in order to dispatch or revoke tokens).
 
-It must be a hash of devise scopes as keys and an array of request formats as
+It must be a hash of Devise scopes as keys and an array of request formats as
 values. When a scope is not present or if it has a nil item, requests without
 format will be taken into account.
 
