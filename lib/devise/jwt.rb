@@ -36,6 +36,12 @@ module Devise
             default: Warden::JWTAuth.config.secret,
             constructor: ->(value) { forward_to_warden(:secret, value) })
 
+    setting(:decoding_secret,
+            constructor: ->(value) { forward_to_warden(:decoding_secret, value) })
+
+    setting(:algorithm,
+            constructor: ->(value) { forward_to_warden(:algorithm, value) })
+
     setting(:expiration_time,
             default: Warden::JWTAuth.config.expiration_time,
             constructor: ->(value) { forward_to_warden(:expiration_time, value) })

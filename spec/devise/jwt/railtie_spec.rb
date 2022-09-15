@@ -45,4 +45,39 @@ describe Devise::JWT::Railtie do
       jwt_with_jti_matcher_user: JwtWithJtiMatcherUser
     )
   end
+
+  it 'configures algorithm using defaults' do
+    expect(Warden::JWTAuth.config.algorithm).to eq('HS256')
+  end
+
+  it 'configures decoding_secret using defaults' do
+    expect(Warden::JWTAuth.config.decoding_secret).to eq(
+      Warden::JWTAuth.config.secret
+    )
+  end
+
+  context 'when asymmetric algorithm is user configured' do
+    let(:rsa_secret) { OpenSSL::PKey::RSA.generate 2048 }
+    let(:decoding_secret) { rsa_secret.public_key }
+
+    before do
+      Rails.configuration.devise.jwt do |jwt|
+        jwt.algorithm = 'RS256'
+        jwt.secret = rsa_secret
+        jwt.decoding_secret = decoding_secret
+      end
+    end
+
+    it 'does not override user defined algorithm' do
+      expect(Warden::JWTAuth.config.algorithm).to eq('RS256')
+    end
+
+    it 'does not override user defined secret' do
+      expect(Warden::JWTAuth.config.secret).to eq(rsa_secret)
+    end
+
+    it 'does not override user defined decoding_secret' do
+      expect(Warden::JWTAuth.config.decoding_secret).to eq(decoding_secret)
+    end
+  end
 end
