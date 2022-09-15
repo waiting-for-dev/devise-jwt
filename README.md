@@ -31,7 +31,7 @@ For `Denylist`, you only need to update the `include` line you're using in your 
 
 ```ruby
 # include Devise::JWT::RevocationStrategies::Blacklist # before
-include Devise::JWT::RevocationStrategies::Denylist 
+include Devise::JWT::RevocationStrategies::Denylist
 ```
 
 For `Allowlist`, you need to update the `include` line you're using in your user model:
@@ -78,9 +78,9 @@ end
 
 If you are using Encrypted Credentials (Rails 5.2+), you can store the secret key in `config/credentials.yml.enc`.
 
-Open your credentials editor using `bin/rails credentials:edit` and add `devise_jwt_secret_key`. 
+Open your credentials editor using `bin/rails credentials:edit` and add `devise_jwt_secret_key`.
 
-**Note** you may need to set `$EDITOR` depending on your specific environment.
+> **Note** you may need to set `$EDITOR` depending on your specific environment.
 
 ```yml
 
@@ -101,9 +101,32 @@ Devise.setup do |config|
 end
 ```
 
-**Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
+> **Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
 
-Currently, HS256 algorithm is the one in use.
+Currently, HS256 algorithm is the one in use. You may configure a matching secret and algorithm name to use a different one (see [ruby-jwt](https://github.com/jwt/ruby-jwt#algorithms-and-usage) to see which are supported):
+
+```ruby
+Devise.setup do |config|
+  # ...
+  config.jwt do |jwt|
+    jwt.secret = OpenSSL::PKey::RSA.new(Rails.application.credentials.devise_jwt_secret_key!)
+    jwt.algorithm = Rails.application.credentials.devise_jwt_algorithm!
+  end
+end
+```
+
+If the algorithm is asymmetric (e.g. RS256) which necessitates a different decoding secret, configure the `decoding_secret` setting as well:
+
+```ruby
+Devise.setup do |config|
+  # ...
+  config.jwt do |jwt|
+    jwt.secret = OpenSSL::PKey::RSA.new(Rails.application.credentials.devise_jwt_private_key!)
+    jwt.decoding_secret = OpenSSL::PKey::RSA.new(Rails.application.credentials.devise_jwt_public_key!)
+    jwt.algorithm = 'RS256' # or some other asymmetric algorithm
+  end
+end
+```
 
 ### Model configuration
 
