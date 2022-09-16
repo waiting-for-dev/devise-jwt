@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.10.0] - 2022-09-16
+### Added
+- Enable support for asymmetric algorithms
+
+### Fixed
+- FIX: "No verification key available" on token decode
+
 ## [0.9.0] - 2021-09-21
 ### Fixed
 - Fix compatibility with dry-configurable 0.13
