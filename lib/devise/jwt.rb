@@ -54,6 +54,10 @@ module Devise
             default: Warden::JWTAuth.config.revocation_requests,
             constructor: ->(value) { forward_to_warden(:revocation_requests, value) })
 
+    setting(:token_header,
+            default: Warden::JWTAuth.config.token_header,
+            constructor: ->(value) { forward_to_warden(:token_header, value) })
+
     setting(:aud_header,
             default: Warden::JWTAuth.config.aud_header,
             constructor: ->(value) { forward_to_warden(:aud_header, value) })
