@@ -481,6 +481,10 @@ end
 
 Secret key is used to sign generated JWT tokens. You must set it.
 
+#### rotation_secret
+
+Allow rotating secrets. Set a new value to `secret` and copy the old secret to `rotation_secret`.
+
 #### expiration_time
 
 Number of seconds while a JWT is valid after its generation. After that, it won't be valid anymore, even if it hasn't been revoked.
