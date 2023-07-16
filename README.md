@@ -202,10 +202,11 @@ This is so because of the following default Devise workflow:
   in the session without requiring a strategy (`:jwt_authenticatable`
   in our case).
 
-So, if you want to avoid this caveat you have three options:
+So, if you want to avoid this caveat you have five options:
 
 - Disable the session. If you are developing an API, you probably don't need
   it. In order to disable it, change `config/initializers/session_store.rb` to:
+  
   ```ruby
   Rails.application.config.session_store :disabled
   ```
@@ -213,17 +214,40 @@ So, if you want to avoid this caveat you have three options:
   have the session disabled.
 - If you still need the session for any other purpose, disable
   `:database_authenticatable` user storage. In `config/initializers/devise.rb`:
+  
   ```ruby
   config.skip_session_storage = [:http_auth, :params_auth]
   ```
 - If you are using Devise for another model (e.g. `AdminUser`) and doesn't want
   to disable session storage for Devise entirely, you can disable it on a
   per-model basis:
+  
   ```ruby
   class User < ApplicationRecord
     devise :database_authenticatable #, your other enabled modules...
     self.skip_session_storage = [:http_auth, :params_auth]
   end
+  ```
+- If you need the session for some of the controllers, you are able to disable it at
+  the controller level for those controllers which don't need it:
+  
+  ```ruby
+  class AdminsController < ApplicationController
+    before_action :drop_session_cookie
+
+    private
+
+    def drop_session_cookie
+      request.session_options[:skip] = true
+    end
+  ```
+- As the last option you can tell Devise to not store the user in the Warden session
+  if you override default Devise `SessionsController` with your own one, and pass
+  `store: false` attribute to the `sign_in`, `sign_in_and_redirect`, `bypass_sign_in`
+  methods:
+  
+  ```ruby
+  sign_in user, store: false
   ```
 
 ### Revocation strategies
