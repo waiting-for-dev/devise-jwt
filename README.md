@@ -101,7 +101,7 @@ Devise.setup do |config|
 end
 ```
 
-> **Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
+> **Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `rails secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
 
 Currently, HS256 algorithm is the one in use. You may configure a matching secret and algorithm name to use a different one (see [ruby-jwt](https://github.com/jwt/ruby-jwt#algorithms-and-usage) to see which are supported):
 
