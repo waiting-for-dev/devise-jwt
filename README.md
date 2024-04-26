@@ -571,6 +571,12 @@ jwt.request_formats = {
 
 By default, only requests without format are processed.
 
+#### token_header
+
+Request/response header which will transmit the JWT token. Make sure you configure this header as described in [Model configuration](#model-configuration)
+
+Defaults to 'Authorization'
+
 #### aud_header
 
 Request header which content will be stored to the `aud` claim in the payload.
