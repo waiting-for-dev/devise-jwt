@@ -36,6 +36,10 @@ module Devise
             default: Warden::JWTAuth.config.secret,
             constructor: ->(value) { forward_to_warden(:secret, value) })
 
+    setting(:rotation_secret,
+            default: Warden::JWTAuth.config.rotation_secret,
+            constructor: ->(value) { forward_to_warden(:rotation_secret, value) })
+
     setting(:decoding_secret,
             constructor: ->(value) { forward_to_warden(:decoding_secret, value) })
 

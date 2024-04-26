@@ -101,7 +101,7 @@ Devise.setup do |config|
 end
 ```
 
-> **Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `bundle exec rake secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
+> **Important:** You are encouraged to use a secret different than your application `secret_key_base`. It is quite possible that some other component of your system is already using it. If several components share the same secret key, chances that a vulnerability in one of them has a wider impact increase. In rails, generating new secrets is as easy as `rails secret`. Also, never share your secrets pushing it to a remote repository, you are better off using an environment variable like in the example.
 
 Currently, HS256 algorithm is the one in use. You may configure a matching secret and algorithm name to use a different one (see [ruby-jwt](https://github.com/jwt/ruby-jwt#algorithms-and-usage) to see which are supported):
 
@@ -202,10 +202,11 @@ This is so because of the following default Devise workflow:
   in the session without requiring a strategy (`:jwt_authenticatable`
   in our case).
 
-So, if you want to avoid this caveat you have three options:
+So, if you want to avoid this caveat you have five options:
 
 - Disable the session. If you are developing an API, you probably don't need
   it. In order to disable it, change `config/initializers/session_store.rb` to:
+  
   ```ruby
   Rails.application.config.session_store :disabled
   ```
@@ -213,17 +214,40 @@ So, if you want to avoid this caveat you have three options:
   have the session disabled.
 - If you still need the session for any other purpose, disable
   `:database_authenticatable` user storage. In `config/initializers/devise.rb`:
+  
   ```ruby
   config.skip_session_storage = [:http_auth, :params_auth]
   ```
 - If you are using Devise for another model (e.g. `AdminUser`) and doesn't want
   to disable session storage for Devise entirely, you can disable it on a
   per-model basis:
+  
   ```ruby
   class User < ApplicationRecord
     devise :database_authenticatable #, your other enabled modules...
     self.skip_session_storage = [:http_auth, :params_auth]
   end
+  ```
+- If you need the session for some of the controllers, you are able to disable it at
+  the controller level for those controllers which don't need it:
+  
+  ```ruby
+  class AdminsController < ApplicationController
+    before_action :drop_session_cookie
+
+    private
+
+    def drop_session_cookie
+      request.session_options[:skip] = true
+    end
+  ```
+- As the last option you can tell Devise to not store the user in the Warden session
+  if you override default Devise `SessionsController` with your own one, and pass
+  `store: false` attribute to the `sign_in`, `sign_in_and_redirect`, `bypass_sign_in`
+  methods:
+  
+  ```ruby
+  sign_in user, store: false
   ```
 
 ### Revocation strategies
@@ -480,6 +504,10 @@ end
 #### secret
 
 Secret key is used to sign generated JWT tokens. You must set it.
+
+#### rotation_secret
+
+Allow rotating secrets. Set a new value to `secret` and copy the old secret to `rotation_secret`.
 
 #### expiration_time
 
