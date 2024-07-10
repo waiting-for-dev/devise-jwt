@@ -587,6 +587,25 @@ like an OAuth workflow with client id and client secret.
 
 Defaults to `JWT_AUD`.
 
+#### token_header
+
+Request header containing the token in the format of `Bearer #{token}`.
+
+Defaults to `Authorization`.
+
+#### issuer
+
+The [issuer claim in the token](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1).
+
+If present, it will be checked against the incoming token issuer claim and
+authorization will be skipped if they don't match.
+
+Defaults to `nil`.
+
+```ruby
+jwt.issuer = 'http://myapp.com'
+```
+
 ## Development
 
 There are docker and docker-compose files configured to create a development environment for this gem. So, if you use Docker you only need to run:
