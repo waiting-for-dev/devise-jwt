@@ -573,7 +573,7 @@ By default, only requests without format are processed.
 
 #### token_header
 
-Request/response header which will transmit the JWT token. Make sure you configure this header as described in [Model configuration](#model-configuration)
+Request/response header which will transmit the JWT token.
 
 Defaults to 'Authorization'
 
