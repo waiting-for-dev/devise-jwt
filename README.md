@@ -577,6 +577,13 @@ Request/response header which will transmit the JWT token.
 
 Defaults to 'Authorization'
 
+#### issuer
+
+Expected issuer claim. If present, it will be checked against the incoming
+token issuer claim and authorization will be skipped if they don't match.
+
+Defaults to nil.
+
 #### aud_header
 
 Request header which content will be stored to the `aud` claim in the payload.

@@ -62,6 +62,10 @@ module Devise
             default: Warden::JWTAuth.config.token_header,
             constructor: ->(value) { forward_to_warden(:token_header, value) })
 
+    setting(:issuer,
+            default: Warden::JWTAuth.config.issuer,
+            constructor: ->(value) { forward_to_warden(:issuer, value) })
+
     setting(:aud_header,
             default: Warden::JWTAuth.config.aud_header,
             constructor: ->(value) { forward_to_warden(:aud_header, value) })
