@@ -70,6 +70,14 @@ module Devise
             default: Warden::JWTAuth.config.aud_header,
             constructor: ->(value) { forward_to_warden(:aud_header, value) })
 
+    setting(:valid_auds,
+            default: Warden::JWTAuth.config.valid_auds,
+            constructor: ->(value) { forward_to_warden(:valid_auds, value)})
+
+    setting(:default_scope,
+            default: Warden::JWTAuth.config.default_scope,
+            constructor: ->(value) { forward_to_warden(:default_scope, value)})
+
     # A hash of warden scopes as keys and an array of request formats that will
     # be processed as values. When a scope is not present or if it has a nil
     # item, requests without format will be taken into account.
