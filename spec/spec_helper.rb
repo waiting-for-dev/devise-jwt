@@ -30,4 +30,10 @@ end
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
+
+  # Make sure routes are loaded once before the test suite is run
+  # Since they are lazy loaded by default on Rails 8
+  config.before(:suite) do
+    Rails.application.try(:reload_routes_unless_loaded)
+  end
 end
