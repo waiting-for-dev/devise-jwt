@@ -4,6 +4,6 @@ require 'spec_helper'
 
 describe Devise::JWT do
   it 'has a version number' do
-    expect(Devise::JWT::VERSION).not_to be nil
+    expect(Devise::JWT::VERSION).not_to be_nil
   end
 end

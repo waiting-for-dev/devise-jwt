@@ -7,7 +7,7 @@ describe Devise::JWT::RevocationStrategies::Null do
 
   describe '#jwt_revoked?(payload, user)' do
     it 'returns false' do
-      expect(strategy.jwt_revoked?(:whatever, :whatever)).to eq(false)
+      expect(strategy.jwt_revoked?(:whatever, :whatever)).to be(false)
     end
   end
 end

@@ -10,8 +10,8 @@ jobs:
     - name: Set up Ruby ${{ matrix.ruby-version }}
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7 
+        ruby-version: 3.4
         bundler-cache: true # 'bundle install' and cache
-    - name: Run specs 
+    - name: Run specs
       run: |
         bundle exec rubocop

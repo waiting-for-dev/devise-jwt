@@ -125,7 +125,7 @@ describe Devise::JWT::DefaultsGenerator do
     it 'adds strategies configured for each devise model with jwt' do
       expect(defaults[:revocation_strategies]).to eq(
         jwt_with_jti_matcher_user: 'JwtWithJtiMatcherUser',
-        jwt_with_denylist_user: 'JWTDenylist',
+        jwt_with_denylist_user: 'JwtDenylist',
         jwt_with_allowlist_user: 'JwtWithAllowlistUser',
         jwt_with_null_user: 'Devise::JWT::RevocationStrategies::Null'
       )

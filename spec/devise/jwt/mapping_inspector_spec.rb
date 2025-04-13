@@ -24,13 +24,13 @@ describe Devise::JWT::MappingInspector do
   describe '#jwt?' do
     context 'when jwt_authenticatable module is included' do
       it 'returns true' do
-        expect(jwt_with_jti_matcher_inspector.jwt?).to eq(true)
+        expect(jwt_with_jti_matcher_inspector.jwt?).to be(true)
       end
     end
 
     context 'when jwt_authenticatable module is not included' do
       it 'returns false' do
-        expect(no_jwt_inspector.jwt?).to eq(false)
+        expect(no_jwt_inspector.jwt?).to be(false)
       end
     end
   end
@@ -38,7 +38,7 @@ describe Devise::JWT::MappingInspector do
   describe '#session?' do
     context 'when session routes are included' do
       it 'returns true' do
-        expect(jwt_with_jti_matcher_inspector.session?).to eq(true)
+        expect(jwt_with_jti_matcher_inspector.session?).to be(true)
       end
     end
 
@@ -46,7 +46,7 @@ describe Devise::JWT::MappingInspector do
       it 'returns true' do
         jwt_with_jti_matcher_inspector.mapping.routes.delete(:session)
 
-        expect(jwt_with_jti_matcher_inspector.session?).to eq(false)
+        expect(jwt_with_jti_matcher_inspector.session?).to be(false)
       end
     end
   end
@@ -54,7 +54,7 @@ describe Devise::JWT::MappingInspector do
   describe '#registration?' do
     context 'when registration routes are included' do
       it 'returns true' do
-        expect(jwt_with_jti_matcher_inspector.registration?).to eq(true)
+        expect(jwt_with_jti_matcher_inspector.registration?).to be(true)
       end
     end
 
@@ -62,7 +62,7 @@ describe Devise::JWT::MappingInspector do
       it 'returns true' do
         jwt_with_jti_matcher_inspector.mapping.routes.delete(:registration)
 
-        expect(jwt_with_jti_matcher_inspector.registration?).to eq(false)
+        expect(jwt_with_jti_matcher_inspector.registration?).to be(false)
       end
     end
   end
