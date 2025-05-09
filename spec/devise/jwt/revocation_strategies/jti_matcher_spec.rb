@@ -26,7 +26,7 @@ describe Devise::JWT::RevocationStrategies::JTIMatcher do
       let(:jti) { user.jti }
 
       it 'returns false' do
-        expect(strategy.jwt_revoked?(payload, user)).to eq(false)
+        expect(strategy.jwt_revoked?(payload, user)).to be(false)
       end
     end
 
@@ -34,7 +34,7 @@ describe Devise::JWT::RevocationStrategies::JTIMatcher do
       let(:jti) { '123' }
 
       it 'returns true' do
-        expect(strategy.jwt_revoked?(payload, user)).to eq(true)
+        expect(strategy.jwt_revoked?(payload, user)).to be(true)
       end
     end
   end

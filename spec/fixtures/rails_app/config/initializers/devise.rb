@@ -275,7 +275,9 @@ Devise.setup do |config|
   # JWT configuration
   config.jwt do |jwt|
     jwt.secret = 'dwdwdwdwdwdwedwedwedwddw'
-    jwt.dispatch_requests = [['GET', %r{^/foo_path$}]]
+    jwt.dispatch_requests = [
+      ['GET', %r{^/foo_path$}],
+    ]
     jwt.revocation_requests = [['GET', %r{^/bar_path$}]]
     jwt.request_formats = {
       jwt_with_denylist_user: %i[json xml]

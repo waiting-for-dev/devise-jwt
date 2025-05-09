@@ -20,13 +20,13 @@ describe Devise::JWT::RevocationStrategies::Allowlist do
       before { user.allowlisted_jwts.create(payload) }
 
       it 'returns false' do
-        expect(strategy.jwt_revoked?(payload, user)).to eq(false)
+        expect(strategy.jwt_revoked?(payload, user)).to be(false)
       end
     end
 
     context 'when jti and aud payload does not exist on jwt_allowlist' do
       it 'returns true' do
-        expect(strategy.jwt_revoked?(payload, user)).to eq(true)
+        expect(strategy.jwt_revoked?(payload, user)).to be(true)
       end
     end
   end
@@ -40,9 +40,11 @@ describe Devise::JWT::RevocationStrategies::Allowlist do
     end
 
     it 'does not crash when token has already been revoked' do
-      strategy.revoke_jwt(payload, user)
+      expect do
+        strategy.revoke_jwt(payload, user)
 
-      strategy.revoke_jwt(payload, user)
+        strategy.revoke_jwt(payload, user)
+      end.not_to raise_error
     end
   end
 
@@ -52,7 +54,7 @@ describe Devise::JWT::RevocationStrategies::Allowlist do
 
       expect(
         jwt_with_allowlist_user.allowlisted_jwts.exists?(payload)
-      ).to eq(true)
+      ).to be(true)
     end
   end
 end
