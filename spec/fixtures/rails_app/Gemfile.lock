@@ -2,7 +2,7 @@ PATH
   remote: ../../..
   specs:
     devise-jwt (0.12.1)
-      devise (~> 4.0)
+      devise (>= 4.0.0, < 6.0.0)
       warden-jwt_auth (~> 0.10)
 
 GEM
@@ -88,10 +88,10 @@ GEM
     connection_pool (2.5.1)
     crass (1.0.6)
     date (3.4.1)
-    devise (4.9.4)
+    devise (5.0.0.rc)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
+      railties (>= 7.0)
       responders
       warden (~> 1.2.3)
     drb (2.2.1)
