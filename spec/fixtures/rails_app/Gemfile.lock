@@ -1,7 +1,7 @@
 PATH
   remote: ../../..
   specs:
-    devise-jwt (0.12.1)
+    devise-jwt (0.13.0)
       devise (>= 4.0.0, < 6.0.0)
       warden-jwt_auth (~> 0.10)
 
