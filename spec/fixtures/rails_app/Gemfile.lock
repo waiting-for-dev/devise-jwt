@@ -84,6 +84,7 @@ GEM
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     builder (3.3.0)
+    cgi (0.5.1)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.1)
     crass (1.0.6)
@@ -129,7 +130,9 @@ GEM
     marcel (1.0.4)
     mini_mime (1.1.5)
     mini_portile2 (2.8.8)
-    minitest (5.25.5)
+    minitest (6.0.5)
+      drb (~> 2.0)
+      prism (~> 1.5)
     net-imap (0.5.7)
       date
       net-protocol
@@ -147,6 +150,7 @@ GEM
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
+    prism (1.9.0)
     psych (5.2.3)
       date
       stringio
@@ -204,6 +208,7 @@ GEM
     stringio (3.1.7)
     thor (1.3.2)
     timeout (0.4.3)
+    tsort (0.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uri (1.0.3)
@@ -225,10 +230,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cgi
   devise-jwt!
   puma
   rails
   sqlite3
+  tsort
 
 BUNDLED WITH
    2.6.7
